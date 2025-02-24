@@ -1,12 +1,14 @@
-﻿<Window x:Class="OBEM.MainWindow"
+﻿<Window x:Class="YourWpfProject.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OBEM"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Device Info" Height="350" Width="525">
     <Grid>
-        
+        <Button Name="BtnFetchAllDevices" Content="Fetch All Devices" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Click="BtnFetchAllDevices_Click"/>
+        <Button Name="BtnFetchAllCategories" Content="Fetch All Categories" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,50,0,0" Click="BtnFetchAllCategories_Click"/>
+        <TextBox Name="txtDeviceName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="0,100,0,0"/>
+        <Button Name="BtnFetchDeviceByName" Content="Fetch Device by Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,150,0,0" Click="BtnFetchDeviceByName_Click"/>
+        <TextBox Name="txtCategoryName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="0,200,0,0"/>
+        <Button Name="BtnFetchDeviceByCategory" Content="Fetch Device by Category" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,250,0,0" Click="BtnFetchDeviceByCategory_Click"/>
+        <TextBox Name="txtResult" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Height="100" Margin="0,300,0,0" TextWrapping="Wrap"/>
     </Grid>
 </Window>

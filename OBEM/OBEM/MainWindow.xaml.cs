@@ -1,28 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OBEM.Services;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using OBEM.Services;
 
-namespace OBEM
+namespace YourWpfProject
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly ApiService _apiService;
+
         public MainWindow()
         {
             InitializeComponent();
+            _apiService = new ApiService();
+        }
+
+        // Fetch All Devices
+        private async void BtnFetchAllDevices_Click(object sender, RoutedEventArgs e)
+        {
+            string data = await _apiService.GetAllDevicesAsync();
+            txtResult.Text = data; // Prikazivanje rezultata u UI
+        }
+
+        // Fetch All Categories
+        private async void BtnFetchAllCategories_Click(object sender, RoutedEventArgs e)
+        {
+            string data = await _apiService.GetAllCategoriesAsync();
+            txtResult.Text = data;
+        }
+
+        // Fetch Device by Name
+        private async void BtnFetchDeviceByName_Click(object sender, RoutedEventArgs e)
+        {
+            string deviceName = txtDeviceName.Text; // Uzima ime uređaja iz textbox-a
+            string data = await _apiService.GetDeviceByNameAsync(deviceName);
+            txtResult.Text = data;
+        }
+
+        // Fetch Device by Category
+        private async void BtnFetchDeviceByCategory_Click(object sender, RoutedEventArgs e)
+        {
+            string categoryName = txtCategoryName.Text; 
+            string data = await _apiService.GetDeviceByCategoryAsync(categoryName);
+            txtResult.Text = data;
         }
     }
 }

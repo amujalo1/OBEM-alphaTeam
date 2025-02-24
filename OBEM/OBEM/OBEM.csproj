@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\ApiService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="models\Building.cs" />
+    <Compile Include="models\CategoryInfo.cs" />
     <Compile Include="models\DeviceInfo.cs" />
     <Compile Include="models\unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
