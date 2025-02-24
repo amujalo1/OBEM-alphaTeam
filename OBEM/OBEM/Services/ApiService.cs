@@ -88,12 +88,12 @@ namespace OBEM.Services
             }
         }
 
-        // Get All Categories
+        // Get Trending Info
         public async Task<string> GetTrendingInfo()
         {
             using (var client = CreateHttpClient())
             {
-                string url = $"{_baseUrl}/getTrendingInfo";
+                string url = $"{_baseUrl}/getAllCategories";
                 try
                 {
                     var response = await client.GetAsync(url);
