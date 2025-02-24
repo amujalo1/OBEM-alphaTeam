@@ -8,6 +8,19 @@ namespace OBEM.models
 {
     class Device
     {
+
+        public Device( string name, int lowerBound, int upperBound, int numericValue, string unit, string apartmetName, string type, string floor)
+        {
+            Name = name;
+            LowerBound = lowerBound;
+            UpperBound = upperBound;
+            NumericValue = numericValue;
+            Unit = unit;
+            ApartmetName = apartmetName;
+            Type = type;
+            Floor = floor;
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
 
