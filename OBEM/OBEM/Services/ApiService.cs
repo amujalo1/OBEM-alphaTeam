@@ -88,6 +88,24 @@ namespace OBEM.Services
             }
         }
 
+        // Get All Categories
+        public async Task<string> GetTrendingInfo()
+        {
+            using (var client = CreateHttpClient())
+            {
+                string url = $"{_baseUrl}/getTrendingInfo";
+                try
+                {
+                    var response = await client.GetAsync(url);
+                    return await HandleResponse(response);
+                }
+                catch (Exception ex)
+                {
+                    return $"Greška: {ex.Message}";
+                }
+            }
+        }
+
         // Helper method for handling response
         private async Task<string> HandleResponse(HttpResponseMessage response)
         {
