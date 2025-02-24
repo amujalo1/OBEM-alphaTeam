@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-    class Unit
+    class Floor
     {
-        public string Name { get; set; }
-        public string Type { get; set; }
     }
 }
