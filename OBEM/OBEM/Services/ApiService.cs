@@ -93,7 +93,7 @@ namespace OBEM.Services
         {
             using (var client = CreateHttpClient())
             {
-                string url = $"{_baseUrl}/getAllCategories";
+                string url = $"{_baseUrl}/getTrendingInfo";
                 try
                 {
                     var response = await client.GetAsync(url);
