@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-{
     class Device
     {
 
@@ -39,5 +38,4 @@ namespace OBEM.models
         public string Floor { get; set; }
 
     }
-}
 }
