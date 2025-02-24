@@ -80,5 +80,13 @@ namespace YourWpfProject
             string data = await _apiService.GetDeviceByCategoryAsync(categoryName);
             txtResult.Text = data;
         }
+
+        //Show new window
+        private void BtnSwitchWindow(object sender, RoutedEventArgs e)
+        {
+            // Create and show the new window when the button is clicked
+            Window newWindow = new Window();
+            newWindow.Show();
+        }
     }
 }

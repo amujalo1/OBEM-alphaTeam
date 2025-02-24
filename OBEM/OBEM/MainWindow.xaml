@@ -10,5 +10,7 @@
         <TextBox Name="txtCategoryName" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="0,200,0,0"/>
         <Button Name="BtnFetchDeviceByCategory" Content="Fetch Device by Category" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,250,0,0" Click="BtnFetchDeviceByCategory_Click"/>
         <TextBox Name="txtResult" HorizontalAlignment="Left" VerticalAlignment="Top" Width="400" Height="100" Margin="0,300,0,0" TextWrapping="Wrap"/>
+        <Button Name="BtnSwitchWindow1" Content="Switch window" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Margin="0,250,0,0" Click="BtnSwitchWindow"/>
+
     </Grid>
 </Window>
