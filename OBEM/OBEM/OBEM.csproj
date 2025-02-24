@@ -62,6 +62,7 @@
     <Compile Include="models\BuildingObject.cs" />
     <Compile Include="models\Device.cs" />
     <Compile Include="models\Floor.cs" />
+    <Compile Include="models\TrendingInfo.cs" />
     <Compile Include="Services\ApiService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

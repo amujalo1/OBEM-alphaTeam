@@ -6,6 +6,7 @@ using OBEM.models;
 using System.Collections.Generic;
 using System.Text;
 using System;
+using OBEM.models.OBEM.Models;
 
 namespace OBEM
 {
@@ -62,7 +63,28 @@ namespace OBEM
         private async void BtnFetchAllCategories_Click(object sender, RoutedEventArgs e)
         {
             string data = await _apiService.GetAllCategoriesAsync();
-            txtResult.Text = data;
+            // Parsiranje JSON podataka u listu objekata DeviceInfo
+            try
+            {
+                var kategorije = JsonConvert.DeserializeObject<List<CategoryInfo>>(data);
+
+                StringBuilder sb = new StringBuilder();
+                foreach (var kategorija in kategorije)
+                {
+                    sb.AppendLine($"categoryNumber: {kategorija.CategoryNumber}");
+                    foreach (var naziv  in kategorija.CategoryNames)
+                    {
+                        sb.AppendLine($"categoryName: {naziv}");
+                    }
+                    sb.AppendLine("===============================================");
+                }
+
+                txtResult.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtResult.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
         }
 
         // Fetch Device by Name
@@ -86,7 +108,32 @@ namespace OBEM
         private async void BtnFetchTrendingInfo_Click(object sender, RoutedEventArgs e)
         {
             string data = await _apiService.GetTrendingInfo();
-            txtResult.Text = data;
+
+            try
+            {
+                var response = JsonConvert.DeserializeObject<TrendingInfo>(data);
+
+                if (response != null)
+                {
+                    txtResult.Text = $"Result: {response.Result}\nMessage: {response.Message}\n\n";
+
+                    if (response.Records != null && response.Records.ContainsKey("505/37"))
+                    {
+                        foreach (var record in response.Records["505/37"])
+                        {
+                            txtResult.Text += $"Value: {record.Value}, Time: {record.Time}, Status: {record.Status}\n";
+                        }
+                    }
+                }
+                else
+                {
+                    txtResult.Text = "Nepoznat odgovor.";
+                }
+            }
+            catch (Exception ex)
+            {
+                txtResult.Text = $"Greška pri parsiranju: {ex.Message}";
+            }
         }
 
         // Fetch Trending Info By Id
