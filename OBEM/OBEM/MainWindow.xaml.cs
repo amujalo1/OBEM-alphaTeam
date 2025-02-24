@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System;
 
-namespace YourWpfProject
+namespace OBEM
 {
     public partial class MainWindow : Window
     {
@@ -43,7 +43,7 @@ namespace YourWpfProject
                     sb.AppendLine($"Growth Ratio: {device.GrowthRatio}");
                     sb.AppendLine($"Group1: {device.Group1}");
                     sb.AppendLine($"Group2: {device.Group2}");
-                    sb.AppendLine($"Group3: {device.Group3}"); 
+                    sb.AppendLine($"Group3: {device.Group3}");
                     sb.AppendLine($"Is Active: {device.IsActive}");
                     sb.AppendLine($"Update Interval: {device.UpdateInterval}");
                     sb.AppendLine("===============================================");
@@ -76,9 +76,32 @@ namespace YourWpfProject
         // Fetch Device by Category
         private async void BtnFetchDeviceByCategory_Click(object sender, RoutedEventArgs e)
         {
-            string categoryName = txtCategoryName.Text; 
+            string categoryName = txtCategoryName.Text;
             string data = await _apiService.GetDeviceByCategoryAsync(categoryName);
             txtResult.Text = data;
         }
+
+
+        // Fetch Trending Info
+        private async void BtnFetchTrendingInfo_Click(object sender, RoutedEventArgs e)
+        {
+            string data = await _apiService.GetTrendingInfo();
+            txtResult.Text = data;
+        }
+
+        // Fetch Trending Info By Id
+        private async void BtnFetchTrendingInfoById_Click(object sender, RoutedEventArgs e)
+        {
+            int id = int.TryParse(txtTrendingId.Text, out int result) ? result : 0;
+            if (id == 0)
+            {
+                txtResult.Text = "Molimo unesite važeći ID.";
+                return;
+            }
+
+            string data = await _apiService.GetTrendingInfoById(id);
+            txtResult.Text = data;
+        }
+
     }
 }
