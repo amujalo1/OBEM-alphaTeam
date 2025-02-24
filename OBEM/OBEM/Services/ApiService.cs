@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -94,6 +95,24 @@ namespace OBEM.Services
             using (var client = CreateHttpClient())
             {
                 string url = $"{_baseUrl}/getTrendingInfo";
+                try
+                {
+                    var response = await client.GetAsync(url);
+                    return await HandleResponse(response);
+                }
+                catch (Exception ex)
+                {
+                    return $"Greška: {ex.Message}";
+                }
+            }
+        }
+
+        // Get Trending Info By Id
+        public async Task<string> GetTrendingInfoById(int Id)
+        {
+            using (var client = CreateHttpClient())
+            {
+                string url = $"{_baseUrl}/getTrendingInfo?id={Id}";
                 try
                 {
                     var response = await client.GetAsync(url);
