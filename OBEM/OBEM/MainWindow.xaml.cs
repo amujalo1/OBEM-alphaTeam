@@ -1,154 +1,22 @@
-﻿using OBEM.Services;
-using System.Windows;
-using OBEM.Services;
-using Newtonsoft.Json;
-using OBEM.models;
-using System.Collections.Generic;
-using System.Text;
-using System;
-using OBEM.models.OBEM.Models;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace OBEM
 {
     public partial class MainWindow : Window
     {
-        private readonly ApiService _apiService;
-
         public MainWindow()
         {
             InitializeComponent();
-            _apiService = new ApiService();
         }
 
-        // Fetch All Devices
-        private async void BtnFetchAllDevices_Click(object sender, RoutedEventArgs e)
+        private void OpenApiTester_Click(object sender, RoutedEventArgs e)
         {
-            string data = await _apiService.GetAllDevicesAsync();
-
-            // Parsiranje JSON podataka u listu objekata DeviceInfo
-            try
-            {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-
-                StringBuilder sb = new StringBuilder();
-                foreach (var device in devices)
-                {
-                    sb.AppendLine($"ID: {device.Id}");
-                    sb.AppendLine($"Name: {device.Name}");
-                    sb.AppendLine($"Lower Bound: {device.LowerBound}");
-                    sb.AppendLine($"Upper Bound: {device.UpperBound}");
-                    sb.AppendLine($"Numeric Value: {device.NumericValue}");
-                    sb.AppendLine($"String Value: {device.StringValue}");
-                    sb.AppendLine($"Unit: {device.Unit}");
-                    sb.AppendLine($"Simulation Type: {device.SimulationType}");
-                    sb.AppendLine($"Growth Ratio: {device.GrowthRatio}");
-                    sb.AppendLine($"Group1: {device.Group1}");
-                    sb.AppendLine($"Group2: {device.Group2}");
-                    sb.AppendLine($"Group3: {device.Group3}");
-                    sb.AppendLine($"Is Active: {device.IsActive}");
-                    sb.AppendLine($"Update Interval: {device.UpdateInterval}");
-                    sb.AppendLine("===============================================");
-                }
-
-                txtResult.Text = sb.ToString();
-            }
-            catch (Exception ex)
-            {
-                txtResult.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
-            }
+            MainFrame.Navigate(new ApiTester());
         }
-
-
-        // Fetch All Categories
-        private async void BtnFetchAllCategories_Click(object sender, RoutedEventArgs e)
+        private void OpenUnitEnergyMonitoring_Click(object sender, RoutedEventArgs e)
         {
-            string data = await _apiService.GetAllCategoriesAsync();
-            // Parsiranje JSON podataka u listu objekata DeviceInfo
-            try
-            {
-                var kategorije = JsonConvert.DeserializeObject<List<CategoryInfo>>(data);
-
-                StringBuilder sb = new StringBuilder();
-                foreach (var kategorija in kategorije)
-                {
-                    sb.AppendLine($"categoryNumber: {kategorija.CategoryNumber}");
-                    foreach (var naziv  in kategorija.CategoryNames)
-                    {
-                        sb.AppendLine($"categoryName: {naziv}");
-                    }
-                    sb.AppendLine("===============================================");
-                }
-
-                txtResult.Text = sb.ToString();
-            }
-            catch (Exception ex)
-            {
-                txtResult.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
-            }
+            MainFrame.Navigate(new UnitEnergyMonitoring());
         }
-
-        // Fetch Device by Name
-        private async void BtnFetchDeviceByName_Click(object sender, RoutedEventArgs e)
-        {
-            string deviceName = txtDeviceName.Text; // Uzima ime uređaja iz textbox-a
-            string data = await _apiService.GetDeviceByNameAsync(deviceName);
-            txtResult.Text = data;
-        }
-
-        // Fetch Device by Category
-        private async void BtnFetchDeviceByCategory_Click(object sender, RoutedEventArgs e)
-        {
-            string categoryName = txtCategoryName.Text;
-            string data = await _apiService.GetDeviceByCategoryAsync(categoryName);
-            txtResult.Text = data;
-        }
-
-
-        // Fetch Trending Info
-        private async void BtnFetchTrendingInfo_Click(object sender, RoutedEventArgs e)
-        {
-            string data = await _apiService.GetTrendingInfo();
-
-            try
-            {
-                var response = JsonConvert.DeserializeObject<TrendingInfo>(data);
-
-                if (response != null)
-                {
-                    txtResult.Text = $"Result: {response.Result}\nMessage: {response.Message}\n\n";
-
-                    if (response.Records != null && response.Records.ContainsKey("505/37"))
-                    {
-                        foreach (var record in response.Records["505/37"])
-                        {
-                            txtResult.Text += $"Value: {record.Value}, Time: {record.Time}, Status: {record.Status}\n";
-                        }
-                    }
-                }
-                else
-                {
-                    txtResult.Text = "Nepoznat odgovor.";
-                }
-            }
-            catch (Exception ex)
-            {
-                txtResult.Text = $"Greška pri parsiranju: {ex.Message}";
-            }
-        }
-
-        // Fetch Trending Info By Id
-        private async void BtnFetchTrendingInfoById_Click(object sender, RoutedEventArgs e)
-        {
-            int id = int.TryParse(txtTrendingId.Text, out int result) ? result : 0;
-            if (id == 0)
-            {
-                txtResult.Text = "Molimo unesite važeći ID.";
-                return;
-            }
-
-            string data = await _apiService.GetTrendingInfoById(id);
-            txtResult.Text = data;
-        }
-
     }
 }

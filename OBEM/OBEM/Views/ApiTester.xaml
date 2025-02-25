@@ -1,0 +1,107 @@
+﻿<Page x:Class="OBEM.ApiTester"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OBEM"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="700"
+      Title="Device Info">
+
+    <Page.Resources>
+        <!-- Modern Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#388E3C"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="45"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#388E3C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Modern TextBox Style -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="#f4f4f4"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Padding" Value="10,0"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <!-- Define Grid Structure -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Fetch All Devices Button -->
+        <Button Name="BtnFetchAllDevices" Content="Fetch All Devices" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                Grid.Row="0" Grid.ColumnSpan="2" Click="BtnFetchAllDevices_Click"/>
+
+        <!-- Fetch Trending Info Button -->
+        <Button Name="BtnFetchTrendingInfo" Content="Fetch Trending Info" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" 
+                Click="BtnFetchTrendingInfo_Click"/>
+
+        <!-- Fetch Trending Info By Id -->
+        <TextBox Name="txtTrendingId" HorizontalAlignment="Stretch" 
+                 VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" 
+                 Margin="0,10,0,0"/>
+        <Button Name="BtnFetchTrendingInfoById" Content="Fetch Trending By ID" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                Grid.Row="2" Grid.Column="1" Margin="0,10,0,0" 
+                Click="BtnFetchTrendingInfoById_Click"/>
+
+        <!-- Device Name Input -->
+        <TextBox Name="txtDeviceName" HorizontalAlignment="Stretch" 
+                 VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" 
+                 Margin="0,10,0,0"/>
+        <Button Name="BtnFetchDeviceByName" Content="Fetch Device by Name" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                Grid.Row="3" Grid.Column="1" Margin="0,10,0,0" 
+                Click="BtnFetchDeviceByName_Click"/>
+
+        <!-- Device Category Input -->
+        <TextBox Name="txtCategoryName" HorizontalAlignment="Stretch" 
+                 VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" 
+                 Margin="0,10,0,0"/>
+        <Button Name="BtnFetchDeviceByCategory" Content="Fetch Device by Category" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                Grid.Row="4" Grid.Column="1" Margin="0,10,0,0" 
+                Click="BtnFetchDeviceByCategory_Click"/>
+
+        <!-- Fetch All Categories Button -->
+        <Button Name="BtnFetchAllCategories" Content="Fetch All Categories" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0" 
+                Click="BtnFetchAllCategories_Click"/>
+
+        <!-- Result Text Box -->
+        <TextBox Name="txtResult" HorizontalAlignment="Stretch" 
+                 VerticalAlignment="Top" Grid.Row="6" Grid.ColumnSpan="2" 
+                 Margin="0,20,0,0" TextWrapping="Wrap" IsReadOnly="True" Height="200"/>
+    </Grid>
+</Page>
