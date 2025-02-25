@@ -9,29 +9,27 @@
       Title="UnitDetails">
 
     <Grid>
-        <!-- Define Grid Columns: main content section + right section -->
         <Grid.ColumnDefinitions>
-            <!-- Main content section with all your UI elements -->
             <ColumnDefinition Width="*"/>
 
-            <!-- Empty section on the right (will be left blank for now) -->
+            
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Main Content Section: Image and Borders -->
+        
         <Grid Grid.Column="0">
-            <!-- Image as background -->
+            
             <Image HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Image.Source>
-                    <!-- PNG Image -->
+                    <!-- Image background -->
                     <BitmapImage UriSource="pack://application:,,,/Resources/sample.png"/>
                 </Image.Source>
             </Image>
 
-            <!-- StackPanel aligned to the left for vertical borders -->
+            
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Margin="10">
 
-                <!-- Stylish Border for Floor 1 -->
+                
                 <Button x:Name="Floor2" Width="150" Height="50" BorderBrush="Red" BorderThickness="2"  Margin="10" Click="FloorButton_Click">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -43,7 +41,7 @@
                                Foreground="White" FontWeight="Bold" Text="Floor 2" />
                 </Button>
 
-                <!-- Stylish Border for Floor 2 -->
+                
                 <Button x:Name="Floor1" Width="150" Height="50" BorderBrush="Green" BorderThickness="2" Margin="10" Click="FloorButton_Click">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -55,7 +53,7 @@
                                Foreground="White" FontWeight="Bold" Text="Floor 1" />
                 </Button>
 
-                <!-- Stylish Border for Floor 0 -->
+                
                 <Button x:Name="Floor0" Width="150" Height="50" BorderBrush="Blue" BorderThickness="2"  Margin="10" Click="FloorButton_Click">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -68,10 +66,10 @@
                 </Button>
             </StackPanel>
 
-            <!-- StackPanel for horizontal borders under the image -->
+            
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,30" >
 
-                <!-- Stylish Border for Outside -->
+                
                 <Button x:Name="FloorNeg1" Width="150" Height="50" BorderBrush="Purple" BorderThickness="2" Margin="10,0,100,0" Click="FloorButton_Click">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -94,7 +92,7 @@
                                Foreground="White" FontWeight="Bold" Text="Outside" />
                 </Button>
 
-                <!-- Stylish Border for General -->
+                
                 <Button x:Name="General" Width="150" Height="50" BorderBrush="Yellow" BorderThickness="2" Margin="0,0,0,0" Click="FloorButton_Click">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -106,16 +104,15 @@
                                Foreground="Black" FontWeight="Bold" Text="General" />
                 </Button>
             </StackPanel>
+            <StackPanel x:Name="FloorButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="435,50,0,0">
+                <!-- apartment buttons go here-->
+            </StackPanel>
         </Grid>
 
-        <!-- Right Section: To display buttons and filtered results -->
+        
         <Grid Grid.Column="1" Background="LightGray">
-            <!-- StackPanel to hold buttons for each floor -->
-            <StackPanel x:Name="FloorButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
-                <!-- Dynamic buttons will be added here -->
-            </StackPanel>
-
-            <!-- Text block to display results -->
+            
+            <!-- Text block placeholder until we make something prettier -->
             <TextBox x:Name="txtFilteredResults" Text="Filtered Results will appear here" Margin="10" />
         </Grid>
     </Grid>

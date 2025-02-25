@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using Newtonsoft.Json;
 using OBEM.Services;
 using OBEM.models;
+using System.Windows.Media;
 
 namespace OBEM.Views
 {
@@ -13,6 +14,7 @@ namespace OBEM.Views
     {
         private readonly ApiService _apiService = new ApiService();
 
+        // dictionary because button names cannot have spaces
         private Dictionary<string, string> floorMapping = new Dictionary<string, string>
         {
             { "Floor0", "Floor 0" },
@@ -25,37 +27,39 @@ namespace OBEM.Views
 
         private string selectedGroup1 = null;
         private string selectedGroup2 = null;
-        private string selectedGroup3 = null;  // Will hold the selected floor (e.g., "Floor 0")
+        private string selectedGroup3 = null;  
 
         public UnitDetails()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            
         }
 
-        // Single event handler for all floor buttons
+        // same event handler for all floor buttons
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
-            // Get the button's name
+            
+
             string buttonName = (sender as Button)?.Name;
 
-            // Look up the floor name in the dictionary
+            
             if (floorMapping.ContainsKey(buttonName))
             {
-                // Get the corresponding floor name with a space
+                
                 string floor = floorMapping[buttonName];
                 selectedGroup3 = floor;
 
-                // Update the filtered results UI
+                MessageBox.Show($"Loading devices for {floor}");
                 txtFilteredResults.Text = $"Showing devices for {floor}...";
 
-                // Load and display filtered devices based on the selected floor
+                
                 await LoadDevices();
             }
         }
 
         private async System.Threading.Tasks.Task LoadDevices()
         {
-            // Temporary display message while loading devices
+
             txtFilteredResults.Text = "Loading devices...";
 
             string data = await _apiService.GetAllDevicesAsync();
@@ -65,9 +69,11 @@ namespace OBEM.Views
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
                 StringBuilder sb = new StringBuilder();
 
+                FloorButtonsPanel.Children.Clear();
+
                 foreach (var device in devices)
                 {
-                    // Only filter based on the selected floor (Group3)
+                    // filtering logic
                     if ((selectedGroup3 == null || device.Group3 == selectedGroup3))
                     {
                         sb.AppendLine($"ID: {device.Id}");
@@ -85,10 +91,25 @@ namespace OBEM.Views
                         sb.AppendLine($"Is Active: {device.IsActive}");
                         sb.AppendLine($"Update Interval: {device.UpdateInterval}");
                         sb.AppendLine("===============================================");
+
+                        var newApartmentButton = new Button
+                        {
+                            Width = 100,
+                            Height = 50,
+                            Content = device.Name,
+                            Margin = new Thickness(5),
+                            Background = new SolidColorBrush(Colors.LightBlue),
+                            Tag = device
+                        };
+
+                        newApartmentButton.Click += ApartmentButton_Click; // handler on click
+
+
+                        FloorButtonsPanel.Children.Add(newApartmentButton);
                     }
                 }
 
-                // Display filtered results in the TextBlock
+                // write results to textblock placeholder
                 txtFilteredResults.Text = sb.Length > 0 ? sb.ToString() : "No devices found for the selected floor.";
             }
             catch (Exception ex)
@@ -96,5 +117,26 @@ namespace OBEM.Views
                 txtFilteredResults.Text = "Error loading devices: " + ex.Message;
             }
         }
+
+            private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
+            {
+                
+                var apartmentButton = sender as Button;
+                var device = apartmentButton?.Tag as DeviceInfo;
+
+                if (device != null)
+                {
+                        
+                        string consumptionDetailsForApartment = $"Device ID: {device.Id}\n" +
+                                                    $"Name: {device.Name}\n" +
+                                                    $"Lower Bound: {device.LowerBound}\n" +
+                                                    $"Upper Bound: {device.UpperBound}\n" +
+                                                    $"Current Consumption: {device.NumericValue} {device.Unit}";
+
+                        
+                        txtFilteredResults.Text = consumptionDetailsForApartment;
+                        await LoadDevices();
+            }
+            }
     }
 }
