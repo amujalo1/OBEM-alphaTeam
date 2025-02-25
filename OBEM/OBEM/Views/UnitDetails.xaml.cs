@@ -35,7 +35,7 @@ namespace OBEM.Views
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
-            string buttonName = (sender as Button)?.Name;
+            string buttonName = (sender as RadioButton)?.Name;
 
             if (floorMapping.ContainsKey(buttonName))
             {
@@ -60,7 +60,7 @@ namespace OBEM.Views
                 HashSet<string> uniqueGroup1Values = new HashSet<string>();
                 HashSet<string> uniqueGroup2Values = new HashSet<string>();
 
-                FloorButtonsPanel.Children.Clear();
+                ApartmentButtonsPanel.Children.Clear();
                 lstGroup2.Items.Clear();
 
                 foreach (var device in devices)
@@ -75,18 +75,24 @@ namespace OBEM.Views
 
                 foreach (var group1 in uniqueGroup1Values)
                 {
-                    var newApartmentButton = new Button
+                    var newApartmentButton = new RadioButton
                     {
                         Width = 100,
                         Height = 50,
                         Content = group1,
                         Margin = new Thickness(5),
                         Background = new SolidColorBrush(Colors.LightBlue),
-                        Tag = group1
+                        Tag = group1,
                     };
 
+                    var menuButtonStyle = Application.Current.FindResource("MenuButtonTheme") as Style;
+                    if (menuButtonStyle != null)
+                    {
+                        newApartmentButton.Style = menuButtonStyle;
+                    }
+
                     newApartmentButton.Click += ApartmentButton_Click;
-                    FloorButtonsPanel.Children.Add(newApartmentButton);
+                    ApartmentButtonsPanel.Children.Add(newApartmentButton);
                 }
 
                 foreach (var group2 in uniqueGroup2Values)
@@ -104,7 +110,7 @@ namespace OBEM.Views
 
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
         {
-            var apartmentButton = sender as Button;
+            var apartmentButton = sender as RadioButton;
             selectedGroup1 = apartmentButton?.Tag as string;
 
             if (selectedGroup1 != null)

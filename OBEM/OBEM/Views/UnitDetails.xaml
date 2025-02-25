@@ -7,117 +7,77 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="UnitDetails">
+    <Border Background="#272537" CornerRadius="20" Padding="5" BorderBrush="Gray" BorderThickness="2">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="200"/>
-            <!-- Lijevi dio -->
-            <ColumnDefinition Width="5"/>
-            <!-- GridSplitter -->
-            <ColumnDefinition Width="200" MinWidth="100"/>
-            <!-- Desni dio -->
-        </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-        <!-- Lijevi dio -->
-        <Grid Grid.Column="0" Margin="0,0,122,0">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Center" Height="350" Width="352" Margin="61,0,0,0">
-                <Image.Source>
-                    <BitmapImage UriSource="pack://application:,,,/Resources/sample.png"/>
-                </Image.Source>
-            </Image>
+            <TextBlock Text="Logo" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="22"/>
 
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Margin="10">
-                <Button x:Name="Floor2" Width="114" Height="50" BorderBrush="Red" BorderThickness="2" Margin="10" Click="FloorButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="Red" Offset="0.0"/>
-                            <GradientStop Color="LightCoral" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" Text="Floor 2" />
-                </Button>
-
-                <Button x:Name="Floor1" Width="114" Height="50" BorderBrush="Green" BorderThickness="2" Margin="10" Click="FloorButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="Green" Offset="0.0"/>
-                            <GradientStop Color="LightGreen" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" Text="Floor 1" />
-                </Button>
-
-                <Button x:Name="Floor0" Width="114" Height="50" BorderBrush="Blue" BorderThickness="2" Margin="10" Click="FloorButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="Blue" Offset="0.0"/>
-                            <GradientStop Color="LightSkyBlue" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" Text="Floor 0" />
-                </Button>
+            <StackPanel Grid.Row="1" Margin="0,200,0,0">
+                <RadioButton x:Name="Floor2" Click="FloorButton_Click" Content="Floor 2" Height="160" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton x:Name="Floor1" Click="FloorButton_Click" Content="Floor 1" Height="150" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton x:Name="Floor0" Click="FloorButton_Click" Content="Floor 0" Height="150" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton x:Name="FloorNeg1" Click="FloorButton_Click" Content="Floor -1" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton x:Name="Outside" Click="FloorButton_Click" Content="Outside" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton x:Name="General" Click="FloorButton_Click" Content="General" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
             </StackPanel>
 
-            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,30">
-                <Button x:Name="FloorNeg1" Width="127" Height="50" BorderBrush="Purple" BorderThickness="2" Margin="10,0,100,0" Click="FloorButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="DarkOrange" Offset="0.0"/>
-                            <GradientStop Color="Orange" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" Text="Floor -1" />
-                </Button>
-                <Button x:Name="Outside" Width="97" Height="50" BorderBrush="Purple" BorderThickness="2" Click="FloorButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="Purple" Offset="0.0"/>
-                            <GradientStop Color="Violet" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold" Text="Outside" />
-                </Button>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="200"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="200" MinWidth="100"/>
+                </Grid.ColumnDefinitions>
 
-                <Button x:Name="General" Width="92" Height="50" BorderBrush="Yellow" BorderThickness="2" Margin="0,0,0,0" Click="FloorButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="Yellow" Offset="0.0"/>
-                            <GradientStop Color="LightYellow" Offset="1.0"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontWeight="Bold" Text="General" />
-                </Button>
-            </StackPanel>
+                
+                <Border Grid.Column="0" CornerRadius="20" Background="Transparent" Padding="5" BorderBrush="Gray" BorderThickness="1">
+                    <Grid>
+                        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Height="700" Width="700" Margin="0,0,0,100" Panel.ZIndex="1">
+                            <Image.Source>
+                                <BitmapImage UriSource="pack://application:,,,/Resources/UIsample.png"/>
+                            </Image.Source>
+                        </Image>
+                        <StackPanel x:Name="ApartmentButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="650,150,0,0">
+                            <!-- Apartment buttons go here -->
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-            <StackPanel x:Name="FloorButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="435,50,0,0">
-                <!-- Apartment buttons go here -->
-            </StackPanel>
+                
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>
+
+                
+                <Border Grid.Column="2" CornerRadius="20" Background="#4A4763" Padding="5" BorderBrush="Gray" BorderThickness="1">
+                    <Grid>
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Group2 List:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <ListBox x:Name="lstGroup2" Height="150" SelectionChanged="Group2_SelectionChanged">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <TextBlock Text="Details:" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
+                                <TextBlock x:Name="txtDetails" TextWrapping="Wrap" />
+                            </ScrollViewer>
+
+                            <TextBlock Text="Additional Information:" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <TextBox x:Name="txtAdditionalInfo" Height="100" TextWrapping="Wrap" AcceptsReturn="True" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
-
-        <!-- GridSplitter za promjenu širine -->
-        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>
-
-        <!-- Desni dio -->
-        <Grid Grid.Column="2" Background="LightGray">
-            <StackPanel Margin="10">
-                <TextBlock Text="Group2 List:" FontWeight="Bold" Margin="0,0,0,5"/>
-                <ListBox x:Name="lstGroup2" Height="150" SelectionChanged="Group2_SelectionChanged">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <TextBlock Text="Details:" FontWeight="Bold" Margin="0,10,0,5"/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
-                    <TextBlock x:Name="txtDetails" TextWrapping="Wrap" />
-                </ScrollViewer>
-
-                <!-- Dodatni elementi -->
-                <TextBlock Text="Additional Information:" FontWeight="Bold" Margin="0,10,0,5"/>
-                <TextBox x:Name="txtAdditionalInfo" Height="100" TextWrapping="Wrap" AcceptsReturn="True" />
-            </StackPanel>
-        </Grid>
-    </Grid>
+    </Border>
 </Page>

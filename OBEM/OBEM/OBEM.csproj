@@ -78,6 +78,10 @@
     <Compile Include="Views\UnitEnergyMonitoring.xaml.cs">
       <DependentUpon>UnitEnergyMonitoring.xaml</DependentUpon>
     </Compile>
+    <Page Include="Theme\MenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ApiTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -153,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Resource Include="Resources\UIsample.png" />
     <Resource Include="bin\Debug\Newtonsoft.Json.xml" />
     <Content Include="bin\Debug\OBEM.exe" />
     <Content Include="bin\Debug\OBEM.pdb" />
