@@ -9,22 +9,22 @@
         </Grid.RowDefinitions>
 
         <!-- Dugme za prelazak na ApiTester stranicu -->
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="Otvori API Tester"
-            Margin="10"
-            Click="OpenApiTester_Click"/>
-
-            <Button Content="Otvori Unit Energy Monitoring"
-            Margin="10"
-            Click="OpenUnitEnergyMonitoring_Click"/>
-
-            <Button Content="Otvori Energy Cost View"
-            Margin="10"
-            Click="OpenEnergyCost_Click"/>
-        </StackPanel>
 
 
         <!-- Frame koji prikazuje stranice -->
-        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+        <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top" Width="700" Grid.Row="1" Height="30">
+            <Button Content="Otvori API Tester"
+                Click="OpenApiTester_Click" Width="100"/>
+
+            <Button Content="Otvori Unit Energy Monitoring"
+                Click="OpenUnitEnergyMonitoring_Click" Width="100"/>
+
+            <Button Content="Otvori Energy Cost View"
+                Click="OpenEnergyCost_Click" Width="100"/>
+        </DockPanel>
+
+
+        <!-- Frame koji prikazuje stranice -->
+        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden" Margin="0,30,0,0"/>
     </Grid>
 </Window>
