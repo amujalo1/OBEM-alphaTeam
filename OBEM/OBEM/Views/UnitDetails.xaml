@@ -9,80 +9,114 @@
       Title="UnitDetails">
 
     <Grid>
-        <!-- Image as background -->
-        <Image HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image.Source>
-                <!-- PNG Image -->
-                <BitmapImage UriSource="pack://application:,,,/Resources/sample.png"/>
-            </Image.Source>
-        </Image>
+        <!-- Define Grid Columns: main content section + right section -->
+        <Grid.ColumnDefinitions>
+            <!-- Main content section with all your UI elements -->
+            <ColumnDefinition Width="*"/>
 
-        <!-- StackPanel aligned to the left for vertical borders -->
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Spacing="20">
+            <!-- Empty section on the right (will be left blank for now) -->
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- Stylish Border for Floor 1 -->
-            <Border Width="150" Height="50" BorderBrush="Red" BorderThickness="2" CornerRadius="15" Margin="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Red" Offset="0.0"/>
-                        <GradientStop Color="LightCoral" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="White" FontWeight="Bold" Text="Floor 2" />
-            </Border>
+        <!-- Main Content Section: Image and Borders -->
+        <Grid Grid.Column="0">
+            <!-- Image as background -->
+            <Image HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image.Source>
+                    <!-- PNG Image -->
+                    <BitmapImage UriSource="pack://application:,,,/Resources/sample.png"/>
+                </Image.Source>
+            </Image>
 
-            <!-- Stylish Border for Floor 2 -->
-            <Border Width="150" Height="50" BorderBrush="Green" BorderThickness="2" CornerRadius="15" Margin="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Green" Offset="0.0"/>
-                        <GradientStop Color="LightGreen" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="White" FontWeight="Bold" Text="Floor 1" />
-            </Border>
+            <!-- StackPanel aligned to the left for vertical borders -->
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Vertical" Margin="10">
 
-            <!-- Stylish Border for Floor 0 -->
-            <Border Width="150" Height="50" BorderBrush="Blue" BorderThickness="2" CornerRadius="15" Margin="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Blue" Offset="0.0"/>
-                        <GradientStop Color="LightSkyBlue" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="White" FontWeight="Bold" Text="Floor 0" />
-            </Border>
-        </StackPanel>
+                <!-- Stylish Border for Floor 1 -->
+                <Button x:Name="Floor2" Width="150" Height="50" BorderBrush="Red" BorderThickness="2"  Margin="10" Click="FloorButton_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Red" Offset="0.0"/>
+                            <GradientStop Color="LightCoral" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               Foreground="White" FontWeight="Bold" Text="Floor 2" />
+                </Button>
 
-        <!-- StackPanel for horizontal borders under the image -->
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="20" Margin="0,0,0,30">
+                <!-- Stylish Border for Floor 2 -->
+                <Button x:Name="Floor1" Width="150" Height="50" BorderBrush="Green" BorderThickness="2" Margin="10" Click="FloorButton_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Green" Offset="0.0"/>
+                            <GradientStop Color="LightGreen" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               Foreground="White" FontWeight="Bold" Text="Floor 1" />
+                </Button>
 
-            <!-- Stylish Border for Outside -->
-            <Border Width="150" Height="50" BorderBrush="Purple" BorderThickness="2" CornerRadius="15" Margin="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Purple" Offset="0.0"/>
-                        <GradientStop Color="Violet" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="White" FontWeight="Bold" Text="Outside" />
-            </Border>
+                <!-- Stylish Border for Floor 0 -->
+                <Button x:Name="Floor0" Width="150" Height="50" BorderBrush="Blue" BorderThickness="2"  Margin="10" Click="FloorButton_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Blue" Offset="0.0"/>
+                            <GradientStop Color="LightSkyBlue" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               Foreground="White" FontWeight="Bold" Text="Floor 0" />
+                </Button>
+            </StackPanel>
 
-            <!-- Stylish Border for General -->
-            <Border Width="150" Height="50" BorderBrush="Yellow" BorderThickness="2" CornerRadius="15" Margin="10">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="Yellow" Offset="0.0"/>
-                        <GradientStop Color="LightYellow" Offset="1.0"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="Black" FontWeight="Bold" Text="General" />
-            </Border>
-        </StackPanel>
+            <!-- StackPanel for horizontal borders under the image -->
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,30" >
+
+                <!-- Stylish Border for Outside -->
+                <Button x:Name="FloorNeg1" Width="150" Height="50" BorderBrush="Purple" BorderThickness="2" Margin="10,0,100,0" Click="FloorButton_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="DarkOrange" Offset="0.0"/>
+                            <GradientStop Color="Orange" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               Foreground="White" FontWeight="Bold" Text="Floor -1" />
+                </Button>
+
+                <Button x:Name="Outside" Width="150" Height="50" BorderBrush="Purple" BorderThickness="2" Margin="0,0,0,0" Click="FloorButton_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Purple" Offset="0.0"/>
+                            <GradientStop Color="Violet" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               Foreground="White" FontWeight="Bold" Text="Outside" />
+                </Button>
+
+                <!-- Stylish Border for General -->
+                <Button x:Name="General" Width="150" Height="50" BorderBrush="Yellow" BorderThickness="2" Margin="0,0,0,0" Click="FloorButton_Click">
+                    <Button.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="Yellow" Offset="0.0"/>
+                            <GradientStop Color="LightYellow" Offset="1.0"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                               Foreground="Black" FontWeight="Bold" Text="General" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Right Section: To display buttons and filtered results -->
+        <Grid Grid.Column="1" Background="LightGray">
+            <!-- StackPanel to hold buttons for each floor -->
+            <StackPanel x:Name="FloorButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
+                <!-- Dynamic buttons will be added here -->
+            </StackPanel>
+
+            <!-- Text block to display results -->
+            <TextBox x:Name="txtFilteredResults" Text="Filtered Results will appear here" Margin="10" />
+        </Grid>
     </Grid>
 </Page>

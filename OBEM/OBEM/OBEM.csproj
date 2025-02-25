@@ -136,11 +136,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\OBEM.exe" />
-    <Content Include="bin\Debug\OBEM.pdb" />
+    <Resource Include="Resources\stocksample.png" />
+    <Resource Include="Resources\sample.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Resource Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\OBEM.exe" />
+    <Content Include="bin\Debug\OBEM.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

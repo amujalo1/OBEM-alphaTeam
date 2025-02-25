@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using OBEM.Views;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace OBEM
@@ -16,7 +17,7 @@ namespace OBEM
         }
         private void OpenUnitEnergyMonitoring_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new UnitEnergyMonitoring());
+            MainFrame.Navigate(new UnitDetails());
         }
     }
 }
