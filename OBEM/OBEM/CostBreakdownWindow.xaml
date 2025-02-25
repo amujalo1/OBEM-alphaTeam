@@ -1,0 +1,24 @@
+﻿<Window x:Class="OBEM.CostBreakdownWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cost Breakdown" Height="500" Width="600">
+
+    <Grid>
+        <!-- Dugme za dohvaćanje podataka -->
+        <Button Name="BtnFetchDevices"
+                Content="Fetch Devices"
+                Click="BtnFetchDevices_Click"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="10"/>
+
+        <!-- TextBox za prikaz rezultata -->
+        <TextBox Name="txtResult"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 Margin="10,50,10,10"
+                 TextWrapping="Wrap"
+                 IsReadOnly="True"
+                 AcceptsReturn="True"/>
+    </Grid>
+</Window>

@@ -91,14 +91,19 @@
                 Click="BtnFetchDeviceByCategory_Click"/>
 
         <!-- Fetch All Categories Button -->
-        <Button Name="BtnFetchAllCategories" Content="Fetch All Categories" 
+     <!--   <Button Name="BtnFetchAllCategories" Content="Fetch All Categories" 
                 HorizontalAlignment="Stretch" VerticalAlignment="Center" 
                 Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0" 
-                Click="BtnFetchAllCategories_Click"/>
+                Click="BtnFetchAllCategories_Click"/>-->
+
+        <!-- Show Cost Breakdown Button (Same style as others) -->
+        <Button Name="BtnOpenWindow" Content="Open Cost Breakdown"
+        Click="BtnOpenWindow_Click"
+        HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
 
         <!-- Result Text Box -->
         <TextBox Name="txtResult" HorizontalAlignment="Stretch" 
-                 VerticalAlignment="Top" Grid.Row="6" Grid.ColumnSpan="2" 
-                 Margin="0,20,0,0" TextWrapping="Wrap" IsReadOnly="True" Height="200"/>
+                 VerticalAlignment="Top" Grid.Row="7" Grid.ColumnSpan="2" 
+                 Margin="0,75,0,0" TextWrapping="Wrap" IsReadOnly="True" Height="160"/>
     </Grid>
 </Window>

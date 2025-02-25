@@ -150,5 +150,12 @@ namespace OBEM
             txtResult.Text = data;
         }
 
+
+
+        private void BtnOpenWindow_Click(object sender, RoutedEventArgs e)
+        {
+            CostBreakdownWindow costBreakdownWindow = new CostBreakdownWindow();
+            costBreakdownWindow.Show();
+        }
     }
 }
