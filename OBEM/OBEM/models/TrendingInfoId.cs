@@ -24,7 +24,5 @@ namespace OBEM.models
         
         [JsonProperty("Records", NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, List<Record>> Records { get; set; }
-
-
     }
 }

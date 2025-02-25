@@ -58,6 +58,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="models\Record.cs" />
+    <Compile Include="models\TrendingInfoId.cs" />
     <Compile Include="Views\ApiTester.xaml.cs">
       <DependentUpon>ApiTester.xaml</DependentUpon>
     </Compile>
