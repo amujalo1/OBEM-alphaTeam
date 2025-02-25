@@ -23,34 +23,28 @@ namespace OBEM.Views
             { "FloorNeg1", "Floor -1" },
             { "Outside", "Outside" },
             { "General", "General" }
-        }; 
+        };
 
         private string selectedGroup1 = null;
         private string selectedGroup2 = null;
-        private string selectedGroup3 = null;  
+        private string selectedGroup3 = null;
 
         public UnitDetails()
         {
             InitializeComponent();
-            
         }
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
-            
-
             string buttonName = (sender as Button)?.Name;
 
-            
             if (floorMapping.ContainsKey(buttonName))
             {
-                
                 string floor = floorMapping[buttonName];
                 selectedGroup3 = floor;
-
+                selectedGroup1 = null; // Reset selectedGroup1 when a new floor is selected
                 txtFilteredResults.Text = $"Showing devices for {floor}...";
 
-                
                 await LoadDevices();
             }
         }
@@ -74,7 +68,8 @@ namespace OBEM.Views
                 foreach (var device in devices)
                 {
                     // filtering logic
-                    if ((selectedGroup3 == null || device.Group3 == selectedGroup3))
+                    if ((selectedGroup3 == null || device.Group3 == selectedGroup3) &&
+                        (selectedGroup1 == null || device.Group1 == selectedGroup1))
                     {
                         sb.AppendLine($"ID: {device.Id}");
                         sb.AppendLine($"Name: {device.Name}");
@@ -105,15 +100,15 @@ namespace OBEM.Views
                         Content = group1,
                         Margin = new Thickness(5),
                         Background = new SolidColorBrush(Colors.LightBlue),
-                        Tag = group1 // Store the Group1 value or other relevant data
+                        Tag = group1 // Store the Group1 value
                     };
 
-                    newApartmentButton.Click += ApartmentButton_Click; 
+                    newApartmentButton.Click += ApartmentButton_Click;
 
                     FloorButtonsPanel.Children.Add(newApartmentButton);
                 }
 
-                txtFilteredResults.Text = sb.Length > 0 ? sb.ToString() : "No devices found for the selected floor.";
+                txtFilteredResults.Text = sb.Length > 0 ? sb.ToString() : "No devices found for the selected floor and group.";
             }
             catch (Exception ex)
             {
@@ -121,26 +116,16 @@ namespace OBEM.Views
             }
         }
 
-
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var apartmentButton = sender as Button;
+            selectedGroup1 = apartmentButton?.Tag as string; // Set selectedGroup1 to the Tag value of the button
+
+            if (selectedGroup1 != null)
             {
-                
-                var apartmentButton = sender as Button;
-                var device = apartmentButton?.Tag as DeviceInfo;
-
-                if (device != null)
-                {
-                        
-                        string consumptionDetailsForApartment = $"Device ID: {device.Id}\n" +
-                                                    $"Name: {device.Name}\n" +
-                                                    $"Lower Bound: {device.LowerBound}\n" +
-                                                    $"Upper Bound: {device.UpperBound}\n" +
-                                                    $"Current Consumption: {device.NumericValue} {device.Unit}";
-
-                        
-                        txtFilteredResults.Text = consumptionDetailsForApartment;
-                        await LoadDevices();
+                txtFilteredResults.Text = $"Showing devices for {selectedGroup1}...";
+                await LoadDevices();
             }
-            }
+        }
     }
 }
