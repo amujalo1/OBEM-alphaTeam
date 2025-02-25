@@ -14,7 +14,6 @@ namespace OBEM.Views
     {
         private readonly ApiService _apiService = new ApiService();
 
-        // dictionary because button names cannot have spaces
         private Dictionary<string, string> floorMapping = new Dictionary<string, string>
         {
             { "Floor0", "Floor 0" },
@@ -43,7 +42,7 @@ namespace OBEM.Views
                 string floor = floorMapping[buttonName];
                 selectedGroup3 = floor;
                 selectedGroup1 = null; // Reset selectedGroup1 when a new floor is selected
-                txtFilteredResults.Text = $"Showing devices for {floor}...";
+                txtDetails.Text = $"Showing devices for {floor}...";
 
                 await LoadDevices();
             }
@@ -51,25 +50,88 @@ namespace OBEM.Views
 
         private async System.Threading.Tasks.Task LoadDevices()
         {
-            txtFilteredResults.Text = "Loading devices...";
+            txtDetails.Text = "Loading devices...";
 
             string data = await _apiService.GetAllDevicesAsync();
 
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-                StringBuilder sb = new StringBuilder();
+                HashSet<string> uniqueGroup1Values = new HashSet<string>();
+                HashSet<string> uniqueGroup2Values = new HashSet<string>();
 
                 FloorButtonsPanel.Children.Clear();
-
-                // Use a HashSet to store unique Group1 values
-                HashSet<string> uniqueGroup1Values = new HashSet<string>();
+                lstGroup2.Items.Clear();
 
                 foreach (var device in devices)
                 {
-                    // filtering logic
                     if ((selectedGroup3 == null || device.Group3 == selectedGroup3) &&
                         (selectedGroup1 == null || device.Group1 == selectedGroup1))
+                    {
+                        uniqueGroup1Values.Add(device.Group1);
+                        uniqueGroup2Values.Add(device.Group2);
+                    }
+                }
+
+                foreach (var group1 in uniqueGroup1Values)
+                {
+                    var newApartmentButton = new Button
+                    {
+                        Width = 100,
+                        Height = 50,
+                        Content = group1,
+                        Margin = new Thickness(5),
+                        Background = new SolidColorBrush(Colors.LightBlue),
+                        Tag = group1
+                    };
+
+                    newApartmentButton.Click += ApartmentButton_Click;
+                    FloorButtonsPanel.Children.Add(newApartmentButton);
+                }
+
+                foreach (var group2 in uniqueGroup2Values)
+                {
+                    lstGroup2.Items.Add(group2);
+                }
+
+                txtDetails.Text = uniqueGroup2Values.Count > 0 ? "Select a Group2 to see details." : "No devices found for the selected floor and group.";
+            }
+            catch (Exception ex)
+            {
+                txtDetails.Text = "Error loading devices: " + ex.Message;
+            }
+        }
+
+        private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var apartmentButton = sender as Button;
+            selectedGroup1 = apartmentButton?.Tag as string;
+
+            if (selectedGroup1 != null)
+            {
+                txtDetails.Text = $"Showing devices for {selectedGroup1}...";
+                await LoadDevices();
+            }
+        }
+
+        private async void Group2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedGroup2 = lstGroup2.SelectedItem as string;
+
+            if (selectedGroup2 != null)
+            {
+                txtDetails.Text = $"Loading details for {selectedGroup2}...";
+
+                string data = await _apiService.GetAllDevicesAsync();
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var device in devices)
+                {
+                    if (device.Group2 == selectedGroup2 &&
+                        (selectedGroup1 == null || device.Group1 == selectedGroup1) &&
+                        (selectedGroup3 == null || device.Group3 == selectedGroup3))
                     {
                         sb.AppendLine($"ID: {device.Id}");
                         sb.AppendLine($"Name: {device.Name}");
@@ -86,45 +148,10 @@ namespace OBEM.Views
                         sb.AppendLine($"Is Active: {device.IsActive}");
                         sb.AppendLine($"Update Interval: {device.UpdateInterval}");
                         sb.AppendLine("===============================================");
-
-                        uniqueGroup1Values.Add(device.Group1);
                     }
                 }
 
-                foreach (var group1 in uniqueGroup1Values)
-                {
-                    var newApartmentButton = new Button
-                    {
-                        Width = 100,
-                        Height = 50,
-                        Content = group1,
-                        Margin = new Thickness(5),
-                        Background = new SolidColorBrush(Colors.LightBlue),
-                        Tag = group1 // Store the Group1 value
-                    };
-
-                    newApartmentButton.Click += ApartmentButton_Click;
-
-                    FloorButtonsPanel.Children.Add(newApartmentButton);
-                }
-
-                txtFilteredResults.Text = sb.Length > 0 ? sb.ToString() : "No devices found for the selected floor and group.";
-            }
-            catch (Exception ex)
-            {
-                txtFilteredResults.Text = "Error loading devices: " + ex.Message;
-            }
-        }
-
-        private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
-        {
-            var apartmentButton = sender as Button;
-            selectedGroup1 = apartmentButton?.Tag as string; // Set selectedGroup1 to the Tag value of the button
-
-            if (selectedGroup1 != null)
-            {
-                txtFilteredResults.Text = $"Showing devices for {selectedGroup1}...";
-                await LoadDevices();
+                txtDetails.Text = sb.Length > 0 ? sb.ToString() : "No details found for the selected Group2.";
             }
         }
     }
