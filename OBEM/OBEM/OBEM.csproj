@@ -67,6 +67,9 @@
     <Compile Include="models\Floor.cs" />
     <Compile Include="models\TrendingInfo.cs" />
     <Compile Include="Services\ApiService.cs" />
+    <Compile Include="Views\EnergyCost.xaml.cs">
+      <DependentUpon>EnergyCost.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UnitEnergyMonitoring.xaml.cs">
       <DependentUpon>UnitEnergyMonitoring.xaml</DependentUpon>
     </Compile>
@@ -86,6 +89,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\EnergyCost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UnitEnergyMonitoring.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
