@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\User\source\repos\amujalo1\OBEM-alphaTeam\OBEM\OBEM\App.xaml
-4-565388046
+5-816190561
 3-891673045
-19881793758
+22-1228010444
 141349200530
-Views\ApiTester.xaml;MainWindow.xaml;Views\UnitDetails.xaml;Views\UnitEnergyMonitoring.xaml;
+Views\ApiTester.xaml;MainWindow.xaml;Views\EnergyCost.xaml;Views\UnitDetails.xaml;Views\UnitEnergyMonitoring.xaml;
 
 True
 

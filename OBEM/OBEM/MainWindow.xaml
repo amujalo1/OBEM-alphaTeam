@@ -17,6 +17,10 @@
             <Button Content="Otvori Unit Energy Monitoring"
             Margin="10"
             Click="OpenUnitEnergyMonitoring_Click"/>
+
+            <Button Content="Otvori Energy Cost View"
+            Margin="10"
+            Click="OpenEnergyCost_Click"/>
         </StackPanel>
 
 
