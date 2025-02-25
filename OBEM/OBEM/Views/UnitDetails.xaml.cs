@@ -35,7 +35,6 @@ namespace OBEM.Views
             
         }
 
-        // same event handler for all floor buttons
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
             
@@ -49,7 +48,6 @@ namespace OBEM.Views
                 string floor = floorMapping[buttonName];
                 selectedGroup3 = floor;
 
-                MessageBox.Show($"Loading devices for {floor}");
                 txtFilteredResults.Text = $"Showing devices for {floor}...";
 
                 
@@ -59,7 +57,6 @@ namespace OBEM.Views
 
         private async System.Threading.Tasks.Task LoadDevices()
         {
-
             txtFilteredResults.Text = "Loading devices...";
 
             string data = await _apiService.GetAllDevicesAsync();
@@ -70,6 +67,9 @@ namespace OBEM.Views
                 StringBuilder sb = new StringBuilder();
 
                 FloorButtonsPanel.Children.Clear();
+
+                // Use a HashSet to store unique Group1 values
+                HashSet<string> uniqueGroup1Values = new HashSet<string>();
 
                 foreach (var device in devices)
                 {
@@ -92,24 +92,27 @@ namespace OBEM.Views
                         sb.AppendLine($"Update Interval: {device.UpdateInterval}");
                         sb.AppendLine("===============================================");
 
-                        var newApartmentButton = new Button
-                        {
-                            Width = 100,
-                            Height = 50,
-                            Content = device.Name,
-                            Margin = new Thickness(5),
-                            Background = new SolidColorBrush(Colors.LightBlue),
-                            Tag = device
-                        };
-
-                        newApartmentButton.Click += ApartmentButton_Click; // handler on click
-
-
-                        FloorButtonsPanel.Children.Add(newApartmentButton);
+                        uniqueGroup1Values.Add(device.Group1);
                     }
                 }
 
-                // write results to textblock placeholder
+                foreach (var group1 in uniqueGroup1Values)
+                {
+                    var newApartmentButton = new Button
+                    {
+                        Width = 100,
+                        Height = 50,
+                        Content = group1,
+                        Margin = new Thickness(5),
+                        Background = new SolidColorBrush(Colors.LightBlue),
+                        Tag = group1 // Store the Group1 value or other relevant data
+                    };
+
+                    newApartmentButton.Click += ApartmentButton_Click; 
+
+                    FloorButtonsPanel.Children.Add(newApartmentButton);
+                }
+
                 txtFilteredResults.Text = sb.Length > 0 ? sb.ToString() : "No devices found for the selected floor.";
             }
             catch (Exception ex)
@@ -118,7 +121,8 @@ namespace OBEM.Views
             }
         }
 
-            private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
+
+        private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
             {
                 
                 var apartmentButton = sender as Button;
