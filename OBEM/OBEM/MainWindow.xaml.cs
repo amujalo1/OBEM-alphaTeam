@@ -19,5 +19,11 @@ namespace OBEM
         {
             MainFrame.Navigate(new UnitDetails());
         }
+
+        private void OpenEnergyCost_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new EnergyCost());
+        }
+
     }
 }
