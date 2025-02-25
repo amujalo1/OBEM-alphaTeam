@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\User\Documents\GitHub\OBEM-alphaTeam\OBEM\OBEM\obj\Debug\
+C:\Users\User\Documents\GitHub\OBEM-alphaTeam-2\OBEM\OBEM\obj\Debug\
 OBEM
 none
 false
 DEBUG;TRACE
-C:\Users\User\Documents\GitHub\OBEM-alphaTeam\OBEM\OBEM\App.xaml
-3-1461525826
-21105107808
-18-1938643622
-141953238546
-Views\ApiTester.xaml;MainWindow.xaml;Views\UnitEnergyMonitoring.xaml;
+C:\Users\User\Documents\GitHub\OBEM-alphaTeam-2\OBEM\OBEM\App.xaml
+4-565388046
+3-891673045
+19881793758
+14847648966
+Views\ApiTester.xaml;MainWindow.xaml;Views\UnitDetails.xaml;Views\UnitEnergyMonitoring.xaml;
 
 False
 
