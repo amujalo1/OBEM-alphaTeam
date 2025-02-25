@@ -1,0 +1,53 @@
+﻿<Window x:Class="OBEM.Views.UnitLevelEnergyMonitoringView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:OBEM.ViewModels"
+        mc:Ignorable="d"
+        Title="Energy Dashboard" Height="600" Width="1000">
+
+    <Window.DataContext>
+        <vm:UnitLevelEnergyMonitoringViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Total Power Consumption: " FontSize="16" FontWeight="Bold"/>
+            <TextBlock Text="{Binding TotalPowerConsumption}" FontSize="16" FontWeight="Bold" Foreground="Red"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Filter by Unit:" Margin="5"/>
+            <ComboBox ItemsSource="{Binding Units}" SelectedItem="{Binding SelectedUnit}" Width="120" Margin="5"/>
+            <TextBlock Text="Filter by Floor:" Margin="5"/>
+            <ComboBox ItemsSource="{Binding Floors}" SelectedItem="{Binding SelectedFloor}" Width="120" Margin="5"/>
+            <Button Content="Refresh" Command="{Binding LoadDataCommand}" Margin="10"/>
+        </StackPanel>
+
+        <ListView Grid.Row="2" ItemsSource="{Binding FilteredDevices}" Margin="10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Device name" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                    <GridViewColumn Header="Unit" DisplayMemberBinding="{Binding Unit}" Width="100"/>
+                    <GridViewColumn Header="Floor" DisplayMemberBinding="{Binding Floor}" Width="100"/>
+                    <GridViewColumn Header="Power (kW) " DisplayMemberBinding="{Binding NumericValue}" Width="100"/>
+
+                    <GridViewColumn Header="Status">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsActive}" IsEnabled="False"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

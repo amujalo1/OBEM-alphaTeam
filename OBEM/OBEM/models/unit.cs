@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-    class Unit
+    public class Unit : AComponent
     {
-        public string Name { get; set; }
+        private readonly List<Device> _devices = new List<Device>();
         public string Type { get; set; }
+
+        public Unit(string name, string type, int id) : base (name,id) {
+    
+            Name = name; Type = type;
+        }
     }
 }

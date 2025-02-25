@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-    public abstract class AComp
+    public abstract class AComponent
     {
-        public string Naziv { get; protected set; }
-        public string ID { get; protected set; }
+        public string Name { get; protected set; }
+        public int ID { get; protected set; }
 
-        public AComp(string naziv, string Id)
+        public AComponent(string name, int Id)
         {
-            Naziv = naziv;
+            Name = name;
             ID = Id;
         }
     }

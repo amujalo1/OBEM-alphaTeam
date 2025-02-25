@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-    class Device
+    public class Device
     {
 
-        public Device(string name, int lowerBound, int upperBound, int numericValue, string unit, string apartmetName, string type, string floor)
+        public Device(int id, string name, int lowerBound, int upperBound, int numericValue, string unit, string apartmentName, string type, string floor)
         {
+            Id = id;
             Name = name;
             LowerBound = lowerBound;
             UpperBound = upperBound;
             NumericValue = numericValue;
             Unit = unit;
-            ApartmetName = apartmetName;
+            ApartmentName = apartmentName;
             Type = type;
             Floor = floor;
         }
@@ -31,11 +32,27 @@ namespace OBEM.models
 
         public string Unit { get; set; }
 
-        public string ApartmetName { get; set; }
+        public string ApartmentName { get; set; }
 
         public string Type { get; set; }
 
         public string Floor { get; set; }
 
+        public bool IsActive { get; set; }
+
+        public static Device FromDeviceInfo(DeviceInfo info) // for making a device out of deviceinfo
+        {
+            return new Device(
+                id: int.TryParse(info.Id, out var parsedId) ? parsedId : 0, 
+                name: info.Name,
+                lowerBound: info.LowerBound,
+                upperBound: info.UpperBound,
+                numericValue: info.NumericValue,
+                unit: info.Unit,
+                apartmentName: info.Group2,  
+                type: info.Group3,           
+                floor: info.Group1           
+            );
+        }
     }
 }
