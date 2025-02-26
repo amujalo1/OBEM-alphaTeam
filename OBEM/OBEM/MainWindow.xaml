@@ -40,13 +40,15 @@
             </TabItem>
 
             <TabItem Header="Elementi s anomalijama">
-                <!-- Prikaz elemenata s anomalijama -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <TextBlock Text="Ovo je prikaz elemenata s anomalijama." FontSize="16" Margin="10"/>
-                        <!-- Dodajte ovdje elemente za prikaz elemenata s anomalijama -->
-                    </StackPanel>
-                </ScrollViewer>
+                <!-- DataGrid za prikaz anomalija -->
+                <DataGrid x:Name="dgAnomalies" AutoGenerateColumns="False" Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                        <DataGridTextColumn Header="Veličina odstupanja" Binding="{Binding Deviation}" Width="Auto"/>
+                        <DataGridTextColumn Header="Vrijednost" Binding="{Binding Value}" Width="Auto"/>
+                        <DataGridTextColumn Header="Datum" Binding="{Binding Timestamp}" Width="Auto"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </Grid>
