@@ -151,12 +151,6 @@ namespace OBEM.Views
                     {
                         uniqueGroup1Values.Add(device.Group1);
                         uniqueGroup2Values.Add(device.Group2);
-                    }
-
-                    if (selectedFloor == null || device.Group3 == selectedFloor)
-                    {
-                        uniqueGroup1Values.Add(device.Group1);
-                        uniqueGroup2Values.Add(device.Group2);
                         var devicePanel = new StackPanel
                         {
                             Orientation = Orientation.Vertical,
@@ -245,16 +239,17 @@ namespace OBEM.Views
         {
             var apartmentButton = sender as RadioButton;
             selectedGroup1 = apartmentButton?.Tag as string;
-
+            Console.WriteLine(selectedGroup1);
             if (selectedGroup1 != null)
             {
+                selectedGroup2 = null;
                 await LoadDevices();
             }
 
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;          
             string data = await _apiService.GetAllDevicesAsync();
-            ///string unit = (string)(sender as Button).Content;
+            //string unit = (string)(sender as Button).Content;
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
