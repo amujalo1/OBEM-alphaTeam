@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Windows.Controls;
+using System.Text;
+using OBEM.models;
 
 namespace OBEM
 {
-    public partial class UnitEnergyMonitoringByDeviceId : Window
+    public partial class UnitEnergyMonitoringByDeviceId : Page
     {
         public List<DeviceData> DeviceDataList { get; set; }
         private const string ApiToken = "zC3GtRfOFKY9kKI7CSJo6ZxSW33fT/f1NVQ9Lr0s0gk=";
@@ -21,6 +24,21 @@ namespace OBEM
         {
             InitializeComponent();
             DeviceDataList = new List<DeviceData>();
+        }
+        public UnitEnergyMonitoringByDeviceId(string id)
+        {
+            InitializeComponent();
+            DeviceDataList = new List<DeviceData>();
+            DeviceIdTextBox.Text = id;
+            string deviceId = DeviceIdTextBox.Text.Trim();
+
+            if (string.IsNullOrEmpty(deviceId))
+            {
+                MessageBox.Show("Please enter a valid device ID.");
+                return;
+            }
+            _ = LoadTrendingDataAsync(deviceId);
+            _ = LoadDeviceInfoAsync(deviceId);
         }
 
         private async void LoadDataButton_Click(object sender, RoutedEventArgs e)
@@ -34,6 +52,7 @@ namespace OBEM
             }
 
             await LoadTrendingDataAsync(deviceId);
+            await LoadDeviceInfoAsync(deviceId);
         }
 
         private async Task LoadTrendingDataAsync(string deviceId)
@@ -54,7 +73,7 @@ namespace OBEM
                         {
                             var plotModel = new PlotModel { Title = $"Device: {record.Key}" };
 
-                            var splineSeries = new LineSeries { Title = "Average Energy Value", MarkerType = MarkerType.Circle };
+                            var splineSeries = new LineSeries { Title = "Average Energy Value", MarkerType = MarkerType.Circle, Color = OxyColors.DeepSkyBlue };
 
                             List<double> values = new List<double>();
                             List<DateTime> timestamps = new List<DateTime>();
@@ -111,6 +130,42 @@ namespace OBEM
                 }
             }
         }
+
+        private async Task LoadDeviceInfoAsync(string deviceId)
+        {
+            string apiUrl = $"https://slb-skyline.on.dataminer.services/api/custom/OptimizingBuildingEnergyManagement/getAllDevices";
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ApiToken);
+                    var response = await client.GetStringAsync(apiUrl);
+                    var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(response);
+
+                    var device = devices.FirstOrDefault(d => d.Id == deviceId);
+
+                    if (device != null)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendLine($"Name: {device.Name}");
+                        sb.AppendLine($"Unit: {device.Unit}");
+                        sb.AppendLine($"Is On: {device.IsActive}");
+                        sb.AppendLine($"Update Interval: {device.UpdateInterval}");
+
+                        DeviceInfoTextBlock.Text = sb.ToString();
+                    }
+                    else
+                    {
+                        DeviceInfoTextBlock.Text = "Device not found.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DeviceInfoTextBlock.Text = $"Error fetching device info: {ex.Message}";
+                }
+            }
+        }
     }
 
     public class ApiResponse
@@ -147,4 +202,3 @@ namespace OBEM
         public int Status { get; set; }
     }
 }
-

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace OBEM
@@ -152,6 +153,47 @@ namespace OBEM
         {
             MainFrame.Navigate(new EnergyCost());
         }
+        private void OpenDeviceGraphPage_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId());
+        }
+        private void ShowGraph_Click(object sender, RoutedEventArgs e)
+        {
+            // Dohvati odabrani red iz DataGrid-a
+            var button = sender as Button;
+            var selectedItem = button.DataContext;
+
+            // Pretpostavimo da je selectedItem objekt s ID svojstvom
+            var idProperty = selectedItem.GetType().GetProperty("Id");
+            if (idProperty == null)
+            {
+                MessageBox.Show("Odabrani red nema ID svojstvo.");
+                return;
+            }
+
+            // Dohvati ID u formatu "505/37"
+            var fullId = idProperty.GetValue(selectedItem) as string;
+            if (string.IsNullOrEmpty(fullId))
+            {
+                MessageBox.Show("ID nije pronađen.");
+                return;
+            }
+
+            // Parsiraj ID kako bi izdvojio samo drugi dio (npr. "37")
+            var idParts = fullId.Split('/');
+            if (idParts.Length < 2)
+            {
+                MessageBox.Show("ID nije u očekivanom formatu (npr. '505/37').");
+                return;
+            }
+
+            // Uzmi drugi dio ID-a (npr. "37")
+            var id = idParts[1];
+
+            // Navigiraj na novu stranicu s izdvojenim ID-om
+            MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId(id));
+        }
+
     }
 
    

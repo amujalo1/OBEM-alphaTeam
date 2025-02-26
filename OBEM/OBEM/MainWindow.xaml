@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="960" Width="1280">
 
-
     <Grid Background="#272537">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -18,15 +17,12 @@
 
         <!-- Dugme za prelazak na ApiTester stranicu -->
         <DockPanel VerticalAlignment="Top" Grid.Row="1" Height="30" HorizontalAlignment="Left" Width="1280" Margin="10,0,0,0">
-
             <Button Content="Notifikacije" Click="NotificationsButton_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Otvori API Tester" Click="OpenApiTester_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Otvori Unit Energy Monitoring" Click="OpenUnitEnergyMonitoring_Click" Width="200" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Otvori Energy Cost View" Click="OpenEnergyCost_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
-
-            
-                <Label x:Name="DateTimeText" Margin="25,0,0,0" FontSize="14" Foreground="white"/>
- 
+            <Button Content="Oppen Graph Page" Click="OpenDeviceGraphPage_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+            <Label x:Name="DateTimeText" Margin="25,0,0,0" FontSize="14" Foreground="white"/>
         </DockPanel>
 
         <!-- Frame za prikaz stranica -->
@@ -42,6 +38,7 @@
                 <DataGrid x:Name="dgHighConsumption" AutoGenerateColumns="True" Margin="10"/>
             </TabItem>
 
+
             <TabItem Header="Elementi s anomalijama">
                 <!-- DataGrid za prikaz anomalija -->
                 <DataGrid x:Name="dgAnomalies" AutoGenerateColumns="False" Margin="10">
@@ -50,6 +47,13 @@
                         <DataGridTextColumn Header="Veličina odstupanja" Binding="{Binding Deviation}" Width="Auto"/>
                         <DataGridTextColumn Header="Vrijednost" Binding="{Binding Value}" Width="Auto"/>
                         <DataGridTextColumn Header="Datum" Binding="{Binding Timestamp}" Width="Auto"/>
+                        <DataGridTemplateColumn Header="Graf" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Prikaži graf" Click="ShowGraph_Click" Background="Transparent" BorderThickness="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
