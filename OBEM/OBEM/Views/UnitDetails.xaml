@@ -20,7 +20,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Logo" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="22"/>
+            <TextBlock Text="Logo" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="22" MouseLeftButtonDown="PageLoaded"/>
 
             <StackPanel Grid.Row="1" Margin="0,20,0,0">
                 <RadioButton x:Name="Floor2" Click="FloorButton_Click" Content="Floor 2" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
