@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using OBEM.Services;
 using OBEM.models;
 using System.Windows.Media;
+using System.Threading.Tasks;
 
 namespace OBEM.Views
 {
@@ -33,8 +34,16 @@ namespace OBEM.Views
             InitializeComponent();
         }
 
+        private async void PageLoaded(object sender, RoutedEventArgs e)
+        {
+            await BuildingCarbonFootprint(sender, null);
+            await EnergyCostBuilding(sender, null);
+        }
+
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
+
+            //
             string buttonName = (sender as RadioButton)?.Name;
 
             if (floorMapping.ContainsKey(buttonName))
@@ -46,6 +55,70 @@ namespace OBEM.Views
 
                 await LoadDevices();
             }
+
+            // Energy cost logic
+
+            string data = await _apiService.GetAllDevicesAsync();
+            string floorLevel = (sender as RadioButton)?.Content.ToString();
+            double energyCost = 0;
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
+                const double pricePerKw = 0.30;
+                var floorEnergyConsumption = new Dictionary<string, double>();
+
+                foreach (var device in devices)
+                {
+
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
+                    {
+                        if (device.Group3 == floorLevel)
+                        {
+                            energyCost += device.NumericValue * pricePerKw;
+                        }
+
+                    }
+                }
+                StringBuilder sb = new StringBuilder();
+
+
+                sb.AppendLine($"Floor: {floorLevel}");
+                sb.AppendLine($"Total cost: {energyCost}$");
+
+                txtEnergyCost.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+
+
+            // Carbon footprint calculation
+            double CO2 = 0;
+
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
+                StringBuilder sb = new StringBuilder();
+                foreach (var device in devices)
+                {
+
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3==floorLevel)
+                    {
+                        CO2 += device.NumericValue * 1.2;
+                    }
+                }
+                sb.AppendLine($"{CO2} kg CO2");
+                txtCarbonFootprint.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+
+
         }
 
         private async System.Threading.Tasks.Task LoadDevices()
@@ -118,6 +191,69 @@ namespace OBEM.Views
                 txtDetails.Text = $"Showing devices for {selectedGroup1}...";
                 await LoadDevices();
             }
+
+            //Energy cost for single unit
+            selectedGroup2 = apartmentButton?.Content as string;          
+            string data = await _apiService.GetAllDevicesAsync();
+            ///string unit = (string)(sender as Button).Content;
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
+                const double pricePerKw = 0.30;
+                var floorEnergyConsumption = new Dictionary<string, double>();
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var device in devices)
+                {
+
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
+                    {
+                        double energyCost = device.NumericValue * pricePerKw;
+
+                        sb.AppendLine($"Unit: {device.Group1}");
+                        sb.AppendLine($"Energy Cost: {energyCost}");
+                        break;
+                    }
+                }
+
+
+                txtEnergyCost.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+
+
+
+            // CO2 footprint 
+
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var device in devices)
+                {
+
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
+                    {
+                        double CO2 = device.NumericValue * 1.2;
+
+                        sb.AppendLine($"{CO2} kg CO2");
+                        break;
+                    }
+                }
+
+
+                txtCarbonFootprint.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+
         }
 
         private async void Group2_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -160,5 +296,67 @@ namespace OBEM.Views
                 txtDetails.Text = sb.Length > 0 ? sb.ToString() : "No details found for the selected Group2.";
             }
         }
+
+        // Carbon footprint calculation for entire building
+        private async Task BuildingCarbonFootprint(object sender, SelectionChangedEventArgs e)
+        {
+
+            string data = await _apiService.GetAllDevicesAsync();
+            double CO2 = 0;
+
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
+                StringBuilder sb = new StringBuilder();
+                foreach (var device in devices)
+                {
+
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
+                    {
+                        CO2 += device.NumericValue * 1.2;
+
+                    }
+                }
+                sb.AppendLine($"{CO2} kg CO2");
+                txtCarbonFootprint.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+
+        }
+
+
+        // Cost calculation for entire building
+
+        private async Task EnergyCostBuilding(object sender, RoutedEventArgs e)
+        {
+            string data = await _apiService.GetAllDevicesAsync();
+
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
+                const double pricePerKw = 0.30;
+                StringBuilder sb = new StringBuilder();
+                double energyCost = 0;
+                foreach (var device in devices)
+                {
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
+                    {
+                        energyCost += device.NumericValue * pricePerKw;
+                    }
+                }
+                sb.AppendLine($"Energy Cost For Entire Building: {energyCost}$");
+                txtEnergyCost.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+        }
+
     }
 }
