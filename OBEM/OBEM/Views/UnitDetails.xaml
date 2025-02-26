@@ -20,7 +20,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Logo" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="22"/>
+            <TextBlock Text="Logo" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="22" MouseLeftButtonDown="PageLoaded"/>
 
             <StackPanel Grid.Row="1" Margin="0,20,0,0">
                 <RadioButton x:Name="Floor2" Click="FloorButton_Click" Content="Floor 2" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
@@ -39,23 +39,22 @@
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" CornerRadius="20" Background="Transparent" Padding="5" BorderBrush="Gray" BorderThickness="1">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <Grid>
-                            <!-- Podignuta slika kuće -->
-                            <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="350" Width="350" Margin="0,50,0,0" Panel.ZIndex="1">
-                                <Image.Source>
-                                    <BitmapImage UriSource="pack://application:,,,/Resources/UIsample.png"/>
-                                </Image.Source>
-                            </Image>
 
-                            <!-- Pomaknuti dugmadi za apartmane malo gore -->
-                            <StackPanel x:Name="ApartmentButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,100,0,0">
-                                <!-- Apartment buttons go here -->
-                            </StackPanel>
-                        </Grid>
-                    </ScrollViewer>
+                    <Grid>
+                        <!-- Podignuta slika kuće -->
+                        <Image HorizontalAlignment="Left" VerticalAlignment="Top" Height="350" Width="350" Margin="500,50,0,0" Panel.ZIndex="1">
+                            <Image.Source>
+                                <BitmapImage UriSource="pack://application:,,,/Resources/UIsample.png"/>
+                            </Image.Source>
+                        </Image>
+
+                        
+                        <StackPanel x:Name="ApartmentButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,100,0,0">
+                            <!-- Apartment buttons go here -->
+                        </StackPanel>
+                    </Grid>
                 </Border>
-
+                
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>
 
                 <Border Grid.Column="2" CornerRadius="20" Background="#4A4763" Padding="5" BorderBrush="Gray" BorderThickness="1">

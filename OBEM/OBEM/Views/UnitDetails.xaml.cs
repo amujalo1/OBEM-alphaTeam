@@ -15,6 +15,8 @@ namespace OBEM.Views
     {
         private readonly ApiService _apiService = new ApiService();
 
+        
+
         private Dictionary<string, string> floorMapping = new Dictionary<string, string>
         {
             { "Floor0", "Floor 0" },
@@ -25,6 +27,7 @@ namespace OBEM.Views
             { "General", "General" }
         };
 
+
         private string selectedGroup1 = null;
         private string selectedGroup2 = null;
         private string selectedGroup3 = null;
@@ -32,6 +35,7 @@ namespace OBEM.Views
         public UnitDetails()
         {
             InitializeComponent();
+
         }
 
         private async void PageLoaded(object sender, RoutedEventArgs e)
@@ -52,6 +56,9 @@ namespace OBEM.Views
                 selectedGroup3 = floor;
                 selectedGroup1 = null; // Reset selectedGroup1 when a new floor is selected
                 txtDetails.Text = $"Showing devices for {floor}...";
+
+                int floorNumber = GetFloorNumber(floor);
+                MoveStackPanelBasedOnFloor(floorNumber);
 
                 await LoadDevices();
             }
@@ -150,10 +157,10 @@ namespace OBEM.Views
                 {
                     var newApartmentButton = new RadioButton
                     {
-                        Width = 100,
-                        Height = 50,
+                        Width = 75,
+                        Height = 25,
                         Content = group1,
-                        Margin = new Thickness(5),
+                        Margin = new Thickness(),
                         Background = new SolidColorBrush(Colors.LightBlue),
                         Tag = group1,
                     };
@@ -163,9 +170,10 @@ namespace OBEM.Views
                     {
                         newApartmentButton.Style = menuButtonStyle;
                     }
-
                     newApartmentButton.Click += ApartmentButton_Click;
                     ApartmentButtonsPanel.Children.Add(newApartmentButton);
+
+                    
                 }
 
                 foreach (var group2 in uniqueGroup2Values)
@@ -358,5 +366,55 @@ namespace OBEM.Views
             }
         }
 
+        
+        public void MoveStackPanelBasedOnFloor(int floorNumber)
+        {
+            // Define the margin positions based on the selected floor
+            double marginTop = 0;
+
+            switch (floorNumber)
+            {
+                case 2:
+                    marginTop = 20;
+                    break;
+                case 1:
+                    marginTop = 70;
+                    break;
+                case 0:
+                    marginTop = 120;
+                    break;
+                case -1:
+                    marginTop = 170;
+                    break;
+                case -2:
+                    marginTop = 220;
+                    break;
+                case -3:
+                    marginTop = 270;
+                    break;
+                default:
+                    marginTop = 0; // Default margin in case of invalid floor
+                    break;
+            }
+
+            
+            ApartmentButtonsPanel.Margin = new Thickness(0, marginTop, 200, 0);
+        }
+
+        private int GetFloorNumber(string floor)
+        {
+            switch (floor)
+            {
+                case "Floor 2": return 2;
+                case "Floor 1": return 1;
+                case "Floor 0": return 0;
+                case "Floor -1": return -1;
+                case "Floor -2": return -2;
+                case "Floor -3": return -3;
+                case "Outside": return -4; 
+                case "General": return -5; 
+                default: return 0; 
+            }
+        }
     }
 }
