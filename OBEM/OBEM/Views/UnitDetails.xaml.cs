@@ -8,6 +8,9 @@ using OBEM.Services;
 using OBEM.models;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Windows.Controls.Primitives;
+using System.Xml.Linq;
 
 namespace OBEM.Views
 {
@@ -32,11 +35,10 @@ namespace OBEM.Views
         private string selectedGroup2 = null;
         private string selectedGroup3 = null;
         private string selectedFloor = null;
-
         public UnitDetails()
         {
+            
             InitializeComponent();
-
         }
 
         private async void PageLoaded(object sender, RoutedEventArgs e)
@@ -209,17 +211,18 @@ namespace OBEM.Views
                     var newApartmentButton = new RadioButton
                     {
                         Width = 75,
+                        Padding = new Thickness(10, 5, 10, 5),
                         Height = 25,
+                        FontSize = 10,
                         Content = group1,
-                        Margin = new Thickness(),
-                        Background = new SolidColorBrush(Colors.LightBlue),
-                        Tag = group1,
+                        Tag = group1
                     };
 
-                    var menuButtonStyle = Application.Current.FindResource("MenuButtonTheme") as Style;
+                    var menuButtonStyle = Application.Current.FindResource("SelectionButtonTheme") as Style;
                     if (menuButtonStyle != null)
                     {
                         newApartmentButton.Style = menuButtonStyle;
+                        newApartmentButton.ToolTip = $"Apartment: {group1}";
                     }
                     newApartmentButton.Click += ApartmentButton_Click;
                     ApartmentButtonsPanel.Children.Add(newApartmentButton);
@@ -374,7 +377,8 @@ namespace OBEM.Views
         
         public void MoveStackPanelBasedOnFloor(int floorNumber)
         {
-            // Define the margin positions based on the selected floor
+            // pomjeranje margine od početka u zavisnosti od izabira
+            // ovo je lakše nego da pravimo više panela
             double marginTop = 0;
 
             switch (floorNumber)
@@ -391,18 +395,14 @@ namespace OBEM.Views
                 case -1:
                     marginTop = 170;
                     break;
-                case -2:
+                case -4:
                     marginTop = 220;
                     break;
-                case -3:
-                    marginTop = 270;
-                    break;
                 default:
-                    marginTop = 0; // Default margin in case of invalid floor
+                    marginTop = 1000; // default
                     break;
             }
 
-            
             ApartmentButtonsPanel.Margin = new Thickness(0, marginTop, 200, 0);
         }
 
@@ -414,8 +414,6 @@ namespace OBEM.Views
                 case "Floor 1": return 1;
                 case "Floor 0": return 0;
                 case "Floor -1": return -1;
-                case "Floor -2": return -2;
-                case "Floor -3": return -3;
                 case "Outside": return -4; 
                 case "General": return -5; 
                 default: return 0; 
