@@ -68,7 +68,9 @@ namespace OBEM.Views
             string data = await _apiService.GetAllDevicesAsync();
             string floorLevel = (sender as RadioButton)?.Content.ToString();
             double currentEnergyCost = 0;
+            double currentCO2 = 0;
             const double pricePerKw = 0.30;
+            
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
@@ -78,53 +80,29 @@ namespace OBEM.Views
                 foreach (var device in devices)
                 {
 
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
-                    {
-                        if (device.Group3 == floorLevel)
-                        {
-                            currentEnergyCost += device.NumericValue * pricePerKw;
-                        }
-
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3 == floorLevel)
+                    {         
+                            currentEnergyCost += device.NumericValue;
                     }
                 }
+                currentCO2 = currentEnergyCost * 1.2;
                 StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{currentCO2} kg CO2");
+                txtCurentCarbonFootprint.Text = sb.ToString();
+                sb.Clear();
 
+                currentEnergyCost *= pricePerKw;
 
                 sb.AppendLine($"Floor: {floorLevel}");
-                sb.AppendLine($"Total cost: {currentEnergyCost}$");
+                sb.AppendLine($"{currentEnergyCost}$");
+                txtCurrentEnergyCost.Text = sb.ToString();
+                
 
-                txtEnergyCost.Text = sb.ToString();
             }
             catch (Exception ex)
             {
                 txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
-
-
-            // Carbon footprint calculation
-            double currentCO2 = 0;
-
-            try
-            {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-
-                StringBuilder sb = new StringBuilder();
-                foreach (var device in devices)
-                {
-
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3==floorLevel)
-                    {
-                        currentCO2 += device.NumericValue * 1.2;
-                    }
-                }
-                sb.AppendLine($"{currentCO2} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
-            }
-            catch (Exception ex)
-            {
-                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
-            }
-
 
             // Last 7 days
 
@@ -171,9 +149,11 @@ namespace OBEM.Views
                 StringBuilder sb = new StringBuilder();
 
                 sb.AppendLine($"Floor: {floorLevel}");
-                sb.AppendLine($"Total cost: {totalEnergyCost}$");
+                sb.AppendLine($"{Math.Round(totalEnergyCost)}$");
+                txtEnergyCost.Text = sb.ToString();
                 sb.Clear();
-                sb.AppendLine($"Total CO2 : {totalCO2} kg CO2");
+                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
+                txtCarbonFootprint.Text = sb.ToString();
             }
             catch (Exception ex)
             {
@@ -259,7 +239,6 @@ namespace OBEM.Views
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;          
             string data = await _apiService.GetAllDevicesAsync();
-            ///string unit = (string)(sender as Button).Content;
             try
             {
                 const double pricePerKw = 0.30;
@@ -321,7 +300,7 @@ namespace OBEM.Views
                         {
                             double average = sumOfAverages / count;
                             double energyCost = average * pricePerKw;
-                            double CO2 = average + 1.2;
+                            double CO2 = average * 1.2;
 
                             totalCost += energyCost;
                             totalCO2 += CO2;
