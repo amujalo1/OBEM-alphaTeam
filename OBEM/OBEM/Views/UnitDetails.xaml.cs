@@ -206,8 +206,28 @@ namespace OBEM.Views
             ///string unit = (string)(sender as Button).Content;
             try
             {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
                 const double pricePerKw = 0.30;
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var device in devices)
+                {
+                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
+                    {
+                        double currentEnergyCost = device.NumericValue * pricePerKw;
+                        double currentCO2 = device.NumericValue * 1.2;
+                        sb.AppendLine($"Unit: {device.Group1}");
+                        sb.AppendLine($"Energy Cost: {currentEnergyCost}");
+                        txtCurrentEnergyCost.Text = sb.ToString();
+                        sb.Clear();
+                        sb.AppendLine($"{currentCO2} kg CO2");
+                        txtCurentCarbonFootprint.Text = sb.ToString();
+
+                        break;
+                    }
+                }
+                
+                // Last 7 days
                 double totalCost = 0;
                 double totalCO2 = 0;
                 var floorEnergyConsumption = new Dictionary<string, double>();
@@ -220,6 +240,7 @@ namespace OBEM.Views
 
                         string trendingData = await _apiService.GetTrendingInfoById2(int.Parse(device.Id));
                         var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
+
 
                         var records = trendingResponse.Records;
 
@@ -253,7 +274,7 @@ namespace OBEM.Views
 
                 }
 
-                StringBuilder sb = new StringBuilder();
+                sb.Clear();
                 sb.AppendLine($"{Math.Round(totalCost)}$");
                 txtEnergyCost.Text = sb.ToString();
                 sb.Clear();

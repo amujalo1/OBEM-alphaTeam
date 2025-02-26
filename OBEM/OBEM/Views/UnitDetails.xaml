@@ -73,12 +73,18 @@
                             <ScrollViewer VerticalScrollBarVisibility="Auto" Height="200">
                                 <TextBlock x:Name="txtDetails" TextWrapping="Wrap" />
                             </ScrollViewer>
-                            <!-- Carbon footprint -->
-                            <TextBlock Text="Carbon foorprint:" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <!-- Carbon footprint in last 7 days -->
+                            <TextBlock Text="Carbon foorprint in last 7 days:" FontWeight="Bold" Margin="0,10,0,5"/>
                             <TextBox x:Name="txtCarbonFootprint" Height="20" TextWrapping="Wrap" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" IsReadOnly="True"/>
-                            <!-- Energy cost-->
-                            <TextBlock Text="Energy cost:" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <!-- Energy cost in last 7 days-->
+                            <TextBlock Text="Energy cost in last 7 days:" FontWeight="Bold" Margin="0,10,0,5"/>
                             <TextBox x:Name="txtEnergyCost" Height="50" TextWrapping="Wrap" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" IsReadOnly="True"/>
+                            <!-- Current carbon footprint -->
+                            <TextBlock Text="Current carbon footprint:" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <TextBox x:Name="txtCurentCarbonFootprint" Height="20" TextWrapping="Wrap" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" IsReadOnly="True"/>
+                            <!-- Current energy consumption -->
+                            <TextBlock Text="Current energy consumption:" FontWeight="Bold" Margin="0,10,0,5"/>
+                            <TextBox x:Name="txtCurrentEnergyCost" Height="50" TextWrapping="Wrap" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" IsReadOnly="True"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
