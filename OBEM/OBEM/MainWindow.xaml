@@ -15,19 +15,19 @@
         </Grid.RowDefinitions>
 
         <!-- Dugme za prelazak na ApiTester stranicu -->
-        <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top" Width="700" Grid.Row="0" Height="30">
-            <Button Content="Otvori API Tester"
-                    Click="OpenApiTester_Click" Width="150"/>
+        <DockPanel VerticalAlignment="Top" Grid.Row="1" Height="30" HorizontalAlignment="Left" Width="1280">
 
-            <Button Content="Otvori Unit Energy Monitoring"
-                    Click="OpenUnitEnergyMonitoring_Click" Width="200"/>
+            <Button Content="Notifikacije" Click="NotificationsButton_Click" Width="150"/>
 
-            <Button Content="Otvori Energy Cost View"
-                    Click="OpenEnergyCost_Click" Width="150"/>
+            <Button Content="Otvori API Tester" Click="OpenApiTester_Click" Width="150"/>
+            <Button Content="Otvori Unit Energy Monitoring" Click="OpenUnitEnergyMonitoring_Click" Width="200"/>
+            <Button Content="Otvori Energy Cost View" Click="OpenEnergyCost_Click" Width="150"/>
+
+            <Label x:Name="DateTimeText" FontSize="14" Foreground="black"/>
         </DockPanel>
 
         <!-- Frame za prikaz stranica -->
-        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden" Margin="10"/>
+        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden" Margin="10,35,10,10"/>
 
         <!-- GridSplitter za promjenu visine TabControl-a -->
         <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>

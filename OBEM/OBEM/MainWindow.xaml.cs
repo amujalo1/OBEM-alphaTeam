@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace OBEM
 {
@@ -19,8 +19,26 @@ namespace OBEM
             InitializeComponent();
             LoadHighConsumptionData();
             LoadAnomaliesData();
+            StartClock();
+        }
+        private void StartClock()
+        {
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += (sender, e) => UpdateDateTime();
+            timer.Start();
         }
 
+        private void UpdateDateTime()
+        {
+            DateTime currentDateTime = DateTime.Now;
+            DateTimeText.Content = currentDateTime.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
+        private void NotificationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new Notifikacije());
+        }
         private async void LoadHighConsumptionData()
         {
             string data = await _apiService.GetAllDevicesAsync();
