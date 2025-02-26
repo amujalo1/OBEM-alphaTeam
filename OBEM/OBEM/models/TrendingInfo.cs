@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,47 +7,44 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-    using System;
-    using System.Collections.Generic;
-    using Newtonsoft.Json;
 
-    namespace OBEM.Models
+    public class Anomaly
     {
-        public class Record
+        public string Id { get; set; }
+        public double Deviation { get; set; }
+        public double Value { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+
+    public class TrendingValue
+    {
+        [JsonProperty("Value")]
+        public string Value { get; set; }
+
+        [JsonProperty("Time")] // Mapirajte "Time" iz JSON-a na Timestamp
+        public DateTime Timestamp { get; set; }
+
+        [JsonProperty("Status")]
+        public int Status { get; set; }
+
+        public double NumericValue
         {
-            [JsonProperty("Value", NullValueHandling = NullValueHandling.Ignore)]
-            public string Value { get; set; }
-
-            [JsonProperty("Time", NullValueHandling = NullValueHandling.Ignore)]
-            public DateTime Time { get; set; }
-
-            [JsonProperty("Status", NullValueHandling = NullValueHandling.Ignore)]
-            public int Status { get; set; }
+            get
+            {
+                if (double.TryParse(Value, out double result))
+                    return result;
+                return 0; // Default vrijednost za nevalidne brojeve
+            }
         }
+    }
 
-        public class DeviceRecords
-        {
-            [JsonProperty("505/37", NullValueHandling = NullValueHandling.Ignore)]
-            public List<Record> RecordsList { get; set; }
-        }
-
-        public class TrendingInfo
-        {
-            [JsonProperty("Result", NullValueHandling = NullValueHandling.Ignore)]
-            public int Result { get; set; }
-
-            [JsonProperty("Message", NullValueHandling = NullValueHandling.Ignore)]
-            public string Message { get; set; }
-
-            [JsonProperty("Values", NullValueHandling = NullValueHandling.Ignore)]
-            public List<string> Values { get; set; }
-
-            [JsonProperty("ColumnNames", NullValueHandling = NullValueHandling.Ignore)]
-            public List<string> ColumnNames { get; set; }
-
-            [JsonProperty("Records", NullValueHandling = NullValueHandling.Ignore)]
-            public Dictionary<string, List<Record>> Records { get; set; }
-        }
+    public class TrendingInfo
+    {
+        public int Result { get; set; }
+        public string Message { get; set; }
+        public List<string> Values { get; set; }
+        public List<string> ColumnNames { get; set; }
+        public Dictionary<string, List<TrendingValue>> Records { get; set; }
     }
 }
 

@@ -140,7 +140,6 @@
     <None Include=".vs\OBEM\v17\DocumentLayout.json" />
     <None Include=".vs\slnx.sqlite" />
     <None Include=".vs\VSWorkspaceState.json" />
-    <None Include="bin\Debug\OBEM.exe.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -154,15 +153,9 @@
     <Resource Include="Resources\stocksample.png" />
     <Resource Include="Resources\sample.png" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
     <Resource Include="Resources\UIsample.png" />
-    <Resource Include="bin\Debug\Newtonsoft.Json.xml" />
-    <Content Include="bin\Debug\OBEM.exe" />
-    <Content Include="bin\Debug\OBEM.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

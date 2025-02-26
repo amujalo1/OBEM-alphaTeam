@@ -6,7 +6,7 @@ using OBEM.models;
 using System.Collections.Generic;
 using System.Text;
 using System;
-using OBEM.models.OBEM.Models;
+using OBEM.models;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
@@ -111,31 +111,7 @@ namespace OBEM
         {
             string data = await _apiService.GetTrendingInfo();
 
-            try
-            {
-                var response = JsonConvert.DeserializeObject<TrendingInfo>(data);
-
-                if (response != null)
-                {
-                    txtResult.Text = $"Result: {response.Result}\nMessage: {response.Message}\n\n";
-
-                    if (response.Records != null && response.Records.ContainsKey("505/37"))
-                    {
-                        foreach (var record in response.Records["505/37"])
-                        {
-                            txtResult.Text += $"Value: {record.Value}, Time: {record.Time}, Status: {record.Status}\n";
-                        }
-                    }
-                }
-                else
-                {
-                    txtResult.Text = "Nepoznat odgovor.";
-                }
-            }
-            catch (Exception ex)
-            {
-                txtResult.Text = $"Greška pri parsiranju: {ex.Message}";
-            }
+            txtResult.Text = data;
         }
 
         // Fetch Trending Info By Id

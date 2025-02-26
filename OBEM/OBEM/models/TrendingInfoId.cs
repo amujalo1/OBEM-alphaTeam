@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using OBEM.models.OBEM.Models;
+using OBEM.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
