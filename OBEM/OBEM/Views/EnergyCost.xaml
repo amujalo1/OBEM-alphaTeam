@@ -27,11 +27,11 @@
 		<Button Name="Floor0" Content="Floor 0"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 Grid.Row="2" Grid.ColumnSpan="2" Margin="0,130,0,0"
-                Click="BtnUnitEnergyCostPerFloor_Click"/>
+                Click="BtnEntireEnergyCostPerFloor_Click"/>
 		<Button Name="Floor1" Content="Floor 1"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 Grid.Row="2" Grid.ColumnSpan="2" Margin="0,170,0,0"
-                Click="BtnUnitEnergyCostPerFloor_Click"/>
+                Click="BtnEntireEnergyCostPerFloor_Click"/>
 		<Button Name="Floor2" Content="Floor 2"
                 HorizontalAlignment="Stretch" VerticalAlignment="Center"
                 Grid.Row="2" Grid.ColumnSpan="2" Margin="0,210,0,0"
