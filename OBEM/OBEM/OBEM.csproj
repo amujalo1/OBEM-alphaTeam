@@ -14,6 +14,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,6 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="models\Record.cs" />
+    <Compile Include="models\TrendingInfoId.cs" />
     <Compile Include="Views\ApiTester.xaml.cs">
       <DependentUpon>ApiTester.xaml</DependentUpon>
     </Compile>
@@ -67,9 +71,19 @@
     <Compile Include="models\Floor.cs" />
     <Compile Include="models\TrendingInfo.cs" />
     <Compile Include="Services\ApiService.cs" />
+    <Compile Include="Views\EnergyCost.xaml.cs">
+      <DependentUpon>EnergyCost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UnitDetails.xaml.cs">
+      <DependentUpon>UnitDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UnitEnergyMonitoring.xaml.cs">
       <DependentUpon>UnitEnergyMonitoring.xaml</DependentUpon>
     </Compile>
+    <Page Include="Theme\MenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ApiTester.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +100,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\EnergyCost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UnitDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UnitEnergyMonitoring.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,11 +151,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\OBEM.exe" />
-    <Content Include="bin\Debug\OBEM.pdb" />
+    <Resource Include="Resources\stocksample.png" />
+    <Resource Include="Resources\sample.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
+    <Resource Include="Resources\UIsample.png" />
+    <Resource Include="bin\Debug\Newtonsoft.Json.xml" />
+    <Content Include="bin\Debug\OBEM.exe" />
+    <Content Include="bin\Debug\OBEM.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
