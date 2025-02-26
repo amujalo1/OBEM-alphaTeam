@@ -125,6 +125,25 @@ namespace OBEM.Services
             }
         }
 
+        // Get trending info by id 2
+
+        public async Task<string> GetTrendingInfoById2(int Id)
+        {
+            using (var client = CreateHttpClient())
+            {
+                string url = $"{_baseUrl}/getTrendingInfo?type=average&?id={Id}";
+                try
+                {
+                    var response = await client.GetAsync(url);
+                    return await HandleResponse(response);
+                }
+                catch (Exception ex)
+                {
+                    return $"Greška: {ex.Message}";
+                }
+            }
+        }
+
         // Helper method for handling response
         private async Task<string> HandleResponse(HttpResponseMessage response)
         {

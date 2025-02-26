@@ -207,26 +207,59 @@ namespace OBEM.Views
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-
                 const double pricePerKw = 0.30;
+                double totalCost = 0;
+                double totalCO2 = 0;
                 var floorEnergyConsumption = new Dictionary<string, double>();
-                StringBuilder sb = new StringBuilder();
+                DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
 
                 foreach (var device in devices)
                 {
-
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
                     {
-                        double energyCost = device.NumericValue * pricePerKw;
 
-                        sb.AppendLine($"Unit: {device.Group1}");
-                        sb.AppendLine($"Energy Cost: {energyCost}");
-                        break;
+                        string trendingData = await _apiService.GetTrendingInfoById2(int.Parse(device.Id));
+                        var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
+
+                        var records = trendingResponse.Records;
+
+                        double sumOfAverages = 0;
+                        int count = 0;
+
+                        foreach(var recordEntry in records)
+                        {
+                            foreach(var record in recordEntry.Value)
+                            {
+                                DateTime recordTime = DateTime.Parse(record.Time);
+                                
+                                if(recordTime > sevenDaysAgo)
+                                {
+                                    sumOfAverages += record.AverageValue;
+                                    count++;
+                                }
+                            }
+                        }
+
+                        if(count > 0)
+                        {
+                            double average = sumOfAverages / count;
+                            double energyCost = average * pricePerKw;
+                            double CO2 = average + 1.2;
+
+                            totalCost += energyCost;
+                            totalCO2 += CO2;
+                        }
                     }
+
                 }
 
-
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{Math.Round(totalCost)}$");
                 txtEnergyCost.Text = sb.ToString();
+                sb.Clear();
+                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
+                txtCarbonFootprint.Text = sb.ToString();
+
             }
             catch (Exception ex)
             {
@@ -236,7 +269,7 @@ namespace OBEM.Views
 
 
             // CO2 footprint 
-
+/*
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
@@ -260,7 +293,7 @@ namespace OBEM.Views
             catch (Exception ex)
             {
                 txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
-            }
+            }*/
 
         }
 

@@ -46,5 +46,8 @@ namespace OBEM.models
         public List<string> ColumnNames { get; set; }
         public Dictionary<string, List<TrendingValue>> Records { get; set; }
     }
+
+
+
 }
 
