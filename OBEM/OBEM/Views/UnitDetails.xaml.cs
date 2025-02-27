@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media.Effects;
 using OxyPlot;
 using System.Linq;
+using OxyPlot.Series;
 
 namespace OBEM.Views
 {
@@ -186,11 +187,9 @@ namespace OBEM.Views
                 HashSet<string> uniqueGroup1Values = new HashSet<string>();
                 HashSet<string> uniqueGroup2Values = new HashSet<string>();
 
-                // Clear the panels at the start
                 ApartmentButtonsPanel.Children.Clear();
                 DetailsPanel.Children.Clear();
 
-                // First pass to collect the unique values for group1 and group2
                 foreach (var device in devices)
                 {
                     if ((selectedGroup3 == null || device.Group3 == selectedGroup3) &&
@@ -201,7 +200,6 @@ namespace OBEM.Views
                     }
                 }
 
-                // If only floor is selected, group devices by Group2 and sum their values
                 if (selectedGroup1 == null && selectedGroup3 != null)
                 {
                     var groupedDevices = devices
@@ -218,10 +216,57 @@ namespace OBEM.Views
 
                     foreach (var group in groupedDevices)
                     {
-                        var devicePanel = CreateDevicePanel(group.Id,group.Group2, group.NumericValue, group.Unit, group.IsActive, showToggleButton: false);
+                        var devicePanel = CreateDevicePanel(group.Id, group.Group2, group.NumericValue, group.Unit, group.IsActive, showToggleButton: false);
                         DetailsPanel.Children.Add(devicePanel);
                     }
+
+                    var powerUsageData = devices
+                        .Where(d => d.Unit == "Power (kW)" && d.Group3 == selectedGroup3)
+                        .GroupBy(d => new { d.Group1, d.Group3 })
+                        .Select(g => new { Apartment = g.Key.Group1, Category = g.Key.Group3, TotalPower = g.Sum(d => d.NumericValue) })
+                        .OrderByDescending(g => g.TotalPower)
+                        .ToList();
+
+                    var pieSeries = new PieSeries
+                    {
+                        InsideLabelPosition = 0.5,
+                        StrokeThickness = 2,
+                        Stroke = OxyColors.White,
+                        AngleSpan = 360,
+                        StartAngle = 0,
+                        Background = OxyColors.Transparent,
+                        OutsideLabelFormat = "{1}: {0}%"
+                    };
+
+                    foreach (var item in powerUsageData)
+                    {
+                        pieSeries.Slices.Add(new PieSlice($"{item.Apartment} ({item.Category})", item.TotalPower)
+                        {
+                            Fill = OxyColor.FromAColor(180, OxyPalettes.Jet(powerUsageData.Count).Colors[powerUsageData.IndexOf(item)])
+                        });
+                    }
+
+                    var plotModel = new PlotModel
+                    {
+                        Title = "Power Consumption by Apartment and Category",
+                        Background = OxyColors.Transparent,
+                        PlotAreaBackground = OxyColors.Transparent
+                    };
+                    plotModel.Series.Add(pieSeries);
+
+                    var plotView = new OxyPlot.Wpf.PlotView
+                    {
+                        Model = plotModel,
+                        Height = 300,
+                        Width = 400,
+                        Margin = new System.Windows.Thickness(50),
+                        Background = System.Windows.Media.Brushes.Transparent
+                    };
+
+                    // Dodavanje PieChart-a u GraphContentControl
+                    GraphContentControl.Content = plotView;
                 }
+
                 else
                 {
                     // If a specific apartment is selected, show individual devices
@@ -402,7 +447,6 @@ namespace OBEM.Views
 
         private void HideGraphFrame()
         {
-            // Sakrij Frame
             GraphFrame.Visibility = Visibility.Collapsed;
         }
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
