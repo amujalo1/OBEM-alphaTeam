@@ -76,8 +76,6 @@
                     <!-- Frame za prikaz grafikona -->
                     <Frame x:Name="GraphFrame" Visibility="Collapsed" Background="#4A4763" Padding="10" Margin="10" NavigationUIVisibility="Hidden"/>
                 <RadioButton x:Name="txtCurrentOption" Height="30" FontWeight="Bold" Margin="600,0,0,300" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
-                <Line x:Name="arrowLine" X1="140" Y1="15" X2="100" Y2="15" Margin="300,0,0,15" Stroke="Black" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
-                <RadioButton x:Name="txtCurrentOptionApartment" Height="30" Margin="520,0,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
                 <!-- Desni dio (detalji) -->
                 
                     <Border CornerRadius="20">

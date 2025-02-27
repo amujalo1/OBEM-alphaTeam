@@ -51,8 +51,7 @@ namespace OBEM.Views
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
 
-            arrowLine.Visibility = Visibility.Hidden;
-            txtCurrentOptionApartment.Visibility = Visibility.Hidden;
+            
             HideGraphFrame();
             string buttonName = (sender as RadioButton)?.Name;
 
@@ -159,8 +158,9 @@ namespace OBEM.Views
                     Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
                 StringBuilder sb = new StringBuilder();
+                
+                
 
-                sb.AppendLine($"Floor: {floorLevel}");
                 sb.AppendLine($"{Math.Round(totalEnergyCost)}€");
                 txtEnergyConsumptionLastHour.Content = sb.ToString();
                 sb.Clear();
@@ -341,9 +341,12 @@ namespace OBEM.Views
         }
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
         {
+            txtCurrentOption.Content = "";
             HideGraphFrame();
             var apartmentButton = sender as RadioButton;
             selectedGroup1 = apartmentButton?.Tag as string;
+            txtCurrentOption.Content = $"{selectedGroup2} {selectedGroup1}";
+            ;
             Console.WriteLine(selectedGroup1);
             if (selectedGroup1 != null)
             {
@@ -353,9 +356,7 @@ namespace OBEM.Views
 
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;
-            txtCurrentOptionApartment.Visibility = Visibility.Visible;
-            txtCurrentOptionApartment.Content = selectedGroup2;
-            arrowLine.Visibility = Visibility.Visible;
+            
 
             string data = await _apiService.GetAllDevicesAsync();
             try
@@ -444,8 +445,7 @@ namespace OBEM.Views
         private async Task BuildingStats(object sender, SelectionChangedEventArgs e)
         {
             txtCurrentOption.Content = "Building";
-            arrowLine.Visibility = Visibility.Hidden;
-            txtCurrentOptionApartment.Visibility = Visibility.Hidden;
+            
 
             string data = await _apiService.GetAllDevicesAsync();
             double currentCO2 = 0;
