@@ -50,7 +50,7 @@ namespace OBEM.Views
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
 
-            //
+            HideGraphFrame();
             string buttonName = (sender as RadioButton)?.Name;
 
             if (floorMapping.ContainsKey(buttonName))
@@ -190,11 +190,13 @@ namespace OBEM.Views
 
                         var toggleButton = new Button
                         {
-                            Content = "Toggle",
+                            Content = $"Graph:{device.Id}",
                             Width = 100,
                             Height = 30,
                             Margin = new Thickness(0, 0, 0, 5)
                         };
+
+                        toggleButton.Click += GraphButton_Click; // Dodajte ovu liniju
 
                         devicePanel.Children.Add(group2Text);
                         devicePanel.Children.Add(name);
@@ -237,9 +239,26 @@ namespace OBEM.Views
 
             }
         }
+        private void GraphButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var deviceId = button.Content.ToString().Replace("Graph:", "");
 
+            // Prikaži Frame
+            GraphFrame.Visibility = Visibility.Visible;
+
+            // Navigacija do novog Page-a
+            GraphFrame.Navigate(new UnitEnergyMonitoringByDeviceId(deviceId));
+        }
+
+        private void HideGraphFrame()
+        {
+            // Sakrij Frame
+            GraphFrame.Visibility = Visibility.Collapsed;
+        }
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
         {
+            HideGraphFrame();
             var apartmentButton = sender as RadioButton;
             selectedGroup1 = apartmentButton?.Tag as string;
             Console.WriteLine(selectedGroup1);

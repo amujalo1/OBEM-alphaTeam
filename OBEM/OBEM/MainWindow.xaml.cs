@@ -159,11 +159,9 @@ namespace OBEM
         }
         private void ShowGraph_Click(object sender, RoutedEventArgs e)
         {
-            // Dohvati odabrani red iz DataGrid-a
             var button = sender as Button;
             var selectedItem = button.DataContext;
 
-            // Pretpostavimo da je selectedItem objekt s ID svojstvom
             var idProperty = selectedItem.GetType().GetProperty("Id");
             if (idProperty == null)
             {
@@ -171,7 +169,6 @@ namespace OBEM
                 return;
             }
 
-            // Dohvati ID u formatu "505/37"
             var fullId = idProperty.GetValue(selectedItem) as string;
             if (string.IsNullOrEmpty(fullId))
             {
@@ -179,7 +176,6 @@ namespace OBEM
                 return;
             }
 
-            // Parsiraj ID kako bi izdvojio samo drugi dio (npr. "37")
             var idParts = fullId.Split('/');
             if (idParts.Length < 2)
             {
@@ -190,7 +186,6 @@ namespace OBEM
             // Uzmi drugi dio ID-a (npr. "37")
             var id = idParts[1];
 
-            // Navigiraj na novu stranicu s izdvojenim ID-om
             MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId(id));
         }
 

@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OBEM.Views
+namespace OBEM
 {
-    /// <summary>
-    /// Interaction logic for Notifikacije.xaml
-    /// </summary>
     public partial class Notifikacije : Page
     {
         public Notifikacije()
         {
             InitializeComponent();
         }
+
+        
     }
 }

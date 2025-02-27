@@ -1,4 +1,4 @@
-﻿<Page x:Class="OBEM.Views.Notifikacije"
+﻿<Page x:Class="OBEM.Notifikacije"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,9 +6,117 @@
       xmlns:local="clr-namespace:OBEM.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Notifikacije">
+      Title="Notifications">
 
-    <Grid>
-        
+    <Grid Background="#F0F0F0" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Notifications" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Foreground="#333333" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,10,0,20"/>
+
+        <!-- Notification List -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Notification 1: Device Exceeded Threshold -->
+                <Border Background="White" 
+                        CornerRadius="5" 
+                        BorderBrush="#CCCCCC" 
+                        BorderThickness="1" 
+                        Margin="0,0,0,10" 
+                        Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Device Exceeded Threshold" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#FF5555"/>
+                        <TextBlock Text="Device ID: 37 has exceeded the energy consumption threshold of 100 kW." 
+                                   FontSize="14" 
+                                   Foreground="#555555" 
+                                   Margin="0,5,0,0"/>
+                        <TextBlock Text="Timestamp: 2023-10-05 14:30" 
+                                   FontSize="12" 
+                                   Foreground="#777777" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Notification 2: Peak Detected -->
+                <Border Background="White" 
+                        CornerRadius="5" 
+                        BorderBrush="#CCCCCC" 
+                        BorderThickness="1" 
+                        Margin="0,0,0,10" 
+                        Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Peak Detected" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#FFA500"/>
+                        <TextBlock Text="A peak in energy consumption has been detected. Consider reducing load." 
+                                   FontSize="14" 
+                                   Foreground="#555555" 
+                                   Margin="0,5,0,0"/>
+                        <TextBlock Text="Timestamp: 2023-10-05 14:45" 
+                                   FontSize="12" 
+                                   Foreground="#777777" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Notification 3: Solar Panels Required -->
+                <Border Background="White" 
+                        CornerRadius="5" 
+                        BorderBrush="#CCCCCC" 
+                        BorderThickness="1" 
+                        Margin="0,0,0,10" 
+                        Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Solar Panels Required" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#32CD32"/>
+                        <TextBlock Text="High energy demand detected. It is recommended to activate solar panels." 
+                                   FontSize="14" 
+                                   Foreground="#555555" 
+                                   Margin="0,5,0,0"/>
+                        <TextBlock Text="Timestamp: 2023-10-05 15:00" 
+                                   FontSize="12" 
+                                   Foreground="#777777" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Notification 4: Device Offline -->
+                <Border Background="White" 
+                        CornerRadius="5" 
+                        BorderBrush="#CCCCCC" 
+                        BorderThickness="1" 
+                        Margin="0,0,0,10" 
+                        Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Device Offline" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#FF5555"/>
+                        <TextBlock Text="Device ID: 42 is offline. Please check the connection." 
+                                   FontSize="14" 
+                                   Foreground="#555555" 
+                                   Margin="0,5,0,0"/>
+                        <TextBlock Text="Timestamp: 2023-10-05 15:15" 
+                                   FontSize="12" 
+                                   Foreground="#777777" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -36,7 +36,6 @@
                 <RadioButton x:Name="Outside" FontFamily="Verdana" Click="FloorButton_Click" Content="Outside" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton x:Name="General" FontFamily="Verdana" Click="FloorButton_Click" Content="General" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
             </StackPanel>
-
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" MinWidth="200"/>
@@ -44,31 +43,33 @@
                     <ColumnDefinition Width="200" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" CornerRadius="20" Padding="5" BorderBrush="Gray" BorderThickness="1">
-                    <Grid>
-                        <Border CornerRadius="20">
-                            <!-- Podignuta slika kuće -->
-                            <Image Opacity ="0.75" HorizontalAlignment="Left" VerticalAlignment="Top" Height="350" Width="350" Margin="500,0,0,0" Panel.ZIndex="1">
-                                <Image.Source>
-                                    <BitmapImage UriSource="pack://application:,,,/Resources/UIsample.png"/>
-                                </Image.Source>
-                            </Image>
-                        </Border>
-                        
-                        
-                        <WrapPanel x:Name="ApartmentButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,100,0,0">
-                            <!-- Apartment buttons go here -->
-                        </WrapPanel>
-                    </Grid>
-                </Border>
-                
+                <!-- Lijevi dio (sadržaj i Frame za grafikon) -->
+                <Grid Grid.Column="0">
+                    <!-- Postojeći sadržaj (slika i dugmad) -->
+                    <Border CornerRadius="20">
+                        <Image Opacity="0.75" HorizontalAlignment="Left" VerticalAlignment="Top" Height="350" Width="350" Margin="500,0,0,0" Panel.ZIndex="1">
+                            <Image.Source>
+                                <BitmapImage UriSource="pack://application:,,,/Resources/UIsample.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Border>
+                    <WrapPanel x:Name="ApartmentButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,100,0,0">
+                        <!-- Apartment buttons go here -->
+                    </WrapPanel>
+
+                    <!-- Frame za prikaz grafikona -->
+                    <Frame x:Name="GraphFrame" Visibility="Collapsed" Background="#4A4763" Padding="10" Margin="10" NavigationUIVisibility="Hidden"/>
+                </Grid>
+
+                <!-- GridSplitter -->
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>
 
+                <!-- Desni dio (detalji) -->
                 <Border Grid.Column="2" CornerRadius="20" Background="#4A4763" Padding="5" BorderBrush="Gray" BorderThickness="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <StackPanel Margin="10">
                             <StackPanel x:Name="DetailsPanel" Margin="10">
-                            <!-- Detalji će biti dinamički dodani ovdje -->
+                                <!-- Detalji će biti dinamički dodani ovdje -->
                             </StackPanel>
                             <!-- Carbon footprint -->
                             <TextBlock Text="Carbon footprint:" FontWeight="Bold" Margin="0,10,0,5"/>
@@ -80,6 +81,8 @@
                     </ScrollViewer>
                 </Border>
             </Grid>
+
+
         </Grid>
     </Border>
 </Page>
