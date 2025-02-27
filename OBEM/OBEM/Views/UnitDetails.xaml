@@ -43,7 +43,17 @@
                     <ColumnDefinition Width="200" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Lijevi dio (sadržaj i Frame za grafikon) -->
+                <StackPanel>
+                    <!--Real Time usage-->
+                    <TextBlock Text="Total Real-Time Usage (kW):" FontSize="20" FontWeight="Bold" Margin="100,10,0,5"/>
+                    <RadioButton x:Name="txtTotalRealTimeUsage" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                    <!-- Carbon footprint -->
+                    <TextBlock Text="Carbon footprint:" FontSize="16"  FontWeight="Bold" Margin="100,10,0,5"/>
+                    <RadioButton x:Name="txtCarbonFootprint" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                    <!-- Energy cost-->
+                    <TextBlock Text="Energy cost:" FontSize="16" FontWeight="Bold" Margin="100,10,0,5"/>
+                    <RadioButton x:Name="txtEnergyCost" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                </StackPanel>
                 <Grid Grid.Column="0">
                     <!-- Postojeći sadržaj (slika i dugmad) -->
                     <Border CornerRadius="20">
@@ -71,12 +81,6 @@
                             <StackPanel x:Name="DetailsPanel" Margin="10">
                                 <!-- Detalji će biti dinamički dodani ovdje -->
                             </StackPanel>
-                            <!-- Carbon footprint -->
-                            <TextBlock Text="Carbon footprint:" FontWeight="Bold" Margin="0,10,0,5"/>
-                            <TextBox x:Name="txtCarbonFootprint" Height="20" TextWrapping="Wrap" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" IsReadOnly="True"/>
-                            <!-- Energy cost-->
-                            <TextBlock Text="Energy cost:" FontWeight="Bold" Margin="0,10,0,5"/>
-                            <TextBox x:Name="txtEnergyCost" Height="50" TextWrapping="Wrap" VerticalScrollBarVisibility="Disabled" AcceptsReturn="False" IsReadOnly="True"/>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>

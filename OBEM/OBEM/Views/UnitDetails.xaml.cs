@@ -93,14 +93,14 @@ namespace OBEM.Views
                 StringBuilder sb = new StringBuilder();
 
 
-                sb.AppendLine($"Floor: {floorLevel}");
-                sb.AppendLine($"Total cost: {energyCost}$");
+                
+                sb.AppendLine($"{energyCost}€");
 
-                txtEnergyCost.Text = sb.ToString();
+                txtEnergyCost.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
 
@@ -121,11 +121,11 @@ namespace OBEM.Views
                     }
                 }
                 sb.AppendLine($"{CO2} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
+                txtCarbonFootprint.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
 
@@ -287,18 +287,17 @@ namespace OBEM.Views
                     {
                         double energyCost = device.NumericValue * pricePerKw;
 
-                        sb.AppendLine($"Unit: {device.Group1}");
-                        sb.AppendLine($"Energy Cost: {energyCost}");
+                        sb.AppendLine($"{energyCost}€");
                         break;
                     }
                 }
 
 
-                txtEnergyCost.Text = sb.ToString();
+                txtEnergyCost.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
 
@@ -323,11 +322,11 @@ namespace OBEM.Views
                 }
 
 
-                txtCarbonFootprint.Text = sb.ToString();
+               txtCarbonFootprint.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
         }
@@ -354,11 +353,11 @@ namespace OBEM.Views
                     }
                 }
                 sb.AppendLine($"{CO2} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
+                txtCarbonFootprint.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
         }
@@ -384,12 +383,12 @@ namespace OBEM.Views
                         energyCost += device.NumericValue * pricePerKw;
                     }
                 }
-                sb.AppendLine($"Energy Cost For Entire Building: {energyCost}$");
-                txtEnergyCost.Text = sb.ToString();
+                sb.AppendLine($"{energyCost}€");
+                txtEnergyCost.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
         }
 
