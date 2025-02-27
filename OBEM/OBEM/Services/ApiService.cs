@@ -144,6 +144,35 @@ namespace OBEM.Services
             }
         }
 
+
+        // Get trending infor by date 
+
+        public async Task<string> GetTrendingInfoAsync(string type, string id, string start)
+        {
+            using(var client = CreateHttpClient())
+            {
+                string url = $"{_baseUrl}/getTrendingInfo?type={type}&id={id}&start={start}";
+                try
+                {
+                    var response = await client.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        return $"Greška: {response.StatusCode} - {response.ReasonPhrase}";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return $"Greška: {ex.Message}";
+                }
+            }
+        }
+
+
         // Helper method for handling response
         private async Task<string> HandleResponse(HttpResponseMessage response)
         {
