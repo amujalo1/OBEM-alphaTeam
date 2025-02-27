@@ -13,6 +13,8 @@ using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Effects;
+using OxyPlot;
+using System.Linq;
 
 namespace OBEM.Views
 {
@@ -196,102 +198,45 @@ namespace OBEM.Views
                     {
                         uniqueGroup1Values.Add(device.Group1);
                         uniqueGroup2Values.Add(device.Group2);
-
-                        // StackPanel kartica
-                        var devicePanel = new Border
-                        {
-                            Background = new SolidColorBrush(Color.FromRgb(163, 200, 243)),
-                            CornerRadius = new CornerRadius(5),
-                            Padding = new Thickness(5), // unutrašnji padding
-                            Margin = new Thickness(5), // prostor između kartica
-                            Effect = new DropShadowEffect
-                            {
-                                Color = Colors.Gray,
-                                Direction = 320,
-                                ShadowDepth = 4,
-                                Opacity = 1
-                            }
-                        };
-
-                        
-                        var innerGrid = new Grid
-                        {
-                            HorizontalAlignment = HorizontalAlignment.Stretch
-                        };
-
-                        
-                        innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); 
-                        innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) }); 
-
-                        var deviceNamePanel = new StackPanel
-                        {
-                            Orientation = Orientation.Horizontal,
-                            HorizontalAlignment = HorizontalAlignment.Left,
-                            Margin = new Thickness(0, 0, 0, 0)
-                        };
-
-                        var powerIcon = new TextBlock
-                        {
-                            Text = device.IsActive ? "\u2714" : "\u274C", // Unicode for check or X
-                            FontSize = 14,
-                            Foreground = device.IsActive ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red),
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(0, 0, 0, 0) // margin between name and icon
-                        };
-
-                        var nameText = new TextBlock
-                        {
-                            Text = device.Group2,
-                            FontWeight = FontWeights.Bold,
-                            FontSize = 14,
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(15, 0, 0, 0)
-                        };
-
-                        deviceNamePanel.Children.Add(powerIcon);
-                        deviceNamePanel.Children.Add(nameText);
-
-                        var valueText = new TextBlock
-                        {
-                            Text = $"{device.NumericValue} {device.Unit}",
-                            FontWeight = FontWeights.Bold,
-                            FontSize = 14,
-                            Margin = new Thickness(200, 6, 0, 0) // Add some margin to the right for spacing
-                        };
-
-                        // Create toggle button
-                        var toggleButton = new Button
-                        {
-                            Content = $"Graph:{device.Id}",
-                            Width = 60,
-                            Height = 25,
-                            Background = new SolidColorBrush(Color.FromRgb(0, 120, 215)),
-                            Foreground = new SolidColorBrush(Colors.White),
-                            FontSize = 10,
-                            Padding = new Thickness(0, 0, 0, 0),
-                            Cursor = Cursors.Hand,
-                            Margin = new Thickness(-50, 0, 0, 0) // Add margin to the right side for spacing
-                        };
-
-                        toggleButton.Click += GraphButton_Click;
-
-                        
-                        Grid.SetColumn(deviceNamePanel, 0); 
-                        Grid.SetColumn(valueText, 0); 
-                        Grid.SetColumn(toggleButton, 1); 
-
-                        innerGrid.Children.Add(deviceNamePanel);
-                        innerGrid.Children.Add(valueText);
-                        innerGrid.Children.Add(toggleButton);
-
-                        devicePanel.Child = innerGrid;
-
-                        DetailsPanel.Children.Add(devicePanel);
                     }
                 }
 
+                // If only floor is selected, group devices by Group2 and sum their values
+                if (selectedGroup1 == null && selectedGroup3 != null)
+                {
+                    var groupedDevices = devices
+                        .Where(d => d.Group3 == selectedGroup3)
+                        .GroupBy(d => d.Group2)
+                        .Select(g => new
+                        {
+                            Id = g.Key,
+                            Group2 = g.Key,
+                            NumericValue = g.Key == "HVAC System" ? g.Average(d => d.NumericValue) : g.Sum(d => d.NumericValue),
+                            Unit = g.First().Unit,
+                            IsActive = g.Any(d => d.IsActive)
+                        });
 
-                // After processing devices, generate the apartment buttons once
+                    foreach (var group in groupedDevices)
+                    {
+                        var devicePanel = CreateDevicePanel(group.Id,group.Group2, group.NumericValue, group.Unit, group.IsActive, showToggleButton: false);
+                        DetailsPanel.Children.Add(devicePanel);
+                    }
+                }
+                else
+                {
+                    // If a specific apartment is selected, show individual devices
+                    foreach (var device in devices)
+                    {
+                        if ((selectedGroup3 == null || device.Group3 == selectedGroup3) &&
+                            (selectedGroup1 == null || device.Group1 == selectedGroup1))
+                        {
+                            var devicePanel = CreateDevicePanel(device.Id,device.Group2, device.NumericValue, device.Unit, device.IsActive, showToggleButton: true);
+                            DetailsPanel.Children.Add(devicePanel);
+                        }
+                    }
+                }
+
+                // Generate apartment buttons
                 foreach (var group1 in uniqueGroup1Values)
                 {
                     var newApartmentButton = new RadioButton
@@ -322,6 +267,96 @@ namespace OBEM.Views
             }
         }
 
+        private Border CreateDevicePanel(string Id,string group2, double numericValue, string unit, bool isActive, bool showToggleButton)
+        {
+            var devicePanel = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(163, 200, 243)),
+                CornerRadius = new CornerRadius(5),
+                Padding = new Thickness(5), // unutrašnji padding
+                Margin = new Thickness(5), // prostor između kartica
+                Effect = new DropShadowEffect
+                {
+                    Color = Colors.Gray,
+                    Direction = 320,
+                    ShadowDepth = 4,
+                    Opacity = 1
+                }
+            };
+
+            var innerGrid = new Grid
+            {
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch
+            };
+
+            innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
+
+            var deviceNamePanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                Margin = new Thickness(0, 0, 0, 0)
+            };
+
+            var powerIcon = new TextBlock
+            {
+                Text = isActive ? "\u2714" : "\u274C", // Unicode for check or X
+                FontSize = 14,
+                Foreground = isActive ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red),
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 0) // margin between name and icon
+            };
+
+            var nameText = new TextBlock
+            {
+                Text = group2,
+                FontWeight = System.Windows.FontWeights.Bold,
+                FontSize = 14,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                Margin = new Thickness(15, 0, 0, 0)
+            };
+
+            deviceNamePanel.Children.Add(powerIcon);
+            deviceNamePanel.Children.Add(nameText);
+
+            var valueText = new TextBlock
+            {
+                Text = $"{numericValue} {unit}",
+                FontWeight = System.Windows.FontWeights.Bold,
+                FontSize = 14,
+                Margin = new Thickness(200, 6, 0, 0) // Add some margin to the right for spacing
+            };
+
+            innerGrid.Children.Add(deviceNamePanel);
+            innerGrid.Children.Add(valueText);
+
+            // Create toggle button only if showToggleButton is true
+            if (showToggleButton)
+            {
+                var toggleButton = new Button
+                {
+                    Content = $"Graph:{Id}",
+                    Width = 60,
+                    Height = 25,
+                    Background = new SolidColorBrush(Color.FromRgb(0, 120, 215)),
+                    Foreground = new SolidColorBrush(Colors.White),
+                    FontSize = 10,
+                    Padding = new Thickness(0, 0, 0, 0),
+                    Cursor = Cursors.Hand,
+                    Margin = new Thickness(-50, 0, 0, 0) // Add margin to the right side for spacing
+                };
+
+                toggleButton.Click += GraphButton_Click;
+                Grid.SetColumn(toggleButton, 1);
+                innerGrid.Children.Add(toggleButton);
+            }
+
+            devicePanel.Child = innerGrid;
+
+            return devicePanel;
+        }
+
         private async void GraphButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -329,15 +364,26 @@ namespace OBEM.Views
 
             var trendingDataService = new ApiModels();
             var result = await trendingDataService.LoadTrendingDataAsync(deviceId);
-
+            
             if (result.PlotModel != null)
             {
+                result.PlotModel.PlotAreaBorderColor = OxyColors.White; 
+                result.PlotModel.TextColor = OxyColors.White; 
+                result.PlotModel.TitleColor = OxyColors.White; 
+
+                foreach (var axis in result.PlotModel.Axes)
+                {
+                    axis.AxislineColor = OxyColors.White; 
+                    axis.TextColor = OxyColors.White; 
+                    axis.TicklineColor = OxyColors.White;
+                    axis.ExtraGridlineColor = OxyColors.White;
+                }
 
                 var plotView = new OxyPlot.Wpf.PlotView
                 {
                     Model = result.PlotModel,
-                    Width = 400,
-                    Height = 200,
+                    Width = 500,
+                    Height = 300,
                     Background = Brushes.Transparent, 
 
                 };

@@ -26,8 +26,12 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Logo" FontFamily="Verdana" Margin="-15,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="22" MouseLeftButtonDown="PageLoaded"/>
-
+            <Image Source="/Resources/power-meter.png" 
+       Width="70" 
+       Height="35" 
+       VerticalAlignment="Center" 
+       HorizontalAlignment="Center" 
+       MouseLeftButtonDown="PageLoaded"/>
             <StackPanel Grid.Row="1" Margin="0,20,0,0">
                 <RadioButton x:Name="Floor2" FontFamily="Verdana" Click="FloorButton_Click" Content="Floor 2" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton x:Name="Floor1" FontFamily="Verdana" Click="FloorButton_Click" Content="Floor 1" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
@@ -37,23 +41,97 @@
                 <RadioButton x:Name="General" FontFamily="Verdana" Click="FloorButton_Click" Content="General" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
             </StackPanel>
             <Grid Grid.Row="0" Grid.Column="1">
-                <StackPanel Orientation="Horizontal">
-                    <!--Real Time usage-->
-                    <TextBlock Text="Total Real-Time Usage (kW):" FontSize="18" FontWeight="Bold" Margin="0,0,0,0"/>
-                    <RadioButton x:Name="txtTotalRealTimeUsage" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Margin="0,0,0,0" Width="40" Style="{StaticResource SelectionButtonTheme}"/>
-                    <!-- Carbon footprint -->
-                    <TextBlock Text="Carbon footprint:" FontSize="14" FontWeight="Bold" Margin="5,0,0,0"/>
-                    <RadioButton x:Name="txtCurentCarbonFootprint" FontWeight="Bold" Height="30" Margin="0,0,0,0" Width="80" Style="{StaticResource SelectionButtonTheme}"/>
-                    <!-- Energy cost-->
-                    <TextBlock Text="Energy cost:" FontSize="14" FontWeight="Bold" Margin="0,0,0,0"/>
-                    <RadioButton x:Name="txtCurrentEnergyCost" Height="30" FontWeight="Bold" Margin="0,0,0,0" Width="50" Style="{StaticResource SelectionButtonTheme}"/>
-                    <!-- Carbon footprint last hour -->
-                    <TextBlock Text="Carbon footprint (last hour):" FontSize="14"  FontWeight="Bold" Margin="0,0,0,0"/>
-                    <RadioButton x:Name="txtCarbonFootprintLastHour" Height="30" FontWeight="Bold" Margin="0,0,0,0" Width="80" Style="{StaticResource SelectionButtonTheme}"/>
-                    
-                    <TextBlock Text="Energy cost (last hour):" FontSize="14"  FontWeight="Bold" Margin="0,0,0,0"></TextBlock>
-                    <RadioButton x:Name="txtEnergyConsumptionLastHour" Height="30" FontWeight="Bold" Margin="0,0,0,0" Width="50" Style="{StaticResource SelectionButtonTheme}"/>
-                </StackPanel>
+               <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+    <!-- Real Time usage -->
+    <TextBlock Text="Total Real-Time Usage (kW):" 
+               FontSize="14" 
+               FontWeight="Bold" 
+               Margin="10,0,10,0" 
+               VerticalAlignment="Center"/>
+    <RadioButton x:Name="txtTotalRealTimeUsage" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontWeight="Bold" 
+                 FontSize="10"
+                 Height="30" 
+                 Width="40" 
+                 Style="{StaticResource SelectionButtonTheme}"
+                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
+        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+    </RadioButton>
+
+    <!-- Carbon footprint -->
+    <TextBlock Text="Carbon footprint:" 
+               FontSize="14" 
+               FontWeight="Bold" 
+               Margin="10,0,10,0" 
+               VerticalAlignment="Center"/>
+    <RadioButton x:Name="txtCurentCarbonFootprint" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontWeight="Bold" 
+                 FontSize="10"
+                 Height="30" 
+                 Width="80" 
+                 Style="{StaticResource SelectionButtonTheme}"
+                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
+        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+    </RadioButton>
+
+    <!-- Energy cost -->
+    <TextBlock Text="Energy cost:" 
+               FontSize="14" 
+               FontWeight="Bold" 
+               Margin="10,0,10,0" 
+               VerticalAlignment="Center"/>
+    <RadioButton x:Name="txtCurrentEnergyCost" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontWeight="Bold" 
+                 FontSize="10"
+                 Height="30" 
+                 Width="50" 
+                 Style="{StaticResource SelectionButtonTheme}"
+                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
+        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+    </RadioButton>
+
+    <!-- Carbon footprint last hour -->
+    <TextBlock Text="Carbon footprint (last hour):" 
+               FontSize="14"  
+               FontWeight="Bold" 
+               Margin="10,0,10,0" 
+               VerticalAlignment="Center"/>
+    <RadioButton x:Name="txtCarbonFootprintLastHour" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontWeight="Bold" 
+                 FontSize="10"
+                 Height="30" 
+                 Width="80" 
+                 Style="{StaticResource SelectionButtonTheme}"
+                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
+        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+    </RadioButton>
+
+    <!-- Energy cost last hour -->
+    <TextBlock Text="Energy cost (last hour):" 
+               FontSize="14"  
+               FontWeight="Bold" 
+               Margin="10,0,10,0" 
+               VerticalAlignment="Center"/>
+    <RadioButton x:Name="txtEnergyConsumptionLastHour" 
+                 HorizontalAlignment="Center" 
+                 VerticalAlignment="Center" 
+                 FontWeight="Bold" 
+                 FontSize="10"
+                 Height="30" 
+                 Width="50" 
+                 Style="{StaticResource SelectionButtonTheme}"
+                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
+        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+    </RadioButton>
+</StackPanel>
                 
             </Grid>
             <Grid Grid.Row="1" Grid.Column="1">
@@ -87,7 +165,7 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Postavljamo ContentControl u drugu kolonu (indeks 1) -->
-                        <ContentControl x:Name="GraphContentControl" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"/>
+                        <ContentControl x:Name="GraphContentControl" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
                     </Grid>
                 </Border>
 

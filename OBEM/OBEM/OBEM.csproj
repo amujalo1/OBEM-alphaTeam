@@ -198,7 +198,9 @@
     <Resource Include="Resources\stocksample.png" />
     <Resource Include="Resources\sample.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\power-meter.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UIsample.png" />
   </ItemGroup>
