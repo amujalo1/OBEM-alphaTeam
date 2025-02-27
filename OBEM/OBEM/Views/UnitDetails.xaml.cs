@@ -110,7 +110,7 @@ namespace OBEM.Views
             double totalEnergyCost = 0;
             double totalCO2 = 0;
 
-            DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+            DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
             double sumOfAverages = 0;
             int count = 0;
             try
@@ -147,8 +147,11 @@ namespace OBEM.Views
                 if (count > 0)
                 {
                     double averageValue = sumOfAverages / count;
+                    Console.WriteLine($"averageValue - {averageValue}");
                     totalEnergyCost = averageValue * pricePerKw;
+                    Console.WriteLine($"totalEnergyCost - {totalEnergyCost}");
                     totalCO2 = averageValue * 1.2;
+                    Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
                 StringBuilder sb = new StringBuilder();
 
@@ -270,8 +273,9 @@ namespace OBEM.Views
                 double totalCost = 0;
                 double totalCO2 = 0;
                 var floorEnergyConsumption = new Dictionary<string, double>();
-                DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
-
+                DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
+                int count = 0;
+                double sumOfAverages = 0;
                 foreach (var device in devices)
                 {
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
@@ -283,8 +287,8 @@ namespace OBEM.Views
 
                         var records = trendingResponse.Records;
 
-                        double sumOfAverages = 0;
-                        int count = 0;
+                        
+                      
 
                         foreach(var recordEntry in records)
                         {
@@ -299,19 +303,19 @@ namespace OBEM.Views
                                     count++;
                                 }
                             }
-                        }
-
-                        if(count > 0)
-                        {
-                            double average = sumOfAverages / count;
-                            double energyCost = average * pricePerKw;
-                            double CO2 = average * 1.2;
-
-                            totalCost += energyCost;
-                            totalCO2 += CO2;
-                        }
+                        }      
                     }
 
+                }
+
+                if (count > 0)
+                {
+                    double averageValue = sumOfAverages / count;
+                    Console.WriteLine($"averageValue - {averageValue}");
+                    totalCost = averageValue * pricePerKw;
+                    Console.WriteLine($"totalCost - {totalCost}");
+                    totalCO2 = averageValue * 1.2;
+                    Console.WriteLine($"totalCO2 - {totalCO2} kg CO2");
                 }
 
                 sb.Clear();
@@ -406,12 +410,12 @@ namespace OBEM.Views
             {
                 txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
-
-
+            //Works fine
+            //Last 7 days
             double totalEnergyCost = 0;
             double totalCO2 = 0;
 
-            DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+            DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
             double sumOfAverages = 0;
             int count = 0;
 
@@ -433,6 +437,7 @@ namespace OBEM.Views
                                 if (recordTime > sevenDaysAgo) {
                                     sumOfAverages += record.AverageValue;
                                     count++;
+                                    Console.WriteLine($"suma{count}--{sumOfAverages}");
                                 }
                             }
                         }
@@ -442,8 +447,11 @@ namespace OBEM.Views
 
                 if (count > 0) {
                     double averageValue = sumOfAverages / count;
+                    Console.WriteLine($"averageValue - {averageValue}");
                     totalEnergyCost = averageValue * pricePerKw;
+                    Console.WriteLine($"totalEnergyCost - {totalEnergyCost}");
                     totalCO2 = averageValue * 1.2;
+                    Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
 
                 StringBuilder sb = new StringBuilder();
