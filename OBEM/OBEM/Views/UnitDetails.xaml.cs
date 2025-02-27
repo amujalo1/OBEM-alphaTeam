@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
+using System.Windows.Input;
+using System.Windows.Media.Effects;
 
 namespace OBEM.Views
 {
@@ -69,6 +71,7 @@ namespace OBEM.Views
 
             string data = await _apiService.GetAllDevicesAsync();
             string floorLevel = (sender as RadioButton)?.Content.ToString();
+            txtCurrentOption.Content = floorLevel;
             double currentEnergyCost = 0;
             double currentCO2 = 0;
             const double pricePerKw = 0.30;
@@ -85,10 +88,16 @@ namespace OBEM.Views
                         Console.WriteLine($"FloorLevel: {floorLevel}, Device Group3: {device.Group3}");
 
                         currentEnergyCost += device.NumericValue;
+                        
                     }
                 }
-                currentCO2 = currentEnergyCost * 1.2;
+                double currentPower = currentEnergyCost;
                 StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{currentPower} kWh");
+                txtTotalRealTimeUsage.Content = sb.ToString();
+                sb.Clear();
+
+                currentCO2 = currentEnergyCost * 1.2;
                 sb.AppendLine($"{currentCO2} kg CO2");
                 txtCurentCarbonFootprint.Content = sb.ToString();
                 sb.Clear();
@@ -186,56 +195,97 @@ namespace OBEM.Views
                     {
                         uniqueGroup1Values.Add(device.Group1);
                         uniqueGroup2Values.Add(device.Group2);
-                        var devicePanel = new StackPanel
+
+                        // Kreirajte StackPanel za karticu
+                        var devicePanel = new Border // Koristimo Border za zaobljene uglove
                         {
-                            Orientation = Orientation.Vertical,
-                            Margin = new Thickness(0, 0, 0, 10),
-                            Background = new SolidColorBrush(Colors.White),
-                            //Padding = new Thickness(10),
-                            //CornerRadius = new CornerRadius(5)
+                            Background = new SolidColorBrush(Colors.White), // Početna boja pozadine
+                            CornerRadius = new CornerRadius(10), // Zaobljeni uglovi
+                            Padding = new Thickness(10), // Unutarnji razmak (padding)
+                            Margin = new Thickness(5), // Vanjski razmak (margin) između kartica
+                            Effect = new DropShadowEffect // Dodajte sjenu za moderniji izgled
+                            {
+                                Color = Colors.Gray,
+                                Direction = 320,
+                                ShadowDepth = 5,
+                                Opacity = 0.5
+                            }
                         };
 
+                        // Unutarnji StackPanel za organizaciju elemenata
+                        var innerStackPanel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical
+                        };
+
+                        // Dodajte TextBlock za Group2
                         var group2Text = new TextBlock
                         {
                             Text = $"Group2: {device.Group2}",
                             FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 0, 0, 5)
+                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
+                            FontSize = 14 // Veličina fonta
                         };
 
+                        // Dodajte TextBlock za Name
                         var name = new TextBlock
                         {
-                            Text = $"name: {device.Name}",
+                            Text = $"Name: {device.Name}",
                             FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 0, 0, 5)
+                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
+                            FontSize = 14
                         };
 
+                        // Dodajte TextBlock za IsActive status
                         var isOnText = new TextBlock
                         {
-                            Text = $"Is On: {device.IsActive}",
-                            Margin = new Thickness(0, 0, 0, 5)
+                            Text = device.IsActive ? "Status: Activated" : "Status: Deactivated", // Promijenite tekst ovisno o statusu
+                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
+                            FontSize = 14,
+                            Foreground = device.IsActive ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red) // Boja teksta ovisno o statusu
                         };
 
+                        // Dodajte TextBlock za Numeric Value
                         var numericValueText = new TextBlock
                         {
                             Text = $"Numeric Value: {device.NumericValue} {device.Unit}",
-                            Margin = new Thickness(0, 0, 0, 5)
+                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
+                            FontSize = 14
                         };
 
+                        // Dodajte Button za prikaz grafa
                         var toggleButton = new Button
                         {
-                            Content = $"Graph:{device.Id}",
+                            Content = $"Graph: {device.Id}",
                             Width = 100,
                             Height = 30,
-                            Margin = new Thickness(0, 0, 0, 5)
+                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod dugmeta
+                            Background = new SolidColorBrush(Color.FromRgb(0, 120, 215)), // Plava boja pozadine
+                            Foreground = new SolidColorBrush(Colors.White), // Bijeli tekst
+                            FontSize = 12,
+                            Padding = new Thickness(5),
+                            Cursor = Cursors.Hand // Promijeni kursor u ruku
                         };
 
-                        toggleButton.Click += GraphButton_Click; // Dodajte ovu liniju
+                        toggleButton.Click += GraphButton_Click; // Dodajte event handler
 
-                        devicePanel.Children.Add(group2Text);
-                        devicePanel.Children.Add(name);
-                        devicePanel.Children.Add(isOnText);
-                        devicePanel.Children.Add(numericValueText);
-                        devicePanel.Children.Add(toggleButton);
+                        // Ako je uređaj aktivan, promijenite boju pozadine kartice
+                        if (device.IsActive)
+                        {
+                            devicePanel.Background = new SolidColorBrush(Color.FromRgb(173, 216, 230)); // Svijetlo plava boja pozadine
+                        }
+
+                        // Dodajte sve elemente u unutarnji StackPanel
+                        innerStackPanel.Children.Add(group2Text);
+                        innerStackPanel.Children.Add(name);
+                        innerStackPanel.Children.Add(isOnText);
+                        innerStackPanel.Children.Add(numericValueText);
+                        innerStackPanel.Children.Add(toggleButton);
+
+                        // Dodajte unutarnji StackPanel u Border (karticu)
+                        devicePanel.Child = innerStackPanel;
+
+
 
                         DetailsPanel.Children.Add(devicePanel);
                     }
@@ -302,7 +352,9 @@ namespace OBEM.Views
             }
 
             //Energy cost for single unit
-            selectedGroup2 = apartmentButton?.Content as string;          
+            selectedGroup2 = apartmentButton?.Content as string;
+            txtCurrentOption.Content = selectedGroup2;
+
             string data = await _apiService.GetAllDevicesAsync();
             try
             {
@@ -314,6 +366,10 @@ namespace OBEM.Views
                 {
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
                     {
+                        sb.AppendLine($"{device.NumericValue} kWh");
+                        txtTotalRealTimeUsage.Content = sb.ToString();
+                        sb.Clear();
+
                         double currentEnergyCost = device.NumericValue * pricePerKw;
                         double currentCO2 = device.NumericValue * 1.2;
                         sb.AppendLine($"Unit: {device.Group1}");
@@ -383,10 +439,10 @@ namespace OBEM.Views
 
         }
 
-
         // Carbon footprint calculation for entire building
         private async Task BuildingStats(object sender, SelectionChangedEventArgs e)
         {
+            txtCurrentOption.Content = "Building";
 
             string data = await _apiService.GetAllDevicesAsync();
             double currentCO2 = 0;
@@ -405,8 +461,13 @@ namespace OBEM.Views
                     }
                 }
 
-                currentCO2 = currentEnergyCost * 1.2;
                 StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{currentEnergyCost} kWh");
+                txtTotalRealTimeUsage.Content = sb.ToString();
+                sb.Clear();
+
+
+                currentCO2 = currentEnergyCost * 1.2;
                 sb.AppendLine($"{currentCO2} kg CO2");
                 txtCurentCarbonFootprint.Content = sb.ToString();
                 sb.Clear();
