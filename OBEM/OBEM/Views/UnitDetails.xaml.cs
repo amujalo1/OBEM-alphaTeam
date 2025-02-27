@@ -50,7 +50,8 @@ namespace OBEM.Views
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
-
+            arrowLine.Visibility = Visibility.Hidden;
+            txtCurrentOptionApartment.Visibility = Visibility.Hidden;
             HideGraphFrame();
             string buttonName = (sender as RadioButton)?.Name;
 
@@ -352,7 +353,9 @@ namespace OBEM.Views
 
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;
-            txtCurrentOption.Content = selectedGroup2;
+            txtCurrentOptionApartment.Visibility = Visibility.Visible;
+            txtCurrentOptionApartment.Content = selectedGroup2;
+            arrowLine.Visibility = Visibility.Visible;
 
             string data = await _apiService.GetAllDevicesAsync();
             try
@@ -442,7 +445,8 @@ namespace OBEM.Views
         private async Task BuildingStats(object sender, SelectionChangedEventArgs e)
         {
             txtCurrentOption.Content = "Building";
-
+            arrowLine.Visibility = Visibility.Hidden;
+            txtCurrentOptionApartment.Visibility = Visibility.Hidden;
             string data = await _apiService.GetAllDevicesAsync();
             double currentCO2 = 0;
             double currentEnergyCost = 0;
