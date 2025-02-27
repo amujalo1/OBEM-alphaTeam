@@ -50,6 +50,7 @@ namespace OBEM.Views
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
+
             arrowLine.Visibility = Visibility.Hidden;
             txtCurrentOptionApartment.Visibility = Visibility.Hidden;
             HideGraphFrame();
@@ -94,7 +95,7 @@ namespace OBEM.Views
                 }
                 double currentPower = currentEnergyCost;
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{currentPower} kWh");
+                sb.AppendLine($"{currentPower}");
                 txtTotalRealTimeUsage.Content = sb.ToString();
                 sb.Clear();
 
@@ -105,7 +106,6 @@ namespace OBEM.Views
 
                 currentEnergyCost *= pricePerKw;
 
-                sb.AppendLine($"Floor: {floorLevel}");
                 sb.AppendLine($"{currentEnergyCost}€");
                 txtCurrentEnergyCost.Content = sb.ToString();
 
@@ -368,13 +368,12 @@ namespace OBEM.Views
                 {
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
                     {
-                        sb.AppendLine($"{device.NumericValue} kWh");
+                        sb.AppendLine($"{device.NumericValue}");
                         txtTotalRealTimeUsage.Content = sb.ToString();
                         sb.Clear();
 
                         double currentEnergyCost = device.NumericValue * pricePerKw;
                         double currentCO2 = device.NumericValue * 1.2;
-                        sb.AppendLine($"Unit: {device.Group1}");
                         sb.AppendLine($"{currentEnergyCost}€");
                         txtCurrentEnergyCost.Content = sb.ToString();
                         sb.Clear();
@@ -447,6 +446,7 @@ namespace OBEM.Views
             txtCurrentOption.Content = "Building";
             arrowLine.Visibility = Visibility.Hidden;
             txtCurrentOptionApartment.Visibility = Visibility.Hidden;
+
             string data = await _apiService.GetAllDevicesAsync();
             double currentCO2 = 0;
             double currentEnergyCost = 0;
@@ -465,7 +465,7 @@ namespace OBEM.Views
                 }
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{currentEnergyCost} kWh");
+                sb.AppendLine($"{currentEnergyCost}");
                 txtTotalRealTimeUsage.Content = sb.ToString();
                 sb.Clear();
 

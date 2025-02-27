@@ -17,7 +17,7 @@
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Foreground="{TemplateBinding Foreground}"
-                                           Margin="5,0,0,0"/>
+                                           Margin="0,0,0,0"/>
                             </Border>
                         </Grid>
                     </ControlTemplate>
