@@ -49,10 +49,16 @@
                     <RadioButton x:Name="txtTotalRealTimeUsage" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
                     <!-- Carbon footprint -->
                     <TextBlock Text="Carbon footprint:" FontSize="16"  FontWeight="Bold" Margin="100,10,0,5"/>
-                    <RadioButton x:Name="txtCarbonFootprint" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                    <RadioButton x:Name="txtCurentCarbonFootprint" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
                     <!-- Energy cost-->
                     <TextBlock Text="Energy cost:" FontSize="16" FontWeight="Bold" Margin="100,10,0,5"/>
-                    <RadioButton x:Name="txtEnergyCost" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                    <RadioButton x:Name="txtCurrentEnergyCost" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                    <!-- Carbon footprint last hour -->
+                    <TextBlock Text="Carbon footprint (last hour):" FontSize="16"  FontWeight="Bold" Margin="100,10,0,5"/>
+                    <RadioButton x:Name="txtCarbonFootprintLastHour" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                    <!-- Carbon footprint last hour -->
+                    <TextBlock Text="Energy cost (last hour):" FontSize="16"  FontWeight="Bold" Margin="100,10,0,5"/>
+                    <RadioButton x:Name="txtEnergyConsumptionLastHour" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
                 </StackPanel>
                 <Grid Grid.Column="0">
                     <!-- Postojeći sadržaj (slika i dugmad) -->
