@@ -201,45 +201,50 @@ namespace OBEM.Views
                         {
                             Background = new SolidColorBrush(Color.FromRgb(163, 200, 243)),
                             CornerRadius = new CornerRadius(5),
-                            Padding = new Thickness(3), // unutrašnji padding
-                            Margin = new Thickness(3), // prostor između kartica
+                            Padding = new Thickness(5), // unutrašnji padding
+                            Margin = new Thickness(5), // prostor između kartica
                             Effect = new DropShadowEffect
                             {
                                 Color = Colors.Gray,
                                 Direction = 320,
                                 ShadowDepth = 4,
-                                Opacity = 0.4
+                                Opacity = 1
                             }
                         };
 
-                        var innerStackPanel = new StackPanel
+                        
+                        var innerGrid = new Grid
                         {
-                            Orientation = Orientation.Vertical,
                             HorizontalAlignment = HorizontalAlignment.Stretch
                         };
+
+                        
+                        innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }); 
+                        innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) }); 
 
                         var deviceNamePanel = new StackPanel
                         {
                             Orientation = Orientation.Horizontal,
                             HorizontalAlignment = HorizontalAlignment.Left,
-                            Margin = new Thickness(0, 0, 0, 3)
+                            Margin = new Thickness(0, 0, 0, 0)
                         };
 
                         var powerIcon = new TextBlock
                         {
-                            Text = device.IsActive ? "\u2714" : "\u274C", // Unicode zaX
-                            FontSize = 12, // veličina ikone
+                            Text = device.IsActive ? "\u2714" : "\u274C", // Unicode for check or X
+                            FontSize = 14,
                             Foreground = device.IsActive ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red),
                             VerticalAlignment = VerticalAlignment.Center,
-                            Margin = new Thickness(0, 0, 3, 0) // razmak između imena i ikone
+                            Margin = new Thickness(0, 0, 0, 0) // margin between name and icon
                         };
 
                         var nameText = new TextBlock
                         {
                             Text = device.Group2,
                             FontWeight = FontWeights.Bold,
-                            FontSize = 12,
-                            VerticalAlignment = VerticalAlignment.Center
+                            FontSize = 14,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(15, 0, 0, 0)
                         };
 
                         deviceNamePanel.Children.Add(powerIcon);
@@ -250,9 +255,10 @@ namespace OBEM.Views
                             Text = $"{device.NumericValue} {device.Unit}",
                             FontWeight = FontWeights.Bold,
                             FontSize = 14,
-                            Margin = new Thickness(0, 3, 0, 3)
+                            Margin = new Thickness(200, 6, 0, 0) // Add some margin to the right for spacing
                         };
 
+                        // Create toggle button
                         var toggleButton = new Button
                         {
                             Content = $"Graph:{device.Id}",
@@ -261,21 +267,28 @@ namespace OBEM.Views
                             Background = new SolidColorBrush(Color.FromRgb(0, 120, 215)),
                             Foreground = new SolidColorBrush(Colors.White),
                             FontSize = 10,
-                            Padding = new Thickness(5),
-                            Cursor = Cursors.Hand
+                            Padding = new Thickness(0, 0, 0, 0),
+                            Cursor = Cursors.Hand,
+                            Margin = new Thickness(-50, 0, 0, 0) // Add margin to the right side for spacing
                         };
 
                         toggleButton.Click += GraphButton_Click;
 
-                        innerStackPanel.Children.Add(deviceNamePanel);
-                        innerStackPanel.Children.Add(valueText);
-                        innerStackPanel.Children.Add(toggleButton);
+                        
+                        Grid.SetColumn(deviceNamePanel, 0); 
+                        Grid.SetColumn(valueText, 0); 
+                        Grid.SetColumn(toggleButton, 1); 
 
-                        devicePanel.Child = innerStackPanel;
+                        innerGrid.Children.Add(deviceNamePanel);
+                        innerGrid.Children.Add(valueText);
+                        innerGrid.Children.Add(toggleButton);
+
+                        devicePanel.Child = innerGrid;
 
                         DetailsPanel.Children.Add(devicePanel);
                     }
                 }
+
 
                 // After processing devices, generate the apartment buttons once
                 foreach (var group1 in uniqueGroup1Values)
