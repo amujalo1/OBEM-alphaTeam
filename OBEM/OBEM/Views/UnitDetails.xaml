@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="35"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -60,6 +60,7 @@
                     <TextBlock Text="Energy cost (last hour):" FontSize="16"  FontWeight="Bold" Margin="100,10,0,5"/>
                     <RadioButton x:Name="txtEnergyConsumptionLastHour" Height="30" Margin="-600,10,0,5" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
                 </StackPanel>
+                
                 <Grid Grid.Column="0">
                     <!-- Postojeći sadržaj (slika i dugmad) -->
                     <Border CornerRadius="20">
@@ -81,14 +82,14 @@
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>
 
                 <!-- Desni dio (detalji) -->
-                <Border Grid.Column="2" CornerRadius="20" Background="#4A4763" Padding="5" BorderBrush="Gray" BorderThickness="1">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Margin="10">
-                            <StackPanel x:Name="DetailsPanel" Margin="10">
+                <Border Grid.Column="2" CornerRadius="20" Background="#A3C8F3" Padding="5" BorderBrush="Gray" BorderThickness="1">
+                    
+                        <Grid Margin="5">
+                            <StackPanel x:Name="DetailsPanel" Margin="5">
                                 <!-- Detalji će biti dinamički dodani ovdje -->
                             </StackPanel>
-                        </StackPanel>
-                    </ScrollViewer>
+                        </Grid>
+                    
                 </Border>
             </Grid>
 

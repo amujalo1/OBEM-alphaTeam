@@ -168,8 +168,6 @@ namespace OBEM.Views
 
         private async System.Threading.Tasks.Task LoadDevices()
         {
-            
-
             string data = await _apiService.GetAllDevicesAsync();
 
             try
@@ -178,9 +176,11 @@ namespace OBEM.Views
                 HashSet<string> uniqueGroup1Values = new HashSet<string>();
                 HashSet<string> uniqueGroup2Values = new HashSet<string>();
 
+                // Clear the panels at the start
                 ApartmentButtonsPanel.Children.Clear();
                 DetailsPanel.Children.Clear();
 
+                // First pass to collect the unique values for group1 and group2
                 foreach (var device in devices)
                 {
                     if ((selectedGroup3 == null || device.Group3 == selectedGroup3) &&
@@ -189,109 +189,96 @@ namespace OBEM.Views
                         uniqueGroup1Values.Add(device.Group1);
                         uniqueGroup2Values.Add(device.Group2);
 
-                        // Kreirajte StackPanel za karticu
-                        var devicePanel = new Border // Koristimo Border za zaobljene uglove
+                        // StackPanel kartica
+                        var devicePanel = new Border
                         {
-                            Background = new SolidColorBrush(Colors.White), // Početna boja pozadine
-                            CornerRadius = new CornerRadius(10), // Zaobljeni uglovi
-                            Padding = new Thickness(10), // Unutarnji razmak (padding)
-                            Margin = new Thickness(5), // Vanjski razmak (margin) između kartica
-                            Effect = new DropShadowEffect // Dodajte sjenu za moderniji izgled
+                            Background = new SolidColorBrush(Color.FromRgb(163, 200, 243)),
+                            CornerRadius = new CornerRadius(5),
+                            Padding = new Thickness(3), // unutrašnji padding
+                            Margin = new Thickness(3), // prostor između kartica
+                            Effect = new DropShadowEffect
                             {
                                 Color = Colors.Gray,
                                 Direction = 320,
-                                ShadowDepth = 5,
-                                Opacity = 0.5
+                                ShadowDepth = 4,
+                                Opacity = 0.4
                             }
                         };
 
-                        // Unutarnji StackPanel za organizaciju elemenata
                         var innerStackPanel = new StackPanel
                         {
-                            Orientation = Orientation.Vertical
+                            Orientation = Orientation.Vertical,
+                            HorizontalAlignment = HorizontalAlignment.Stretch
                         };
 
-                        // Dodajte TextBlock za Group2
-                        var group2Text = new TextBlock
+                        var deviceNamePanel = new StackPanel
                         {
-                            Text = $"Group2: {device.Group2}",
+                            Orientation = Orientation.Horizontal,
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            Margin = new Thickness(0, 0, 0, 3)
+                        };
+
+                        var powerIcon = new TextBlock
+                        {
+                            Text = device.IsActive ? "\u2714" : "\u274C", // Unicode zaX
+                            FontSize = 12, // veličina ikone
+                            Foreground = device.IsActive ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red),
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Margin = new Thickness(0, 0, 3, 0) // razmak između imena i ikone
+                        };
+
+                        var nameText = new TextBlock
+                        {
+                            Text = device.Group2,
                             FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
-                            FontSize = 14 // Veličina fonta
+                            FontSize = 12,
+                            VerticalAlignment = VerticalAlignment.Center
                         };
 
-                        // Dodajte TextBlock za Name
-                        var name = new TextBlock
+                        deviceNamePanel.Children.Add(powerIcon);
+                        deviceNamePanel.Children.Add(nameText);
+
+                        var valueText = new TextBlock
                         {
-                            Text = $"Name: {device.Name}",
+                            Text = $"{device.NumericValue} {device.Unit}",
                             FontWeight = FontWeights.Bold,
-                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
-                            FontSize = 14
-                        };
-
-                        // Dodajte TextBlock za IsActive status
-                        var isOnText = new TextBlock
-                        {
-                            Text = device.IsActive ? "Status: Activated" : "Status: Deactivated", // Promijenite tekst ovisno o statusu
-                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
                             FontSize = 14,
-                            Foreground = device.IsActive ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red) // Boja teksta ovisno o statusu
+                            Margin = new Thickness(0, 3, 0, 3)
                         };
 
-                        // Dodajte TextBlock za Numeric Value
-                        var numericValueText = new TextBlock
-                        {
-                            Text = $"Numeric Value: {device.NumericValue} {device.Unit}",
-                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod teksta
-                            FontSize = 14
-                        };
-
-                        // Dodajte Button za prikaz grafa
                         var toggleButton = new Button
                         {
-                            Content = $"Graph: {device.Id}",
-                            Width = 100,
-                            Height = 30,
-                            Margin = new Thickness(0, 0, 0, 5), // Razmak ispod dugmeta
-                            Background = new SolidColorBrush(Color.FromRgb(0, 120, 215)), // Plava boja pozadine
-                            Foreground = new SolidColorBrush(Colors.White), // Bijeli tekst
-                            FontSize = 12,
+                            Content = $"Graph:{device.Id}",
+                            Width = 60,
+                            Height = 25,
+                            Background = new SolidColorBrush(Color.FromRgb(0, 120, 215)),
+                            Foreground = new SolidColorBrush(Colors.White),
+                            FontSize = 10,
                             Padding = new Thickness(5),
-                            Cursor = Cursors.Hand // Promijeni kursor u ruku
+                            Cursor = Cursors.Hand
                         };
 
-                        toggleButton.Click += GraphButton_Click; // Dodajte event handler
+                        toggleButton.Click += GraphButton_Click;
 
-                        // Ako je uređaj aktivan, promijenite boju pozadine kartice
-                        if (device.IsActive)
-                        {
-                            devicePanel.Background = new SolidColorBrush(Color.FromRgb(173, 216, 230)); // Svijetlo plava boja pozadine
-                        }
-
-                        // Dodajte sve elemente u unutarnji StackPanel
-                        innerStackPanel.Children.Add(group2Text);
-                        innerStackPanel.Children.Add(name);
-                        innerStackPanel.Children.Add(isOnText);
-                        innerStackPanel.Children.Add(numericValueText);
+                        innerStackPanel.Children.Add(deviceNamePanel);
+                        innerStackPanel.Children.Add(valueText);
                         innerStackPanel.Children.Add(toggleButton);
 
-                        // Dodajte unutarnji StackPanel u Border (karticu)
                         devicePanel.Child = innerStackPanel;
-
-
 
                         DetailsPanel.Children.Add(devicePanel);
                     }
                 }
 
+                // After processing devices, generate the apartment buttons once
                 foreach (var group1 in uniqueGroup1Values)
                 {
                     var newApartmentButton = new RadioButton
                     {
-                        Width = 75,
+                        Width = 100,
                         Padding = new Thickness(10, 5, 10, 5),
                         Height = 25,
-                        FontSize = 10,
+                        FontSize = 14,
                         Content = group1,
                         Tag = group1
                     };
@@ -302,19 +289,18 @@ namespace OBEM.Views
                         newApartmentButton.Style = menuButtonStyle;
                         newApartmentButton.ToolTip = $"Apartment: {group1}";
                     }
+
                     newApartmentButton.Click += ApartmentButton_Click;
                     ApartmentButtonsPanel.Children.Add(newApartmentButton);
-
-                    
                 }
             }
             catch (Exception ex)
             {
                 // Handle exception
                 Console.WriteLine("Error loading devices: " + ex.Message);
-
             }
         }
+
         private void GraphButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
