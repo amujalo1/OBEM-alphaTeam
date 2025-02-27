@@ -8,6 +8,7 @@ using OBEM.Services;
 using OBEM.models;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace OBEM.Views
 {
@@ -40,8 +41,7 @@ namespace OBEM.Views
 
         private async void PageLoaded(object sender, RoutedEventArgs e)
         {
-            await BuildingCarbonFootprint(sender, null);
-            await EnergyCostBuilding(sender, null);
+            await BuildingStats(sender, null);
         }
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
@@ -79,10 +79,11 @@ namespace OBEM.Views
 
                 foreach (var device in devices)
                 {
-
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3 == floorLevel)
-                    {         
-                            currentEnergyCost += device.NumericValue;
+                    {
+                        Console.WriteLine($"FloorLevel: {floorLevel}, Device Group3: {device.Group3}");
+
+                        currentEnergyCost += device.NumericValue;
                     }
                 }
                 currentCO2 = currentEnergyCost * 1.2;
@@ -135,16 +136,19 @@ namespace OBEM.Views
                                 {
                                     sumOfAverages += record.AverageValue;
                                     count++;
+                                    Console.WriteLine($"suma{count}--{sumOfAverages}");
+
                                 }
                             }
                         }
-                        if(count > 0)
-                        {
-                            double averageValue = sumOfAverages / count;
-                            totalEnergyCost = averageValue + pricePerKw;
-                            totalCO2 += averageValue * 1.2;
-                        }
                     }
+                }
+
+                if (count > 0)
+                {
+                    double averageValue = sumOfAverages / count;
+                    totalEnergyCost = averageValue * pricePerKw;
+                    totalCO2 = averageValue * 1.2;
                 }
                 StringBuilder sb = new StringBuilder();
 
@@ -291,6 +295,7 @@ namespace OBEM.Views
                                 if(recordTime > sevenDaysAgo)
                                 {
                                     sumOfAverages += record.AverageValue;
+                                    Console.WriteLine($"suma{count}--{sumOfAverages}");
                                     count++;
                                 }
                             }
@@ -366,67 +371,98 @@ namespace OBEM.Views
         }
 
         // Carbon footprint calculation for entire building
-        private async Task BuildingCarbonFootprint(object sender, SelectionChangedEventArgs e)
+        private async Task BuildingStats(object sender, SelectionChangedEventArgs e)
         {
 
             string data = await _apiService.GetAllDevicesAsync();
-            double CO2 = 0;
-
+            double currentCO2 = 0;
+            double currentEnergyCost = 0;
+            const double pricePerKw = 0.30;
+            // Current values
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
 
-                StringBuilder sb = new StringBuilder();
                 foreach (var device in devices)
                 {
-
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
                     {
-                        CO2 += device.NumericValue * 1.2;
-
+                        currentEnergyCost += device.NumericValue;
                     }
                 }
-                sb.AppendLine($"{CO2} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
+
+                currentCO2 = currentEnergyCost * 1.2;
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{currentCO2} kg CO2");
+                txtCurentCarbonFootprint.Text = sb.ToString();
+                sb.Clear();
+
+                currentEnergyCost *= pricePerKw;
+                sb.AppendLine($"{currentEnergyCost}$");
+                txtCurrentEnergyCost.Text = sb.ToString();
+
             }
             catch (Exception ex)
             {
                 txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
-        }
 
+            double totalEnergyCost = 0;
+            double totalCO2 = 0;
 
-        // Cost calculation for entire building
+            DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+            double sumOfAverages = 0;
+            int count = 0;
 
-        private async Task EnergyCostBuilding(object sender, RoutedEventArgs e)
-        {
-            string data = await _apiService.GetAllDevicesAsync();
 
             try
             {
                 var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-
-                const double pricePerKw = 0.30;
-                StringBuilder sb = new StringBuilder();
-                double energyCost = 0;
-                foreach (var device in devices)
-                {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
+                foreach (var device in devices) {
+                    if(device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
                     {
-                        energyCost += device.NumericValue * pricePerKw;
+                        string trendingData = await _apiService.GetTrendingInfoById2(int.Parse(device.Id));
+                        var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
+                        var records = trendingResponse.Records;
+
+                        foreach (var recordEntry in records) {
+                            foreach (var record in recordEntry.Value) {
+                                DateTime recordTime = DateTime.Parse(record.Time);
+
+                                if (recordTime > sevenDaysAgo) {
+                                    sumOfAverages += record.AverageValue;
+                                    count++;
+                                }
+                            }
+                        }
                     }
+
                 }
-                sb.AppendLine($"Energy Cost For Entire Building: {energyCost}$");
+
+                if (count > 0) {
+                    double averageValue = sumOfAverages / count;
+                    totalEnergyCost = averageValue * pricePerKw;
+                    totalCO2 = averageValue * 1.2;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{Math.Round(totalEnergyCost)}$");
                 txtEnergyCost.Text = sb.ToString();
+                sb.Clear();
+
+                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
+                txtCarbonFootprint.Text = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtEnergyCost.Text = $"Error calculating energy cost: {ex.Message}";
+                txtCarbonFootprint.Text = $"Error calculating carbon footprint: {ex.Message}";
             }
+
         }
 
-        
+
         public void MoveStackPanelBasedOnFloor(int floorNumber)
         {
             // Define the margin positions based on the selected floor
