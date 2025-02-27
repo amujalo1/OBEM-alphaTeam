@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="960" Width="1280">
-    <Grid>
+
+    <Grid Background="#272537">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Red za dugmad -->
@@ -15,19 +16,17 @@
         </Grid.RowDefinitions>
 
         <!-- Dugme za prelazak na ApiTester stranicu -->
-        <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top" Width="700" Grid.Row="0" Height="30">
-            <Button Content="Otvori API Tester"
-                    Click="OpenApiTester_Click" Width="150"/>
-
-            <Button Content="Otvori Unit Energy Monitoring"
-                    Click="OpenUnitEnergyMonitoring_Click" Width="200"/>
-
-            <Button Content="Otvori Energy Cost View"
-                    Click="OpenEnergyCost_Click" Width="150"/>
+        <DockPanel VerticalAlignment="Top" Grid.Row="1" Height="30" HorizontalAlignment="Left" Width="1280" Margin="10,0,0,0">
+            <Button Content="Notifications" Click="NotificationsButton_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+            <Button Content="API Tester" Click="OpenApiTester_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+            <Button Content="Unit Energy Monitoring" Click="OpenUnitEnergyMonitoring_Click" Width="200" Style="{StaticResource NavButtonTheme}"/>
+            <Button Content="Open Energy Cost View" Click="OpenEnergyCost_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+            <Button Content="Open Graph Page" Click="OpenDeviceGraphPage_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+            <Label x:Name="DateTimeText" Margin="25,0,0,0" FontSize="14" Foreground="white"/>
         </DockPanel>
 
         <!-- Frame za prikaz stranica -->
-        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden" Margin="10"/>
+        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden" Margin="10,35,10,10"/>
 
         <!-- GridSplitter za promjenu visine TabControl-a -->
         <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" Background="Gray" ShowsPreview="True"/>
@@ -39,6 +38,7 @@
                 <DataGrid x:Name="dgHighConsumption" AutoGenerateColumns="True" Margin="10"/>
             </TabItem>
 
+
             <TabItem Header="Elementi s anomalijama">
                 <!-- DataGrid za prikaz anomalija -->
                 <DataGrid x:Name="dgAnomalies" AutoGenerateColumns="False" Margin="10">
@@ -47,6 +47,13 @@
                         <DataGridTextColumn Header="Veličina odstupanja" Binding="{Binding Deviation}" Width="Auto"/>
                         <DataGridTextColumn Header="Vrijednost" Binding="{Binding Value}" Width="Auto"/>
                         <DataGridTextColumn Header="Datum" Binding="{Binding Timestamp}" Width="Auto"/>
+                        <DataGridTemplateColumn Header="Graf" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Prikaži graf" Click="ShowGraph_Click" Background="Transparent" BorderThickness="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>

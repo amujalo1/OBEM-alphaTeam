@@ -90,6 +90,9 @@
     <Compile Include="Views\EnergyCost.xaml.cs">
       <DependentUpon>EnergyCost.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Notifikacije.xaml.cs">
+      <DependentUpon>Notifikacije.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UnitDetails.xaml.cs">
       <DependentUpon>UnitDetails.xaml</DependentUpon>
     </Compile>
@@ -100,6 +103,18 @@
       <DependentUpon>UnitEnergyMonitoringByDeviceId.xaml</DependentUpon>
     </Compile>
     <Page Include="Theme\MenuButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\NavButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\SelectionButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\TabItemTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,6 +135,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\EnergyCost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Notifikacije.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

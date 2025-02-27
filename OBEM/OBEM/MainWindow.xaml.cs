@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace OBEM
 {
@@ -19,8 +20,26 @@ namespace OBEM
             InitializeComponent();
             LoadHighConsumptionData();
             LoadAnomaliesData();
+            StartClock();
+        }
+        private void StartClock()
+        {
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += (sender, e) => UpdateDateTime();
+            timer.Start();
         }
 
+        private void UpdateDateTime()
+        {
+            DateTime currentDateTime = DateTime.Now;
+            DateTimeText.Content = currentDateTime.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
+        private void NotificationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new Notifikacije());
+        }
         private async void LoadHighConsumptionData()
         {
             string data = await _apiService.GetAllDevicesAsync();
@@ -134,6 +153,42 @@ namespace OBEM
         {
             MainFrame.Navigate(new EnergyCost());
         }
+        private void OpenDeviceGraphPage_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId());
+        }
+        private void ShowGraph_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var selectedItem = button.DataContext;
+
+            var idProperty = selectedItem.GetType().GetProperty("Id");
+            if (idProperty == null)
+            {
+                MessageBox.Show("Odabrani red nema ID svojstvo.");
+                return;
+            }
+
+            var fullId = idProperty.GetValue(selectedItem) as string;
+            if (string.IsNullOrEmpty(fullId))
+            {
+                MessageBox.Show("ID nije pronađen.");
+                return;
+            }
+
+            var idParts = fullId.Split('/');
+            if (idParts.Length < 2)
+            {
+                MessageBox.Show("ID nije u očekivanom formatu (npr. '505/37').");
+                return;
+            }
+
+            // Uzmi drugi dio ID-a (npr. "37")
+            var id = idParts[1];
+
+            MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId(id));
+        }
+
     }
 
    

@@ -8,8 +8,10 @@ using OBEM.Services;
 using OBEM.models;
 using System.Windows.Media;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Xml;
+using System.Windows.Controls.Primitives;
+using System.Xml.Linq;
+
 
 namespace OBEM.Views
 {
@@ -33,11 +35,11 @@ namespace OBEM.Views
         private string selectedGroup1 = null;
         private string selectedGroup2 = null;
         private string selectedGroup3 = null;
-
+        private string selectedFloor = null;
         public UnitDetails()
         {
+            
             InitializeComponent();
-
         }
 
         private async void PageLoaded(object sender, RoutedEventArgs e)
@@ -48,7 +50,8 @@ namespace OBEM.Views
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
         {
 
-            //Current 
+
+            HideGraphFrame();
             string buttonName = (sender as RadioButton)?.Name;
 
             if (floorMapping.ContainsKey(buttonName))
@@ -56,7 +59,7 @@ namespace OBEM.Views
                 string floor = floorMapping[buttonName];
                 selectedGroup3 = floor;
                 selectedGroup1 = null; // Reset selectedGroup1 when a new floor is selected
-                txtDetails.Text = $"Showing devices for {floor}...";
+                selectedFloor = floorMapping[buttonName];
 
                 int floorNumber = GetFloorNumber(floor);
                 MoveStackPanelBasedOnFloor(floorNumber);
@@ -94,16 +97,14 @@ namespace OBEM.Views
                 sb.Clear();
 
                 currentEnergyCost *= pricePerKw;
-
-                sb.AppendLine($"Floor: {floorLevel}");
-                sb.AppendLine($"{currentEnergyCost}€");
-                txtCurrentEnergyCost.Text = sb.ToString();
                 
+                sb.AppendLine($"{energyCost}€");
 
+                txtEnergyCost.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
             // Last 7 days
@@ -138,34 +139,18 @@ namespace OBEM.Views
                     }
                 }
 
-                if (count > 0)
-                {
-                    double averageValue = sumOfAverages / count;
-                    Console.WriteLine($"averageValue - {averageValue}");
-                    totalEnergyCost = averageValue * pricePerKw;
-                    Console.WriteLine($"totalEnergyCost - {totalEnergyCost}");
-                    totalCO2 = averageValue * 1.2;
-                    Console.WriteLine($"totalCO2 - {totalCO2}");
-                }
-                StringBuilder sb = new StringBuilder();
-
-                sb.AppendLine($"Floor: {floorLevel}");
-                sb.AppendLine($"{Math.Round(totalEnergyCost)}€");
-                txtEnergyCost.Text = sb.ToString();
-                sb.Clear();
-                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
+                sb.AppendLine($"{CO2} kg CO2");
+                txtCarbonFootprint.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Error calculating energy cost: {ex.Message}";
-                txtCarbonFootprint.Text = $"Error calculating carbon footprint: {ex.Message}";
+                txtCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
         }
 
         private async System.Threading.Tasks.Task LoadDevices()
         {
-            txtDetails.Text = "Loading devices...";
+            
 
             string data = await _apiService.GetAllDevicesAsync();
 
@@ -176,7 +161,7 @@ namespace OBEM.Views
                 HashSet<string> uniqueGroup2Values = new HashSet<string>();
 
                 ApartmentButtonsPanel.Children.Clear();
-                lstGroup2.Items.Clear();
+                DetailsPanel.Children.Clear();
 
                 foreach (var device in devices)
                 {
@@ -185,6 +170,58 @@ namespace OBEM.Views
                     {
                         uniqueGroup1Values.Add(device.Group1);
                         uniqueGroup2Values.Add(device.Group2);
+                        var devicePanel = new StackPanel
+                        {
+                            Orientation = Orientation.Vertical,
+                            Margin = new Thickness(0, 0, 0, 10),
+                            Background = new SolidColorBrush(Colors.White),
+                            //Padding = new Thickness(10),
+                            //CornerRadius = new CornerRadius(5)
+                        };
+
+                        var group2Text = new TextBlock
+                        {
+                            Text = $"Group2: {device.Group2}",
+                            FontWeight = FontWeights.Bold,
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+
+                        var name = new TextBlock
+                        {
+                            Text = $"name: {device.Name}",
+                            FontWeight = FontWeights.Bold,
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+
+                        var isOnText = new TextBlock
+                        {
+                            Text = $"Is On: {device.IsActive}",
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+
+                        var numericValueText = new TextBlock
+                        {
+                            Text = $"Numeric Value: {device.NumericValue} {device.Unit}",
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+
+                        var toggleButton = new Button
+                        {
+                            Content = $"Graph:{device.Id}",
+                            Width = 100,
+                            Height = 30,
+                            Margin = new Thickness(0, 0, 0, 5)
+                        };
+
+                        toggleButton.Click += GraphButton_Click; // Dodajte ovu liniju
+
+                        devicePanel.Children.Add(group2Text);
+                        devicePanel.Children.Add(name);
+                        devicePanel.Children.Add(isOnText);
+                        devicePanel.Children.Add(numericValueText);
+                        devicePanel.Children.Add(toggleButton);
+
+                        DetailsPanel.Children.Add(devicePanel);
                     }
                 }
 
@@ -193,51 +230,65 @@ namespace OBEM.Views
                     var newApartmentButton = new RadioButton
                     {
                         Width = 75,
+                        Padding = new Thickness(10, 5, 10, 5),
                         Height = 25,
+                        FontSize = 10,
                         Content = group1,
-                        Margin = new Thickness(),
-                        Background = new SolidColorBrush(Colors.LightBlue),
-                        Tag = group1,
+                        Tag = group1
                     };
 
-                    var menuButtonStyle = Application.Current.FindResource("MenuButtonTheme") as Style;
+                    var menuButtonStyle = Application.Current.FindResource("SelectionButtonTheme") as Style;
                     if (menuButtonStyle != null)
                     {
                         newApartmentButton.Style = menuButtonStyle;
+                        newApartmentButton.ToolTip = $"Apartment: {group1}";
                     }
                     newApartmentButton.Click += ApartmentButton_Click;
                     ApartmentButtonsPanel.Children.Add(newApartmentButton);
 
                     
                 }
-
-                foreach (var group2 in uniqueGroup2Values)
-                {
-                    lstGroup2.Items.Add(group2);
-                }
-
-                txtDetails.Text = uniqueGroup2Values.Count > 0 ? "Select a Group2 to see details." : "No devices found for the selected floor and group.";
             }
             catch (Exception ex)
             {
-                txtDetails.Text = "Error loading devices: " + ex.Message;
+                // Handle exception
+                Console.WriteLine("Error loading devices: " + ex.Message);
+
             }
         }
+        private void GraphButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var deviceId = button.Content.ToString().Replace("Graph:", "");
 
+            // Prikaži Frame
+            GraphFrame.Visibility = Visibility.Visible;
+
+            // Navigacija do novog Page-a
+            GraphFrame.Navigate(new UnitEnergyMonitoringByDeviceId(deviceId));
+        }
+
+        private void HideGraphFrame()
+        {
+            // Sakrij Frame
+            GraphFrame.Visibility = Visibility.Collapsed;
+        }
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
         {
+            HideGraphFrame();
             var apartmentButton = sender as RadioButton;
             selectedGroup1 = apartmentButton?.Tag as string;
-
+            Console.WriteLine(selectedGroup1);
             if (selectedGroup1 != null)
             {
-                txtDetails.Text = $"Showing devices for {selectedGroup1}...";
+                selectedGroup2 = null;
                 await LoadDevices();
             }
 
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;          
             string data = await _apiService.GetAllDevicesAsync();
+
             try
             {
                 const double pricePerKw = 0.30;
@@ -248,25 +299,31 @@ namespace OBEM.Views
                 {
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
                     {
-                        double currentEnergyCost = device.NumericValue * pricePerKw;
-                        double currentCO2 = device.NumericValue * 1.2;
-                        sb.AppendLine($"Unit: {device.Group1}");
-                        sb.AppendLine($"{currentEnergyCost}€");
-                        txtCurrentEnergyCost.Text = sb.ToString();
-                        sb.Clear();
-                        sb.AppendLine($"{currentCO2} kg CO2");
-                        txtCurentCarbonFootprint.Text = sb.ToString();
 
+                        double energyCost = device.NumericValue * pricePerKw;
+
+                        sb.AppendLine($"{energyCost}€");
                         break;
                     }
                 }
-                
-                // Last 7 days
-                double totalCost = 0;
-                double totalCO2 = 0;
-                DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
-                int count = 0;
-                double sumOfAverages = 0;
+
+
+                txtEnergyCost.Content = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                txtEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
+            }
+
+
+
+            // CO2 footprint 
+
+            try
+            {
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+                StringBuilder sb = new StringBuilder();
+
                 foreach (var device in devices)
                 {
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
@@ -302,60 +359,14 @@ namespace OBEM.Views
                     Console.WriteLine($"totalCO2 - {totalCO2} kg CO2");
                 }
 
-                sb.Clear();
-                sb.AppendLine($"{Math.Round(totalCost)}€");
-                txtEnergyCost.Text = sb.ToString();
-                sb.Clear();
-                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
 
+               txtCarbonFootprint.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
-        }
-
-        private async void Group2_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            selectedGroup2 = lstGroup2.SelectedItem as string;
-
-            if (selectedGroup2 != null)
-            {
-                txtDetails.Text = $"Loading details for {selectedGroup2}...";
-
-                string data = await _apiService.GetAllDevicesAsync();
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-
-                StringBuilder sb = new StringBuilder();
-
-                foreach (var device in devices)
-                {
-                    if (device.Group2 == selectedGroup2 &&
-                        (selectedGroup1 == null || device.Group1 == selectedGroup1) &&
-                        (selectedGroup3 == null || device.Group3 == selectedGroup3))
-                    {
-                        sb.AppendLine($"ID: {device.Id}");
-                        sb.AppendLine($"Name: {device.Name}");
-                        sb.AppendLine($"Lower Bound: {device.LowerBound}");
-                        sb.AppendLine($"Upper Bound: {device.UpperBound}");
-                        sb.AppendLine($"Numeric Value: {device.NumericValue}");
-                        sb.AppendLine($"String Value: {device.StringValue}");
-                        sb.AppendLine($"Unit: {device.Unit}");
-                        sb.AppendLine($"Simulation Type: {device.SimulationType}");
-                        sb.AppendLine($"Growth Ratio: {device.GrowthRatio}");
-                        sb.AppendLine($"Group1: {device.Group1}");
-                        sb.AppendLine($"Group2: {device.Group2}");
-                        sb.AppendLine($"Group3: {device.Group3}");
-                        sb.AppendLine($"Is Active: {device.IsActive}");
-                        sb.AppendLine($"Update Interval: {device.UpdateInterval}");
-                        sb.AppendLine("===============================================");
-                    }
-                }
-
-                txtDetails.Text = sb.Length > 0 ? sb.ToString() : "No details found for the selected Group2.";
-            }
         }
 
         // Carbon footprint calculation for entire building
@@ -379,20 +390,12 @@ namespace OBEM.Views
                     }
                 }
 
-                currentCO2 = currentEnergyCost * 1.2;
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{currentCO2} kg CO2");
-                txtCurentCarbonFootprint.Text = sb.ToString();
-                sb.Clear();
-
-                currentEnergyCost *= pricePerKw;
-                sb.AppendLine($"{currentEnergyCost}€");
-                txtCurrentEnergyCost.Text = sb.ToString();
-
+                sb.AppendLine($"{CO2} kg CO2");
+                txtCarbonFootprint.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtCarbonFootprint.Text = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
             //Works fine
             //Last 7 days
@@ -435,18 +438,12 @@ namespace OBEM.Views
                     Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
 
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{Math.Round(totalEnergyCost)}€");
-                txtEnergyCost.Text = sb.ToString();
-                sb.Clear();
-
-                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprint.Text = sb.ToString();
+                sb.AppendLine($"{energyCost}€");
+                txtEnergyCost.Content = sb.ToString();
             }
             catch (Exception ex)
             {
-                txtEnergyCost.Text = $"Error calculating energy cost: {ex.Message}";
-                txtCarbonFootprint.Text = $"Error calculating carbon footprint: {ex.Message}";
+                txtEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
             }
 
         }
@@ -454,7 +451,8 @@ namespace OBEM.Views
 
         public void MoveStackPanelBasedOnFloor(int floorNumber)
         {
-            // Define the margin positions based on the selected floor
+            // pomjeranje margine od početka u zavisnosti od izabira
+            // ovo je lakše nego da pravimo više panela
             double marginTop = 0;
 
             switch (floorNumber)
@@ -471,18 +469,14 @@ namespace OBEM.Views
                 case -1:
                     marginTop = 170;
                     break;
-                case -2:
+                case -4:
                     marginTop = 220;
                     break;
-                case -3:
-                    marginTop = 270;
-                    break;
                 default:
-                    marginTop = 0; // Default margin in case of invalid floor
+                    marginTop = 1000; // default
                     break;
             }
 
-            
             ApartmentButtonsPanel.Margin = new Thickness(0, marginTop, 200, 0);
         }
 
@@ -494,8 +488,6 @@ namespace OBEM.Views
                 case "Floor 1": return 1;
                 case "Floor 0": return 0;
                 case "Floor -1": return -1;
-                case "Floor -2": return -2;
-                case "Floor -3": return -3;
                 case "Outside": return -4; 
                 case "General": return -5; 
                 default: return 0; 
