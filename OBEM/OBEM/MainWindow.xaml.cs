@@ -157,6 +157,12 @@ namespace OBEM
         {
             MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId());
         }
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow log = new LoginWindow();
+            this.Close();
+            log.Show();
+        }
         private void ShowGraph_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
