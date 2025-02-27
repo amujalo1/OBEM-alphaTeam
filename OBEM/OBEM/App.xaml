@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:OBEM"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/SelectionButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/NavButtonTheme.xaml"/>
+             
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
