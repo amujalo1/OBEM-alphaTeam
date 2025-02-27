@@ -322,17 +322,37 @@ namespace OBEM.Views
             }
         }
 
-        private void GraphButton_Click(object sender, RoutedEventArgs e)
+        private async void GraphButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
             var deviceId = button.Content.ToString().Replace("Graph:", "");
 
-            // Prikaži Frame
-            GraphFrame.Visibility = Visibility.Visible;
+            var trendingDataService = new ApiModels();
+            var result = await trendingDataService.LoadTrendingDataAsync(deviceId);
 
-            // Navigacija do novog Page-a
-            GraphFrame.Navigate(new UnitEnergyMonitoringByDeviceId(deviceId));
+            if (result.PlotModel != null)
+            {
+
+                var plotView = new OxyPlot.Wpf.PlotView
+                {
+                    Model = result.PlotModel,
+                    Width = 400,
+                    Height = 200,
+                    Background = Brushes.Transparent, 
+
+                };
+
+                GraphContentControl.Content = plotView;
+            }
+
+            
+
+            if (!string.IsNullOrEmpty(result.ErrorMessage))
+            {
+                MessageBox.Show(result.ErrorMessage);
+            }
         }
+
 
         private void HideGraphFrame()
         {

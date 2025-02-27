@@ -77,15 +77,20 @@
                     <Frame x:Name="GraphFrame" Visibility="Collapsed" Background="#4A4763" Padding="10" Margin="10" NavigationUIVisibility="Hidden"/>
                 <RadioButton x:Name="txtCurrentOption" Height="30" FontWeight="Bold" Margin="600,0,0,300" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
                 <!-- Desni dio (detalji) -->
-                
-                    <Border CornerRadius="20">
-                        <Image Opacity="0.75" HorizontalAlignment="Left" VerticalAlignment="Top" Height="350" Width="350" Margin="700,50,0,0">
-                            <Image.Source>
-                                <BitmapImage UriSource="pack://application:,,,/Resources/UIsample.png"/>
-                            </Image.Source>
-                        </Image>
-                    </Border>
-                
+
+                <Border CornerRadius="20">
+                    <Grid>
+                        <!-- Definišemo dve kolone: jedna za sadržaj sa leve strane, druga za graf sa desne strane -->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Postavljamo ContentControl u drugu kolonu (indeks 1) -->
+                        <ContentControl x:Name="GraphContentControl" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"/>
+                    </Grid>
+                </Border>
+
             </Grid>
 
 
