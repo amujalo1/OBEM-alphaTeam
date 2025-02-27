@@ -53,7 +53,7 @@
                             </Image.Source>
                         </Image>
                     </Border>
-                    <WrapPanel x:Name="ApartmentButtonsPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,100,0,0">
+                    <WrapPanel x:Name="ApartmentButtonsPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,100,0,0">
                         <!-- Apartment buttons go here -->
                     </WrapPanel>
 
