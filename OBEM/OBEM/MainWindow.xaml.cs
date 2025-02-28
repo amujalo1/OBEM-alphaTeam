@@ -14,6 +14,7 @@ namespace OBEM
     public partial class MainWindow : Window
     {
         private readonly ApiService _apiService = new ApiService();
+        private DispatcherTimer timer;
 
         public MainWindow()
         {
@@ -21,6 +22,22 @@ namespace OBEM
             LoadHighConsumptionData();
             LoadAnomaliesData();
             StartClock();
+            StartThreadTimer();
+        }
+        private void StartThreadTimer()
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(20);
+            Console.WriteLine("Thread zavrsen//////");
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private async void Timer_Tick(object sender, EventArgs e)
+        {
+            InitializeComponent();
+            LoadHighConsumptionData();
+            LoadAnomaliesData();
         }
         private void StartClock()
         {

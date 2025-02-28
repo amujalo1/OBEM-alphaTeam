@@ -16,6 +16,8 @@ using System.Windows.Media.Effects;
 using OxyPlot;
 using System.Linq;
 using OxyPlot.Series;
+using System.Windows.Markup;
+using System.Windows.Threading;
 
 namespace OBEM.Views
 {
@@ -40,15 +42,33 @@ namespace OBEM.Views
         private string selectedGroup2 = null;
         private string selectedGroup3 = null;
         private string selectedFloor = null;
+        private DispatcherTimer timer;
+
         public UnitDetails()
         {
-            
             InitializeComponent();
+            StartTimer();
+        }
+        private void StartTimer()
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(20);
+            Console.WriteLine("Thread zavrsen//////");
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
+        private async void Timer_Tick(object sender, EventArgs e)
+        {
+            await LoadDevices();
+        }
         private async void PageLoaded(object sender, RoutedEventArgs e)
         {
             await BuildingStats(sender, null);
+            
+            string data = await _apiService.GetAllDevicesAsync();
+            var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
         }
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
@@ -460,27 +480,8 @@ namespace OBEM.Views
                     txtCurrentEnergyCost.Content = $"{device.NumericValue * pricePerKw}€";
                     txtCurentCarbonFootprint.Content = $"{device.NumericValue * carbonPerKw} kg CO2";
                 }
-                /*    foreach (var device in devices)
-                {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
-                    {
-                        sb.AppendLine($"{device.NumericValue}");
-                        txtTotalRealTimeUsage.Content = sb.ToString();
-                        sb.Clear();
 
-                        double currentEnergyCost = device.NumericValue * pricePerKw;
-                        double currentCO2 = device.NumericValue * 1.2;
-                        sb.AppendLine($"{currentEnergyCost}€");
-                        txtCurrentEnergyCost.Content = sb.ToString();
-                        sb.Clear();
-                        sb.AppendLine($"{currentCO2} kg CO2");
-                        txtCurentCarbonFootprint.Content = sb.ToString();
-
-                        break;
-                    }
-                }*/
-
-                // Last 7 days
+                // Last hour
                 double totalCost = 0;
                 double totalCO2 = 0;
                 DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
@@ -519,12 +520,7 @@ namespace OBEM.Views
 
                 txtEnergyConsumptionLastHour.Content = $"{Math.Round(totalCost)}€";
                 txtCarbonFootprintLastHour.Content = $"{Math.Round(totalCO2)} kg CO2";
-                /*sb.Clear();
-                sb.AppendLine($"{Math.Round(totalCost)}€");
-                txtEnergyConsumptionLastHour.Content = sb.ToString();
-                sb.Clear();
-                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprintLastHour.Content = sb.ToString();*/
+
 
             }
             catch (Exception ex)
