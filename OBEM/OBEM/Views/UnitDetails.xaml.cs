@@ -68,7 +68,7 @@ namespace OBEM.Views
             await BuildingStats(sender, null);
             
             string data = await _apiService.GetAllDevicesAsync();
-            var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+            var devices = DeserializeDevices(data);
 
         }
 
