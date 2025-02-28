@@ -16,6 +16,8 @@ using System.Windows.Media.Effects;
 using OxyPlot;
 using System.Linq;
 using OxyPlot.Series;
+using System.Windows.Markup;
+using System.Windows.Threading;
 
 namespace OBEM.Views
 {
@@ -40,15 +42,33 @@ namespace OBEM.Views
         private string selectedGroup2 = null;
         private string selectedGroup3 = null;
         private string selectedFloor = null;
+        private DispatcherTimer timer;
+
         public UnitDetails()
         {
-            
             InitializeComponent();
+            StartTimer();
+        }
+        private void StartTimer()
+        {
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(20);
+            Console.WriteLine("Thread zavrsen//////");
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
+        private async void Timer_Tick(object sender, EventArgs e)
+        {
+            await LoadDevices();
+        }
         private async void PageLoaded(object sender, RoutedEventArgs e)
         {
             await BuildingStats(sender, null);
+            
+            string data = await _apiService.GetAllDevicesAsync();
+            var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+
         }
 
         private async void FloorButton_Click(object sender, RoutedEventArgs e)
