@@ -28,7 +28,7 @@ namespace OBEM
         private void StartThreadTimer()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(20);
+            timer.Interval = TimeSpan.FromSeconds(10);
             Console.WriteLine("Thread zavrsen//////");
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -137,7 +137,7 @@ namespace OBEM
                         }
 
                         var validValues = record.Value
-                            .Where(v => v != null && v.AverageValue != null && double.TryParse(v.AverageValue.ToString(), out _))
+                            .Where(v => v != null && double.TryParse(v.AverageValue.ToString(), out _))
                             .ToList();
 
                         if (validValues.Any())
@@ -151,10 +151,15 @@ namespace OBEM
                                 string severity = "Normal";
                                 if (maxDeviation > 10) severity = "Alert";
                                 else if (maxDeviation > 5) severity = "Warning";
-
+                                if (device.Name == "Water Consumption")
+                                    continue;
                                 anomalies.Add(new Anomaly
                                 {
                                     Id = $"505/{device.Id}",
+                                    Name = device.Name,
+                                    Group1 = device.Group1,
+                                    Group2 = device.Group2,
+                                    Group3 = device.Group3,
                                     Deviation = maxDeviation,
                                     Value = double.Parse(anomaly.AverageValue.ToString()),
                                     Timestamp = DateTimeOffset.ParseExact(anomaly.Time, "yyyy-MM-ddTHH:mm:sszzz", null, System.Globalization.DateTimeStyles.None).DateTime,

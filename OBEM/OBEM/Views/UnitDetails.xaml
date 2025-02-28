@@ -26,12 +26,13 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Image Source="/Resources/power-meter.png" 
-       Width="70" 
-       Height="35" 
+            <Image Source="/Resources/UISample.png" 
+       Width="100" 
+       Height="40" 
        VerticalAlignment="Center" 
        HorizontalAlignment="Center" 
-       MouseLeftButtonDown="PageLoaded"/>
+       MouseLeftButtonDown="PageLoaded"
+       />
             <StackPanel Grid.Row="1" Margin="0,20,0,0">
                 <RadioButton x:Name="Floor2" FontFamily="Verdana" Click="FloorButton_Click" Content="Floor 2" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton x:Name="Floor1" FontFamily="Verdana" Click="FloorButton_Click" Content="Floor 1" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
@@ -39,6 +40,7 @@
                 <RadioButton x:Name="FloorNeg1" FontFamily="Verdana" Click="FloorButton_Click" Content="Floor -1" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton x:Name="Outside" FontFamily="Verdana" Click="FloorButton_Click" Content="Outside" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
                 <RadioButton x:Name="General" FontFamily="Verdana" Click="FloorButton_Click" Content="General" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"/>
+                <RadioButton x:Name="txtCurrentOption" Height="30" Foreground="White" FontWeight="Bold" Margin="0,50,0,0" Width="100" Style="{StaticResource MenuButtonTheme}"/>
             </StackPanel>
             <Grid Grid.Row="0" Grid.Column="1">
                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -56,8 +58,8 @@
                  Height="30" 
                  Width="40" 
                  Style="{StaticResource SelectionButtonTheme}"
-                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
-        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+                 Padding="5,0,5,0"> 
+        <TextBlock Text="0" TextAlignment="Center"/> 
     </RadioButton>
 
     <!-- Carbon footprint -->
@@ -74,8 +76,8 @@
                  Height="30" 
                  Width="80" 
                  Style="{StaticResource SelectionButtonTheme}"
-                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
-        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+                 Padding="5,0,5,0"> 
+        <TextBlock Text="0" TextAlignment="Center"/> 
     </RadioButton>
 
     <!-- Energy cost -->
@@ -92,8 +94,8 @@
                  Height="30" 
                  Width="50" 
                  Style="{StaticResource SelectionButtonTheme}"
-                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
-        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+                 Padding="5,0,5,0"> 
+        <TextBlock Text="0" TextAlignment="Center"/> 
     </RadioButton>
 
     <!-- Carbon footprint last hour -->
@@ -110,8 +112,8 @@
                  Height="30" 
                  Width="80" 
                  Style="{StaticResource SelectionButtonTheme}"
-                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
-        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+                 Padding="5,0,5,0"> 
+        <TextBlock Text="0" TextAlignment="Center"/> 
     </RadioButton>
 
     <!-- Energy cost last hour -->
@@ -128,8 +130,8 @@
                  Height="30" 
                  Width="50" 
                  Style="{StaticResource SelectionButtonTheme}"
-                 Padding="5,0,5,0"> <!-- Centriranje teksta unutar RadioButton-a -->
-        <TextBlock Text="0" TextAlignment="Center"/> <!-- Dodajte TextBlock unutar RadioButton-a -->
+                 Padding="5,0,5,0"> 
+        <TextBlock Text="0" TextAlignment="Center"/> <!-- Isti stil za sve topbar buttone -->
     </RadioButton>
 </StackPanel>
                 
@@ -139,11 +141,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
             
-                <!-- Postojeći sadržaj (slika i dugmad) -->
+                <!-- Postojeći sadržaj -->
                     <Border Margin="400,0,0,0" CornerRadius="20">
                         <Grid Margin="5">
-                            <StackPanel x:Name="DetailsPanel" Margin="-800,12,0,0" Width="500" ZIndex="1">
-                                <!-- Detalji će biti dinamički dodani ovdje -->
+                            <StackPanel x:Name="DetailsPanel" Margin="-900,12,0,0" Width="400" ZIndex="1">
+                                <!-- Details will go here -->
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -153,19 +155,19 @@
 
                     <!-- Frame za prikaz grafikona -->
                     <Frame x:Name="GraphFrame" Visibility="Collapsed" Background="#4A4763" Padding="10" Margin="10" NavigationUIVisibility="Hidden"/>
-                <RadioButton x:Name="txtCurrentOption" Height="30" FontWeight="Bold" Margin="600,0,0,300" Width="100" Style="{StaticResource SelectionButtonTheme}"/>
+                
                 <!-- Desni dio (detalji) -->
 
                 <Border CornerRadius="20">
                     <Grid>
-                        <!-- Definišemo dve kolone: jedna za sadržaj sa leve strane, druga za graf sa desne strane -->
+                        
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="4*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Postavljamo ContentControl u drugu kolonu (indeks 1) -->
-                        <ContentControl x:Name="GraphContentControl" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10"/>
+                        
+                        <ContentControl x:Name="GraphContentControl" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,0,0,0"/>
                     </Grid>
                 </Border>
 

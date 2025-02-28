@@ -18,6 +18,7 @@ using System.Linq;
 using OxyPlot.Series;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using System.Text.RegularExpressions;
 
 namespace OBEM.Views
 {
@@ -52,7 +53,7 @@ namespace OBEM.Views
         private void StartTimer()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(20);
+            timer.Interval = TimeSpan.FromSeconds(10);
             Console.WriteLine("Thread zavrsen//////");
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -230,7 +231,10 @@ namespace OBEM.Views
                         StartAngle = 0,
                         Background = OxyColors.Transparent,
                         OutsideLabelFormat = "{1}: {0}%"
+
                     };
+
+
 
                     foreach (var item in powerUsageData)
                     {
@@ -242,7 +246,7 @@ namespace OBEM.Views
 
                     var plotModel = new PlotModel
                     {
-                        Title = "Power Consumption by Apartment and Category",
+                        Title = "Power Consumption by Apartment and Unit",
                         Background = OxyColors.Transparent,
                         PlotAreaBackground = OxyColors.Transparent
                     };
@@ -251,9 +255,9 @@ namespace OBEM.Views
                     var plotView = new OxyPlot.Wpf.PlotView
                     {
                         Model = plotModel,
-                        Height = 300,
-                        Width = 400,
-                        Margin = new System.Windows.Thickness(50),
+                        Height = 375,
+                        Width = 700,
+                        Margin = new System.Windows.Thickness(5),
                         Background = System.Windows.Media.Brushes.Transparent
                     };
 
@@ -329,7 +333,7 @@ namespace OBEM.Views
             };
 
             innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
+            innerGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(10) });
 
             var deviceNamePanel = new StackPanel
             {
@@ -358,10 +362,23 @@ namespace OBEM.Views
 
             deviceNamePanel.Children.Add(powerIcon);
             deviceNamePanel.Children.Add(nameText);
+            var match = Regex.Match(unit, @"\((.*?)\)"); //regex za matchanje stringa unutar zagrada
+            string result = "";
+
+            if (match.Success)
+            {
+                result = match.Groups[1].Value; 
+                
+            }
+            else
+            {
+                result = unit;
+            }
 
             var valueText = new TextBlock
             {
-                Text = $"{numericValue} {unit}",
+                
+                Text = $"{numericValue} {result}",
                 FontWeight = System.Windows.FontWeights.Bold,
                 FontSize = 14,
                 Margin = new Thickness(200, 6, 0, 0) // Add some margin to the right for spacing
@@ -445,11 +462,10 @@ namespace OBEM.Views
         }
         private async void ApartmentButton_Click(object sender, RoutedEventArgs e)
         {
-            txtCurrentOption.Content = "";
+            
             HideGraphFrame();
             var apartmentButton = sender as RadioButton;
             selectedGroup1 = apartmentButton?.Tag as string;
-            txtCurrentOption.Content = $"{selectedGroup2} {selectedGroup1}";
             ;
             Console.WriteLine(selectedGroup1);
             if (selectedGroup1 != null)
@@ -460,7 +476,7 @@ namespace OBEM.Views
 
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;
-            
+            txtCurrentOption.Content = $"{selectedGroup2}";
             string data = await _apiService.GetAllDevicesAsync();
             const double pricePerKw = 0.30;
             const double carbonPerKw = 1.2;

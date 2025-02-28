@@ -74,7 +74,7 @@
         <!-- Dugme za prelazak na ApiTester stranicu -->
         <DockPanel VerticalAlignment="Top" Grid.Row="1" Height="30" HorizontalAlignment="Left" Width="1280" Margin="10,0,0,0">
             <Button Content="Notifications" Click="NotificationsButton_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
-            <Button Content="API Tester" Click="OpenApiTester_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+    
             <Button Content="Unit Energy Monitoring" Click="OpenUnitEnergyMonitoring_Click" Width="200" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Open Energy Cost View" Click="OpenEnergyCost_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Open Graph Page" Click="OpenDeviceGraphPage_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
@@ -90,16 +90,20 @@
 
         <!-- TabControl za prikaz dva različita prikaza (ispod Frame-a) -->
         <TabControl Grid.Row="3" Margin="2">
-            <TabItem Header="Apartments with the highest consumption">
+            <TabItem Header="Apartments with the highest consumption" Height="40">
                 <!-- DataGrid za prikaz stanova s najvećom potrošnjom -->
                 <DataGrid x:Name="dgHighConsumption" AutoGenerateColumns="True" Margin="0"/>
             </TabItem>
 
-            <TabItem Header="Devices with anomalies">
+            <TabItem Header="Devices with anomalies" Height="40">
                 <!-- DataGrid za prikaz anomalija -->
                 <DataGrid x:Name="dgAnomalies" AutoGenerateColumns="False" Margin="0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto"/>
+                        <DataGridTextColumn Header="Group 1" Binding="{Binding Group1}" Width="Auto"/>
+                        <DataGridTextColumn Header="Group 2" Binding="{Binding Group2}" Width="Auto"/>
+                        <DataGridTextColumn Header="Group 3" Binding="{Binding Group3}" Width="Auto"/>
                         <DataGridTextColumn Header="Deviation Size" Binding="{Binding Deviation}" Width="Auto"/>
                         <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="Auto"/>
                         <DataGridTextColumn Header="Date" Binding="{Binding Timestamp}" Width="Auto"/>
