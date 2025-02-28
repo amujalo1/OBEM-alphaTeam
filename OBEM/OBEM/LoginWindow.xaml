@@ -1,0 +1,91 @@
+﻿<Window x:Class="OBEM.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Login"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Width="400"
+        Height="450"
+        Background="#1E1E2F">
+    <!-- Tamno plava pozadina -->
+
+    <Grid>
+        <!-- Glavni okvir za login formu -->
+        <Border Background="#2A2A3A" 
+                CornerRadius="10" 
+                Width="350" 
+                Height="300" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center"
+                Padding="20">
+            <StackPanel VerticalAlignment="Center">
+                <!-- Naslov -->
+                <TextBlock Text="Login" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,20"/>
+
+                <!-- Polje za korisničko ime -->
+                <Grid Margin="0,0,0,10">
+                    <TextBox x:Name="UsernameTextBox" 
+                             Background="#3A3A5A"
+                             Foreground="White"
+                             BorderBrush="#4A4A6A"
+                             BorderThickness="1"
+                             Padding="10"
+                             FontSize="14"
+                             VerticalContentAlignment="Center"
+                             TextChanged="UsernameTextBox_TextChanged"/>
+                    <TextBlock x:Name="UsernamePlaceholder" 
+                               Text="Username" 
+                               Foreground="Gray" 
+                               FontStyle="Italic"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"/>
+                </Grid>
+
+                <!-- Polje za lozinku -->
+                <Grid Margin="0,0,0,20">
+                    <PasswordBox x:Name="PasswordBox" 
+                                 Background="#3A3A5A"
+                                 Foreground="White"
+                                 BorderBrush="#4A4A6A"
+                                 BorderThickness="1"
+                                 Padding="10"
+                                 FontSize="14"
+                                 VerticalContentAlignment="Center"
+                                 PasswordChanged="PasswordBox_PasswordChanged"/>
+                    <TextBlock x:Name="PasswordPlaceholder" 
+                               Text="Password" 
+                               Foreground="Gray" 
+                               FontStyle="Italic"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"/>
+                </Grid>
+
+                <!-- Gumb za prijavu -->
+                <Button Content="Login" 
+                        Width="120" 
+                        Height="40" 
+                        HorizontalAlignment="Center" 
+                        Background="#00BFFF"
+                        Foreground="White"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Padding="10"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Cursor="Hand"
+                        Click="LoginButton_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+
+</Window>

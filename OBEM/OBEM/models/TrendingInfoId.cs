@@ -8,21 +8,37 @@ using System.Threading.Tasks;
 
 namespace OBEM.models
 {
-    public class TrendingInfoId
+    public class ApiResponse
     {
-        [JsonProperty("Result", NullValueHandling = NullValueHandling.Ignore)]
         public int Result { get; set; }
-
-        [JsonProperty("Message", NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
+        public List<object> Values { get; set; }
+        public Dictionary<string, List<TrendingDataApi>> Records { get; set; }
+    }
 
-        [JsonProperty("Values", NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> Values { get; set; }
+    public class TrendingDataApi
+    {
+        public double AverageValue { get; set; }
+        public string Time { get; set; }
+        public int Status { get; set; }
+    }
 
-        [JsonProperty("ColumnNames", NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> ColumnNames { get; set; }
+    public class DeviceData
+    {
+        public string DeviceId { get; set; }
+        public List<TrendingData> TrendingDataList { get; set; }
 
-        [JsonProperty("Records", NullValueHandling = NullValueHandling.Ignore)]
-        public Dictionary<string, List<Record>> Records { get; set; }
+        public DeviceData(string deviceId)
+        {
+            DeviceId = deviceId;
+            TrendingDataList = new List<TrendingData>();
+        }
+    }
+
+    public class TrendingData
+    {
+        public string Value { get; set; }
+        public DateTime Time { get; set; }
+        public int Status { get; set; }
     }
 }

@@ -54,8 +54,19 @@
     </Reference>
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,15 +85,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="models\ApiModels.cs" />
     <Compile Include="models\Record.cs" />
+    <Compile Include="models\TrendingInfo2.cs" />
     <Compile Include="models\TrendingInfoId.cs" />
+    <Compile Include="models\TrendingRecord.cs" />
     <Compile Include="Views\ApiTester.xaml.cs">
       <DependentUpon>ApiTester.xaml</DependentUpon>
     </Compile>
-    <Compile Include="models\AComponent.cs" />
-    <Compile Include="models\BuildingObject.cs" />
     <Compile Include="models\Device.cs" />
-    <Compile Include="models\Floor.cs" />
     <Compile Include="models\TrendingInfo.cs" />
     <Compile Include="Services\ApiService.cs" />
     <Compile Include="Views\EnergyCost.xaml.cs">
@@ -100,6 +114,10 @@
     <Compile Include="Views\UnitEnergyMonitoringByDeviceId.xaml.cs">
       <DependentUpon>UnitEnergyMonitoringByDeviceId.xaml</DependentUpon>
     </Compile>
+    <Page Include="LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Theme\MenuButtonTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Theme\SelectionButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\TabItemTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,10 +172,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="models\Building.cs" />
     <Compile Include="models\CategoryInfo.cs" />
     <Compile Include="models\DeviceInfo.cs" />
-    <Compile Include="models\unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -189,7 +209,9 @@
     <Resource Include="Resources\stocksample.png" />
     <Resource Include="Resources\sample.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\power-meter.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\UIsample.png" />
   </ItemGroup>
