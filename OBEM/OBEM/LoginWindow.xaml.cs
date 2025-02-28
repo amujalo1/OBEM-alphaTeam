@@ -12,7 +12,15 @@ namespace OBEM.Views
             this.KeyDown += new System.Windows.Input.KeyEventHandler(LoginWindow_KeyDown);
         }
 
+        public void SetUsernameText(string username)
+        {
+            UsernameTextBox.Text = username;
+        }
 
+        public void SetPassword(string password)
+        {
+            PasswordBox.Password = password;
+        }
         private void LoginWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -48,7 +56,7 @@ namespace OBEM.Views
         }
 
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        public void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTextBox.Text;
             string password = PasswordBox.Password;
