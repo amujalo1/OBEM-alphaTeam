@@ -67,3 +67,40 @@ The application is designed to provide building managers, residents, and mainten
 2. **Clone the Repository**:
    ```bash
    git clone https://github.com/amujalo1/OBEM-alphaTeam.git
+
+
+
+## Project images
+
+### User Login
+![App Screenshot](OBEM/images/image1.png)
+
+### Notifications
+![App Screenshot](OBEM/images/image2.png)
+
+### Energy Monitoring Last 24 Hours
+![App Screenshot](OBEM/images/image3.png)
+
+### Devices with the highest Energy Consumption
+![App Screenshot](OBEM/images/image4.png)
+
+### Devices with anomalies
+![App Screenshot](OBEM/images/image5.png)
+
+### Anomaly Graph
+![App Screenshot](OBEM/images/image6.png)
+
+### Unit Energy Monitoring Building
+![App Screenshot](OBEM/images/image7.png)
+
+### Unit Energy Monitoring Building by floor
+![App Screenshot](OBEM/images/image8.png)
+
+### Unit Energy Monitoring Building by certain space on floor
+![App Screenshot](OBEM/images/image9.png)
+
+### Energy Cost View
+![App Screenshot](OBEM/images/image10.png)
+
+### Graph Page By Device Id
+![App Screenshot](OBEM/images/image11.png)
