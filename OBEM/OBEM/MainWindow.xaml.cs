@@ -151,7 +151,8 @@ namespace OBEM
                                 string severity = "Normal";
                                 if (maxDeviation > 10) severity = "Alert";
                                 else if (maxDeviation > 5) severity = "Warning";
-
+                                if (device.Name == "Water Consumption")
+                                    continue;
                                 anomalies.Add(new Anomaly
                                 {
                                     Id = $"505/{device.Id}",
