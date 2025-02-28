@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace OBEM.Views
 {
@@ -7,6 +9,16 @@ namespace OBEM.Views
         public LoginWindow()
         {
             InitializeComponent();
+            this.KeyDown += new System.Windows.Input.KeyEventHandler(LoginWindow_KeyDown);
+        }
+
+
+        private void LoginWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LoginButton_Click(sender, new RoutedEventArgs());
+            }
         }
 
         private void UsernameTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -43,20 +55,20 @@ namespace OBEM.Views
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Please fill in both username and password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("Please fill in both username and password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (username == "admin" && password == "1234")
             {
-                MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 MainWindow main = new MainWindow();
                 this.Close();
                 main.Show();
             }
             else
             {
-                MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
