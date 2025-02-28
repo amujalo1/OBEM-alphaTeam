@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace OBEM
@@ -92,67 +93,107 @@ namespace OBEM
 
         private async void LoadAnomaliesData()
         {
-            string data = await _apiService.GetTrendingInfo();
+            var anomalies = new List<Anomaly>();
+            DateTime endDate = DateTime.Now;
+            DateTime startDate = endDate.AddDays(-1);
 
             try
             {
-                var trendingData = JsonConvert.DeserializeObject<TrendingInfo>(data);
+                var response = await _apiService.GetAllDevicesAsync();
+                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(response);
 
-                if (trendingData == null || trendingData.Records == null)
+                if (devices == null || !devices.Any())
                 {
-                    MessageBox.Show("Nema podataka o trendovima ili je Records null.");
+                    Console.WriteLine("Nema dostupnih uređaja.");
                     return;
                 }
 
-                var anomalies = new List<Anomaly>();
-
-                foreach (var record in trendingData.Records)
+                foreach (var device in devices)
                 {
-                    var id = record.Key;
+                    string formattedStartDate = startDate.ToString("MM/dd/yyyy HH:mm");
 
-                    if (record.Value == null)
+                    var deviceResponse = await _apiService.GetTrendingInfoAsync("average", device.Id.ToString(), formattedStartDate);
+
+                    if (string.IsNullOrEmpty(deviceResponse))
                     {
-                        Console.WriteLine($"Nema podataka za ID: {id}");
+                        Console.WriteLine($"API odgovor je prazan za ID: {device.Id}");
                         continue;
                     }
 
-                    var validValues = record.Value
-                        .Where(v => v != null && !string.IsNullOrEmpty(v.Value) && double.TryParse(v.Value, out _))
-                        .ToList();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(deviceResponse);
 
-                    Console.WriteLine($"ID: {id}, Broj validnih vrijednosti: {validValues.Count}");
-
-                    if (validValues == null || !validValues.Any())
+                    if (apiResponse == null || apiResponse.Records == null || !apiResponse.Records.Any())
                     {
-                        Console.WriteLine($"Nema validnih podataka za ID: {id}");
+                        Console.WriteLine($"Nema podataka za ID: {device.Id}");
                         continue;
                     }
 
-                    var averageValue = validValues.Average(v => v.NumericValue);
-                    var maxDeviation = validValues.Max(v => Math.Abs(v.NumericValue - averageValue));
-                    var anomaly = validValues.FirstOrDefault(v => Math.Abs(v.NumericValue - averageValue) == maxDeviation);
-
-                    Console.WriteLine($"ID: {id}, Prosjek: {averageValue}, Maksimalno odstupanje: {maxDeviation}");
-
-                    if (anomaly != null)
+                    foreach (var record in apiResponse.Records)
                     {
-                        anomalies.Add(new Anomaly
+                        if (record.Value == null)
                         {
-                            Id = id,
-                            Deviation = maxDeviation,
-                            Value = anomaly.NumericValue,
-                            Timestamp = anomaly.Timestamp
-                        });
+                            Console.WriteLine($"Record.Value je null za ID: {device.Id}");
+                            continue;
+                        }
+
+                        var validValues = record.Value
+                            .Where(v => v != null && v.AverageValue != null && double.TryParse(v.AverageValue.ToString(), out _))
+                            .ToList();
+
+                        if (validValues.Any())
+                        {
+                            var averageValue = validValues.Average(v => double.Parse(v.AverageValue.ToString()));
+                            var maxDeviation = validValues.Max(v => Math.Abs(double.Parse(v.AverageValue.ToString()) - averageValue));
+                            var anomaly = validValues.FirstOrDefault(v => Math.Abs(double.Parse(v.AverageValue.ToString()) - averageValue) == maxDeviation);
+
+                            if (anomaly != null)
+                            {
+                                string severity = "Normal";
+                                if (maxDeviation > 10) severity = "Alert";
+                                else if (maxDeviation > 5) severity = "Warning";
+
+                                anomalies.Add(new Anomaly
+                                {
+                                    Id = $"505/{device.Id}",
+                                    Deviation = maxDeviation,
+                                    Value = double.Parse(anomaly.AverageValue.ToString()),
+                                    Timestamp = DateTimeOffset.ParseExact(anomaly.Time, "yyyy-MM-ddTHH:mm:sszzz", null, System.Globalization.DateTimeStyles.None).DateTime,
+                                    Severity = severity
+                                });
+                            }
+                        }
                     }
                 }
 
-                Console.WriteLine($"Broj pronađenih anomalija: {anomalies.Count}");
-
                 dgAnomalies.ItemsSource = anomalies;
+
+                // Pretplata na LoadingRow događaj
+                dgAnomalies.LoadingRow += DgAnomalies_LoadingRow;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Greška pri učitavanju podataka o anomalijama: " + ex.Message);
+            }
+        }
+
+
+        private void DgAnomalies_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            var anomaly = e.Row.DataContext as Anomaly;
+            if (anomaly != null)
+            {
+                switch (anomaly.Severity)
+                {
+                    case "Warning":
+                        e.Row.Background = new SolidColorBrush(Colors.Yellow);
+                        break;
+                    case "Alert":
+                        e.Row.Background = new SolidColorBrush(Colors.Red);
+                        break;
+                    case "Normal":
+                        e.Row.Background = new SolidColorBrush(Colors.Green);
+                        break;
+                }
             }
         }
 
@@ -206,7 +247,6 @@ namespace OBEM
                 return;
             }
 
-            // Uzmi drugi dio ID-a (npr. "37")
             var id = idParts[1];
 
             MainFrame.Navigate(new UnitEnergyMonitoringByDeviceId(id));
