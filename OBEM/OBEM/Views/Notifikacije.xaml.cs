@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
+using System.Windows.Media;
 using Newtonsoft.Json;
 
 namespace OBEM
@@ -34,6 +36,8 @@ namespace OBEM
         {
             try
             {
+                LoadingProgressBar.Visibility = Visibility.Visible;
+
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer zC3GtRfOFKY9kKI7CSJo6ZxSW33fT/f1NVQ9Lr0s0gk=");
 
@@ -55,11 +59,8 @@ namespace OBEM
                     NotificationsStackPanel.Children.Clear();
 
                     DisplaySolarPanelDevices(solarPanelDevices);
-
                     DisplayTurnedOffDevices(turnedOffDevices);
-
                     DisplayPeakConsumptionDevices(peakConsumptionDevices);
-
                     DisplayExceededThresholdDevices(exceededThresholdDevices);
                 }
                 else
@@ -71,7 +72,12 @@ namespace OBEM
             {
                 MessageBox.Show($"An error occurred while fetching data: {ex.Message}");
             }
+            finally
+            {
+                LoadingProgressBar.Visibility = Visibility.Collapsed;
+            }
         }
+
 
 
 
