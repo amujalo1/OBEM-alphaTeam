@@ -76,79 +76,57 @@ namespace OBEM.Views
             string data = await _apiService.GetAllDevicesAsync();
             string floorLevel = (sender as RadioButton)?.Content.ToString();
             txtCurrentOption.Content = floorLevel;
-            double currentEnergyCost = 0;
-            double currentCO2 = 0;
             const double pricePerKw = 0.30;
+            const double carbonPerKw = 1.2;
             try
             {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+                var devices = DeserializeDevices(data);
+                var filteredDevices = GetFilteredDevices(devices, floorLevel);
 
-                var floorEnergyConsumption = new Dictionary<string, double>();
+                double currentEnergyConsumption = filteredDevices.Sum(device => device.NumericValue);
+                double currentCO2 = currentEnergyConsumption * carbonPerKw;
+                double currentEnergyCost = currentEnergyConsumption * pricePerKw;
 
-                foreach (var device in devices)
-                {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3 == floorLevel)
-                    {
-                        Console.WriteLine($"FloorLevel: {floorLevel}, Device Group3: {device.Group3}");
 
-                        currentEnergyCost += device.NumericValue;
-                        
-                    }
-                }
-                double currentPower = currentEnergyCost;
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{currentPower}");
-                txtTotalRealTimeUsage.Content = sb.ToString();
-                sb.Clear();
-
-                currentCO2 = currentEnergyCost * 1.2;
-                sb.AppendLine($"{currentCO2} kg CO2");
-                txtCurentCarbonFootprint.Content = sb.ToString();
-                sb.Clear();
-
-                currentEnergyCost *= pricePerKw;
-
-                sb.AppendLine($"{currentEnergyCost}€");
-                txtCurrentEnergyCost.Content = sb.ToString();
-
+                txtTotalRealTimeUsage.Content = $"{currentEnergyConsumption} kW";
+                txtCurentCarbonFootprint.Content = $"{currentCO2} kg CO2";
+                txtCurrentEnergyCost.Content = $"{currentEnergyCost}€";
 
             }
             catch (Exception ex)
             {
-                txtCurrentEnergyCost.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCurrentEnergyCost.Content = $"Error: {ex.Message}";
             }
 
             // Last hour
 
             double totalEnergyCost = 0;
             double totalCO2 = 0;
-
-            DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
             double sumOfAverages = 0;
+            DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
             int count = 0;
 
             try
             {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
+                var devices = DeserializeDevices(data);
 
-                foreach (var device in devices)
+                foreach (var device in GetFilteredDevices(devices,floorLevel))
                 {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3 == floorLevel)
-                    {
+
                         string trendingData = await _apiService.GetTrendingInfoAsync("average", device.Id, sevenDaysAgo.ToString("MM/dd/yyyy HH:mm"));
                         var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
-                        var records = trendingResponse.Records;
+                        var records = trendingResponse?.Records ?? new Dictionary<string, List<TrendingRecord>>();
 
-                        foreach (var recordEntry in records)
+                    foreach (var recordEntry in records.Values)
                         {
-                            foreach (var record in recordEntry.Value)
+                            foreach (var record in recordEntry)
                             {
                                 sumOfAverages += record.AverageValue;
                                 count++;
                                 Console.WriteLine($"suma{count}--{sumOfAverages}");
                             }
                         }
-                    }
+                    
                 }
 
                 if (count > 0)
@@ -160,20 +138,20 @@ namespace OBEM.Views
                     totalCO2 = averageValue * 1.2;
                     Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
-                StringBuilder sb = new StringBuilder();
-                
-                
 
-                sb.AppendLine($"{Math.Round(totalEnergyCost)}€");
-                txtEnergyConsumptionLastHour.Content = sb.ToString();
-                sb.Clear();
-                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprintLastHour.Content = sb.ToString();
+                txtEnergyConsumptionLastHour.Content = $"{Math.Round(totalEnergyCost)}€";
+                txtCarbonFootprintLastHour.Content = $"{Math.Round(totalCO2)} kg CO2";
+
             }
             catch (Exception ex)
             {
                 txtEnergyConsumptionLastHour.Content = $"Error calculating energy cost: {ex.Message}";
             }
+        }
+
+        private List<DeviceInfo> GetFilteredDevices(List<DeviceInfo> devices, string floorLevel)
+        {
+            return devices.Where(device => device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group3 == floorLevel).ToList();
         }
 
 
@@ -467,15 +445,22 @@ namespace OBEM.Views
             //Energy cost for single unit
             selectedGroup2 = apartmentButton?.Content as string;
             
-
             string data = await _apiService.GetAllDevicesAsync();
+            const double pricePerKw = 0.30;
+            const double carbonPerKw = 1.2;
             try
             {
-                const double pricePerKw = 0.30;
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-                StringBuilder sb = new StringBuilder();
+                var devices = DeserializeDevices(data);
+                var filteredDevices = GetFilteredDevicesForApartment(devices, selectedGroup2);
 
-                foreach (var device in devices)
+                if (filteredDevices.Any())
+                {
+                    var device = filteredDevices.First();
+                    txtTotalRealTimeUsage.Content = $"{device.NumericValue} kW";
+                    txtCurrentEnergyCost.Content = $"{device.NumericValue * pricePerKw}€";
+                    txtCurentCarbonFootprint.Content = $"{device.NumericValue * carbonPerKw} kg CO2";
+                }
+                /*    foreach (var device in devices)
                 {
                     if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
                     {
@@ -493,7 +478,7 @@ namespace OBEM.Views
 
                         break;
                     }
-                }
+                }*/
 
                 // Last 7 days
                 double totalCost = 0;
@@ -501,28 +486,23 @@ namespace OBEM.Views
                 DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
                 int count = 0;
                 double sumOfAverages = 0;
-                foreach (var device in devices)
+                foreach (var device in filteredDevices)
                 {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == selectedGroup2)
-                    {
+                    string trendingData = await _apiService.GetTrendingInfoAsync("average", device.Id, sevenDaysAgo.ToString("MM/dd/yyyy HH:mm"));
+                    var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
+                    var records = trendingResponse?.Records ?? new Dictionary<string, List<TrendingRecord>>();
 
-                        string trendingData = await _apiService.GetTrendingInfoAsync("average", device.Id, sevenDaysAgo.ToString("MM/dd/yyyy HH:mm"));
-                        var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
 
-                        var records = trendingResponse.Records;
-
-                        foreach (var recordEntry in records)
+                   foreach (var recordEntry in records.Values)
+                   {
+                        foreach (var record in recordEntry)
                         {
-                            foreach (var record in recordEntry.Value)
-                            {
-                                DateTime recordTime = DateTime.Parse(record.Time);
-
-                                sumOfAverages += record.AverageValue;
-                                Console.WriteLine($"suma{count}--{sumOfAverages}");
-                                count++;
-                            }
+                            sumOfAverages += record.AverageValue;
+                            Console.WriteLine($"suma{count}--{sumOfAverages}");
+                            count++;
                         }
-                    }
+                   }
+                    
 
                 }
 
@@ -536,12 +516,15 @@ namespace OBEM.Views
                     Console.WriteLine($"totalCO2 - {totalCO2} kg CO2");
                 }
 
-                sb.Clear();
+
+                txtEnergyConsumptionLastHour.Content = $"{Math.Round(totalCost)}€";
+                txtCarbonFootprintLastHour.Content = $"{Math.Round(totalCO2)} kg CO2";
+                /*sb.Clear();
                 sb.AppendLine($"{Math.Round(totalCost)}€");
                 txtEnergyConsumptionLastHour.Content = sb.ToString();
                 sb.Clear();
                 sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprintLastHour.Content = sb.ToString();
+                txtCarbonFootprintLastHour.Content = sb.ToString();*/
 
             }
             catch (Exception ex)
@@ -551,82 +534,62 @@ namespace OBEM.Views
 
         }
 
+        private List<DeviceInfo> GetFilteredDevicesForApartment(List<DeviceInfo> devices,string group1)
+        {
+            return devices.Where(device => device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == group1).ToList();
+        }
+
         // Carbon footprint calculation for entire building
         private async Task BuildingStats(object sender, SelectionChangedEventArgs e)
         {
             txtCurrentOption.Content = "Building";
             
-
             string data = await _apiService.GetAllDevicesAsync();
-            double currentCO2 = 0;
-            double currentEnergyCost = 0;
             const double pricePerKw = 0.30;
+            const double carbonPerKw = 1.2;
             // Current values
             try
             {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
 
-                foreach (var device in devices)
-                {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
-                    {
-                        currentEnergyCost += device.NumericValue;
-                    }
-                }
+                var devices = DeserializeDevices(data);
 
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{currentEnergyCost}");
-                txtTotalRealTimeUsage.Content = sb.ToString();
-                sb.Clear();
+                double currentEnergyCost = CalculateCurrentEnergyCost(devices);
+                double currentCO2 = currentEnergyCost * carbonPerKw;
+                double currentCost = currentEnergyCost * pricePerKw;
 
-
-                currentCO2 = currentEnergyCost * 1.2;
-                sb.AppendLine($"{currentCO2} kg CO2");
-                txtCurentCarbonFootprint.Content = sb.ToString();
-                sb.Clear();
-
-                currentEnergyCost *= pricePerKw;
-                sb.AppendLine($"{currentEnergyCost}€");
-                txtCurrentEnergyCost.Content = sb.ToString();
+                txtTotalRealTimeUsage.Content = $"{currentEnergyCost} kW";
+                txtCurentCarbonFootprint.Content = $"{currentCO2} kg CO2";
+                txtCurrentEnergyCost.Content = $"{currentCost}€";
 
             }
             catch (Exception ex)
             {
-                txtCurentCarbonFootprint.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtCurentCarbonFootprint.Content = $"Error parsing data: {ex.Message}";
             }
-            //Works fine
             //Last 7 days
             double totalEnergyCost = 0;
             double totalCO2 = 0;
-
             DateTime sevenDaysAgo = DateTime.Now.AddMinutes(-60);
             double sumOfAverages = 0;
             int count = 0;
 
-
             try
             {
-                var devices = JsonConvert.DeserializeObject<List<DeviceInfo>>(data);
-                foreach (var device in devices)
+                var devices = DeserializeDevices(data);
+                foreach (var device in devices.Where(d => d.Unit == "Power (kW)" && d.Group2 != "Solar Panels"))
                 {
-                    if (device.Unit == "Power (kW)" && device.Group2 != "Solar Panels")
-                    {
                         string trendingData = await _apiService.GetTrendingInfoAsync("average", device.Id, sevenDaysAgo.ToString("MM/dd/yyyy HH:mm"));
                         var trendingResponse = JsonConvert.DeserializeObject<TrendingInfo2>(trendingData);
-                        var records = trendingResponse.Records;
 
-                        foreach (var recordEntry in records)
+                        foreach (var recordEntry in trendingResponse.Records)
                         {
                             foreach (var record in recordEntry.Value)
                             {
-
                                 sumOfAverages += record.AverageValue;
                                 count++;
                                 Console.WriteLine($"suma{count}--{sumOfAverages}");
                             }
-                        }
-                    }
-
+                        }  
                 }
 
                 if (count > 0)
@@ -635,26 +598,29 @@ namespace OBEM.Views
                     Console.WriteLine($"averageValue - {averageValue}");
                     totalEnergyCost = averageValue * pricePerKw;
                     Console.WriteLine($"totalEnergyCost - {totalEnergyCost}");
-                    totalCO2 = averageValue * 1.2;
+                    totalCO2 = averageValue * carbonPerKw;
                     Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
 
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{Math.Round(totalEnergyCost)}€");
-                txtEnergyConsumptionLastHour.Content = sb.ToString();
-                sb.Clear();
+                txtEnergyConsumptionLastHour.Content = $"{Math.Round(totalEnergyCost)}€";
+                txtCarbonFootprintLastHour.Content = $"{Math.Round(totalCO2)} kg CO2";
 
-                sb.AppendLine($"{Math.Round(totalCO2)} kg CO2");
-                txtCarbonFootprintLastHour.Content = sb.ToString();
             }
             catch (Exception ex)
             {
                 txtEnergyConsumptionLastHour.Content = $"Error calculating energy cost: {ex.Message}";
             }
-
         }
 
+        private List<DeviceInfo> DeserializeDevices(string devices)
+        {
+            return JsonConvert.DeserializeObject<List<DeviceInfo>>(devices) ?? new List<DeviceInfo>();
+        }
 
+        private double CalculateCurrentEnergyCost(List<DeviceInfo> devices)
+        {
+            return devices.Where(d => d.Unit == "Power (kW)" && d.Group2 != "Solar Panels").Sum(d => d.NumericValue);
+        }
 
         public void MoveStackPanelBasedOnFloor(int floorNumber)
         {
