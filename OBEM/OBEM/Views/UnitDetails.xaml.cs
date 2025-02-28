@@ -143,7 +143,6 @@ namespace OBEM.Views
                             {
                                 sumOfAverages += record.AverageValue;
                                 count++;
-                                Console.WriteLine($"suma{count}--{sumOfAverages}");
                             }
                         }
                     
@@ -152,11 +151,8 @@ namespace OBEM.Views
                 if (count > 0)
                 {
                     double averageValue = sumOfAverages / count;
-                    Console.WriteLine($"averageValue - {averageValue}");
                     totalEnergyCost = averageValue * pricePerKw;
-                    Console.WriteLine($"totalEnergyCost - {totalEnergyCost}");
                     totalCO2 = averageValue * 1.2;
-                    Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
 
                 txtEnergyConsumptionLastHour.Content = $"{Math.Round(totalEnergyCost)}€";
@@ -306,7 +302,7 @@ namespace OBEM.Views
             catch (Exception ex)
             {
                 // Handle exception
-                Console.WriteLine("Error loading devices: " + ex.Message);
+                Console.WriteLine("Error : " + ex.Message);
             }
         }
 
@@ -499,7 +495,6 @@ namespace OBEM.Views
                         foreach (var record in recordEntry)
                         {
                             sumOfAverages += record.AverageValue;
-                            Console.WriteLine($"suma{count}--{sumOfAverages}");
                             count++;
                         }
                    }
@@ -510,11 +505,8 @@ namespace OBEM.Views
                 if (count > 0)
                 {
                     double averageValue = sumOfAverages / count;
-                    Console.WriteLine($"averageValue - {averageValue}");
                     totalCost = averageValue * pricePerKw;
-                    Console.WriteLine($"totalCost - {totalCost}");
                     totalCO2 = averageValue * 1.2;
-                    Console.WriteLine($"totalCO2 - {totalCO2} kg CO2");
                 }
 
 
@@ -525,7 +517,7 @@ namespace OBEM.Views
             }
             catch (Exception ex)
             {
-                txtEnergyConsumptionLastHour.Content = $"Greška prilikom parsiranja podataka: {ex.Message}";
+                txtEnergyConsumptionLastHour.Content = $"Error: {ex.Message}";
             }
 
         }
@@ -535,7 +527,6 @@ namespace OBEM.Views
             return devices.Where(device => device.Unit == "Power (kW)" && device.Group2 != "Solar Panels" && device.Group1 == group1).ToList();
         }
 
-        // Carbon footprint calculation for entire building
         private async Task BuildingStats(object sender, SelectionChangedEventArgs e)
         {
             txtCurrentOption.Content = "Building";
@@ -560,7 +551,7 @@ namespace OBEM.Views
             }
             catch (Exception ex)
             {
-                txtCurentCarbonFootprint.Content = $"Error parsing data: {ex.Message}";
+                txtCurentCarbonFootprint.Content = $"Error : {ex.Message}";
             }
             //Last 7 days
             double totalEnergyCost = 0;
@@ -583,7 +574,6 @@ namespace OBEM.Views
                             {
                                 sumOfAverages += record.AverageValue;
                                 count++;
-                                Console.WriteLine($"suma{count}--{sumOfAverages}");
                             }
                         }  
                 }
@@ -591,11 +581,8 @@ namespace OBEM.Views
                 if (count > 0)
                 {
                     double averageValue = sumOfAverages / count;
-                    Console.WriteLine($"averageValue - {averageValue}");
                     totalEnergyCost = averageValue * pricePerKw;
-                    Console.WriteLine($"totalEnergyCost - {totalEnergyCost}");
                     totalCO2 = averageValue * carbonPerKw;
-                    Console.WriteLine($"totalCO2 - {totalCO2}");
                 }
 
                 txtEnergyConsumptionLastHour.Content = $"{Math.Round(totalEnergyCost)}€";
@@ -604,7 +591,7 @@ namespace OBEM.Views
             }
             catch (Exception ex)
             {
-                txtEnergyConsumptionLastHour.Content = $"Error calculating energy cost: {ex.Message}";
+                txtEnergyConsumptionLastHour.Content = $"Error : {ex.Message}";
             }
         }
 
