@@ -95,7 +95,7 @@ namespace OBEM
         {
             var anomalies = new List<Anomaly>();
             DateTime endDate = DateTime.Now;
-            DateTime startDate = endDate.AddDays(-2);
+            DateTime startDate = endDate.AddDays(-1);
 
             try
             {
@@ -137,7 +137,7 @@ namespace OBEM
                         }
 
                         var validValues = record.Value
-                            .Where(v => v != null && v.AverageValue != null && double.TryParse(v.AverageValue.ToString(), out _))
+                            .Where(v => v != null && double.TryParse(v.AverageValue.ToString(), out _))
                             .ToList();
 
                         if (validValues.Any())

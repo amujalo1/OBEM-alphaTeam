@@ -74,7 +74,7 @@
         <!-- Dugme za prelazak na ApiTester stranicu -->
         <DockPanel VerticalAlignment="Top" Grid.Row="1" Height="30" HorizontalAlignment="Left" Width="1280" Margin="10,0,0,0">
             <Button Content="Notifications" Click="NotificationsButton_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
-            <Button Content="API Tester" Click="OpenApiTester_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
+    
             <Button Content="Unit Energy Monitoring" Click="OpenUnitEnergyMonitoring_Click" Width="200" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Open Energy Cost View" Click="OpenEnergyCost_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
             <Button Content="Open Graph Page" Click="OpenDeviceGraphPage_Click" Width="150" Style="{StaticResource NavButtonTheme}"/>
