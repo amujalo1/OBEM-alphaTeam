@@ -28,21 +28,19 @@ namespace OBEM
             DeviceDataList = new List<DeviceData>();
         }
 
-
-
-
         public Last24HoursEnergy(string id)
         {
             InitializeComponent();
             DeviceDataList = new List<DeviceData>();
-            DeviceIdTextBox.Text = id;
-            string deviceId = DeviceIdTextBox.Text.Trim();
+
+            string deviceId = id.Trim();
 
             if (string.IsNullOrEmpty(deviceId))
             {
                 MessageBox.Show("Please enter a valid device ID.");
                 return;
             }
+
             _ = LoadTrendingDataAsync(deviceId);
             _ = LoadDeviceInfoAsync(deviceId);
         }
@@ -99,19 +97,23 @@ namespace OBEM
             var dateTimeAxis = new DateTimeAxis
             {
                 Position = AxisPosition.Bottom,
-                Minimum = DateTime.Now.AddHours(-24).ToOADate(), 
+                Minimum = DateTime.Now.AddHours(-24).ToOADate(),
                 Maximum = DateTime.Now.ToOADate(),
-                StringFormat = "HH:mm", 
+                StringFormat = "HH:mm",
             };
             filteredPlotModel.Axes.Add(dateTimeAxis);
 
-            var filteredSeries = new LineSeries { Title = "Energy Data" };
+            var filteredSeries = new LineSeries
+            {
+                Title = "Energy Data",
+                Color = OxyColors.Blue  // Set the color of the line to blue
+            };
 
             foreach (var series in plotModel.Series.OfType<LineSeries>())
             {
                 foreach (var point in series.Points)
                 {
-                    DateTime pointDateTime = DateTime.FromOADate(point.X); 
+                    DateTime pointDateTime = DateTime.FromOADate(point.X);
 
                     if (pointDateTime > DateTime.Now.AddHours(-24))
                     {
@@ -124,6 +126,7 @@ namespace OBEM
 
             return filteredPlotModel;
         }
+
 
 
 

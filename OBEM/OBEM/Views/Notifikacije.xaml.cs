@@ -107,8 +107,6 @@ namespace OBEM
                 {
                     int numericValue = solarPanel.NumericValue;
 
-                    Console.WriteLine($"Device ID: {solarPanel.Id}, Numeric Value: {numericValue}");
-
                     var solarPanelBorder = new Border
                     {
                         Background = System.Windows.Media.Brushes.Green,
@@ -125,12 +123,92 @@ namespace OBEM
                         FontSize = 14
                     };
 
-                    solarPanelBorder.Child = textBlock;
+                    var button = new Button
+                    {
+                        Content = "Open Last 24 Hours Production",
+                        Background = new System.Windows.Media.LinearGradientBrush
+                        {
+                            StartPoint = new System.Windows.Point(0, 0),
+                            EndPoint = new System.Windows.Point(1, 1),
+                            GradientStops = new System.Windows.Media.GradientStopCollection
+                    {
+                        new System.Windows.Media.GradientStop(System.Windows.Media.Colors.LightBlue, 0),
+                        new System.Windows.Media.GradientStop(System.Windows.Media.Colors.DarkBlue, 1)
+                    }
+                        },
+                        Foreground = System.Windows.Media.Brushes.White,
+                        Margin = new System.Windows.Thickness(10),
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        FontSize = 16,
+                        FontWeight = FontWeights.Bold,
+                        BorderBrush = System.Windows.Media.Brushes.DarkBlue,
+                        BorderThickness = new System.Windows.Thickness(2),
+                        Padding = new System.Windows.Thickness(10),
+                        Cursor = System.Windows.Input.Cursors.Hand,
+                        Effect = new System.Windows.Media.Effects.DropShadowEffect
+                        {
+                            Color = System.Windows.Media.Colors.Gray,
+                            Direction = 315,
+                            ShadowDepth = 3,
+                            Opacity = 0.5
+                        }
+                    };
+
+                    var buttonBorder = new Border
+                    {
+                        Background = button.Background,
+                        BorderBrush = button.BorderBrush,
+                        BorderThickness = button.BorderThickness,
+                        Padding = button.Padding,
+                        Margin = button.Margin,
+                        HorizontalAlignment = button.HorizontalAlignment
+                    };
+
+                    var roundedButton = new Button
+                    {
+                        Content = button.Content,
+                        Background = button.Background,
+                        Foreground = button.Foreground,
+                        HorizontalAlignment = button.HorizontalAlignment,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        FontSize = button.FontSize,
+                        FontWeight = button.FontWeight,
+                        BorderBrush = button.BorderBrush,
+                        BorderThickness = button.BorderThickness,
+                        Cursor = button.Cursor,
+                        Padding = button.Padding
+                    };
+
+                    roundedButton.Click += (sender, e) => OpenLast24HoursWindow(solarPanel.Id.ToString());
+
+                    buttonBorder.Child = roundedButton;
+                    buttonBorder.CornerRadius = new System.Windows.CornerRadius(15);
+
+                    var stackPanel = new StackPanel();
+                    stackPanel.Children.Add(textBlock);
+                    stackPanel.Children.Add(buttonBorder);
+                    solarPanelBorder.Child = stackPanel;
 
                     NotificationsStackPanel.Children.Add(solarPanelBorder);
                 }
             }
         }
+
+
+
+
+        private void OpenLast24HoursWindow(string deviceId)
+        {
+            var last24HoursEnergyWindow = new Window
+            {
+                Content = new Last24HoursEnergy(deviceId),
+                Title = "Last 24 Hours Energy",
+                Width = 800,
+                Height = 600
+            };
+            last24HoursEnergyWindow.Show();
+        }
+
 
 
 
