@@ -155,6 +155,10 @@ namespace OBEM
                                 anomalies.Add(new Anomaly
                                 {
                                     Id = $"505/{device.Id}",
+                                    Name = device.Name,
+                                    Group1 = device.Group1,
+                                    Group2 = device.Group2,
+                                    Group3 = device.Group3,
                                     Deviation = maxDeviation,
                                     Value = double.Parse(anomaly.AverageValue.ToString()),
                                     Timestamp = DateTimeOffset.ParseExact(anomaly.Time, "yyyy-MM-ddTHH:mm:sszzz", null, System.Globalization.DateTimeStyles.None).DateTime,

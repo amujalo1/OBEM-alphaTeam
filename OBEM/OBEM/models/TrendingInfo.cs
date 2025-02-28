@@ -11,6 +11,10 @@ namespace OBEM.models
     public class Anomaly
     {
         public string Id { get; set; }
+        public string Name { get; set; }
+        public string Group1 { get; set; }
+        public string Group2 { get; set; }
+        public string Group3 { get; set; }
         public double Deviation { get; set; }
         public double Value { get; set; }
         public DateTime Timestamp { get; set; }
