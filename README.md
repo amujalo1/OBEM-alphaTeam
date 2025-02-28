@@ -66,4 +66,4 @@ The application is designed to provide building managers, residents, and mainten
 
 2. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repository-url.git
+   git clone https://github.com/amujalo1/OBEM-alphaTeam.git
