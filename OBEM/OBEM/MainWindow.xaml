@@ -100,10 +100,11 @@
                 <DataGrid x:Name="dgAnomalies" AutoGenerateColumns="False" Margin="0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                        <DataGridTextColumn Header="Veličina odstupanja" Binding="{Binding Deviation}" Width="Auto"/>
-                        <DataGridTextColumn Header="Vrijednost" Binding="{Binding Value}" Width="Auto"/>
-                        <DataGridTextColumn Header="Datum" Binding="{Binding Timestamp}" Width="Auto"/>
-                        <DataGridTemplateColumn Header="Graf" Width="Auto">
+                        <DataGridTextColumn Header="Deviation Size" Binding="{Binding Deviation}" Width="Auto"/>
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="Auto"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Timestamp}" Width="Auto"/>
+                        <DataGridTextColumn Header="Severity" Binding="{Binding Severity}" Width="Auto"/>
+                        <DataGridTemplateColumn Header="Graph" Width="Auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Prikaži graf" Click="ShowGraph_Click" Background="Transparent" BorderThickness="0" Foreground="#00BFFF" Cursor="Hand"/>

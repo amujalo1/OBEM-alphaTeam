@@ -14,6 +14,8 @@ namespace OBEM.models
         public double Deviation { get; set; }
         public double Value { get; set; }
         public DateTime Timestamp { get; set; }
+        public string Severity { get; set; } 
+
     }
 
     public class TrendingValue
