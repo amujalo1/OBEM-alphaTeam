@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35818.85 d17.13
+VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBEM", "OBEM\OBEM.csproj", "{CD78BF15-A7D1-4F2E-BE0B-47842FEC5AD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBEM-tests", "OBEM-tests\OBEM-tests.csproj", "{A0F80982-B533-4574-BD63-9DE986FA411B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CD78BF15-A7D1-4F2E-BE0B-47842FEC5AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD78BF15-A7D1-4F2E-BE0B-47842FEC5AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD78BF15-A7D1-4F2E-BE0B-47842FEC5AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0F80982-B533-4574-BD63-9DE986FA411B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F80982-B533-4574-BD63-9DE986FA411B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F80982-B533-4574-BD63-9DE986FA411B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F80982-B533-4574-BD63-9DE986FA411B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

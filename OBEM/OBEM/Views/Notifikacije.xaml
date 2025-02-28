@@ -22,6 +22,16 @@
                    HorizontalAlignment="Center" 
                    Margin="0,10,0,20"/>
 
+        <ProgressBar x:Name="LoadingProgressBar" 
+                     IsIndeterminate="True" 
+                     Visibility="Collapsed" 
+                     HorizontalAlignment="Center" 
+                     VerticalAlignment="Center" 
+                     Width="100" 
+                     Height="10" 
+                     Margin="0,50,0,0"
+                     Foreground="Blue"/>
+
         <!-- Notification List -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel x:Name="NotificationsStackPanel">

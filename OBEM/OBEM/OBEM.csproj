@@ -120,6 +120,9 @@
     <Compile Include="Views\EnergyCost.xaml.cs">
       <DependentUpon>EnergyCost.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Last24HoursEnergy.xaml.cs">
+      <DependentUpon>Last24HoursEnergy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Notifikacije.xaml.cs">
       <DependentUpon>Notifikacije.xaml</DependentUpon>
     </Compile>
@@ -169,6 +172,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\EnergyCost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Last24HoursEnergy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

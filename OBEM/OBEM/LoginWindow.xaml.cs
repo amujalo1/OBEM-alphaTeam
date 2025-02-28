@@ -12,7 +12,15 @@ namespace OBEM.Views
             this.KeyDown += new System.Windows.Input.KeyEventHandler(LoginWindow_KeyDown);
         }
 
+        public void SetUsernameText(string username)
+        {
+            UsernameTextBox.Text = username;
+        }
 
+        public void SetPassword(string password)
+        {
+            PasswordBox.Password = password;
+        }
         private void LoginWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -47,15 +55,18 @@ namespace OBEM.Views
             }
         }
 
+        public string ErrorMessage { get; private set; }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+
+        public void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameTextBox.Text;
             string password = PasswordBox.Password;
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                System.Windows.MessageBox.Show("Please fill in both username and password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ErrorMessage = "Please fill in both username and password.";
+                System.Windows.MessageBox.Show(ErrorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -68,7 +79,8 @@ namespace OBEM.Views
             }
             else
             {
-                System.Windows.MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                ErrorMessage = "Invalid username or password. Please try again.";
+                System.Windows.MessageBox.Show(ErrorMessage, "Login Failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
