@@ -52,7 +52,7 @@ namespace OBEM.Views
         private void StartTimer()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(20);
+            timer.Interval = TimeSpan.FromSeconds(10);
             Console.WriteLine("Thread zavrsen//////");
             timer.Tick += Timer_Tick;
             timer.Start();

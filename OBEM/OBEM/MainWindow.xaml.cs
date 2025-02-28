@@ -28,7 +28,7 @@ namespace OBEM
         private void StartThreadTimer()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(20);
+            timer.Interval = TimeSpan.FromSeconds(10);
             Console.WriteLine("Thread zavrsen//////");
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -95,7 +95,7 @@ namespace OBEM
         {
             var anomalies = new List<Anomaly>();
             DateTime endDate = DateTime.Now;
-            DateTime startDate = endDate.AddDays(-1);
+            DateTime startDate = endDate.AddDays(-2);
 
             try
             {
